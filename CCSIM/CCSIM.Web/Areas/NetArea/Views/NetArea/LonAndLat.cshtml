@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.SourceFiles = "~/Models/LonAndLatModel.cs";
+    ViewBag.Title = "FormLayout/LayoutNetAreaLonAndLat";
+    var F = Html.F();
+}
+
+@model CCSIM.Web.Models.LonAndLatModel
+
+@F.PageManager.AutoSizePanelID("Panel_NetLonAndLatAdd")
+
+@section body {
+
+    @(F.Panel().ID("Panel_NetLonAndLatAdd").ShowBorder(false).ShowHeader(false).Layout(LayoutType.Fit)
+            .Toolbars(
+                    F.Toolbar().ID("Toolbar1")
+                        .Items(
+                            F.Button().ID("btnAccept").Text("确定").IconFont(IconFont._Save).Listener("click", "onbtnAcceptClick"),
+                            F.Button().ID("btnEmpty").Text("清空").IconFont(IconFont._Refresh).Listener("click", "onbtnEmptyClick")
+                        )
+                )
+            .Items(
+                F.TextBox().ID("operatorType").Text(Model.operatorType.ToString()).Hidden(true),
+                F.TextBox().ID("lonAndLat").Text(Model.lonAndLat).Hidden(true),
+                F.Form().ID("Form_NetLonAndLatAdd").ShowHeader(true).ShowBorder(false)
+            )
+    )
+    )
+}
+
+
+@section script {
+    <script src="~/res/js/grid.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=A6bc8cb4539b007f51e8aa5ef37ed431"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+    <script>
+        var map = [];
+        var overlays = [];
+
+        //确定
+        function onbtnAcceptClick(event) {
+            if (overlays.length == 0) {
+                showNotify("请绘制网格区域！");
+                return false;
+            }
+            var path = overlays[0].getPath();
+
+            // 返回当前活动Window对象（浏览器窗口对象通过F.getActiveWindow().window获取）
+            var activeWindow = F.getActiveWindow();
+            activeWindow.window.updateLonAndLat(JSON.stringify(path));
+            activeWindow.hide();
+        }
+
+        //清空
+        function onbtnEmptyClick(event) {
+            for (var i = 0; i < overlays.length; i++) {
+                map.removeOverlay(overlays[i]);
+            }
+            overlays.length = 0;
+        }
+
+        F.ready(function () {
+            // 百度地图API功能
+            map = new BMap.Map("Form_NetLonAndLatAdd");
+            //map.centerAndZoom("练市", 16);
+            //map.enableScrollWheelZoom();
+
+            var top_left_control = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_TOP_LEFT });// 左上角，添加比例尺
+            //map.addControl(top_left_control);
+
+            var overlaycomplete = function (e) {
+                overlays.push(e.overlay);
+            };
+            var styleOptions = {
+                strokeColor: "red",    //边线颜色。
+                fillColor: "red",      //填充颜色。当参数为空时，圆形将没有填充效果。
+                strokeWeight: 3,       //边线的宽度，以像素为单位。
+                strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
+                fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+                strokeStyle: 'solid' //边线的样式，solid或dashed。
+            }
+            //实例化鼠标绘制工具
+            var drawingManager = new BMapLib.DrawingManager(map, {
+                isOpen: false, //是否开启绘制模式
+                enableDrawingTool: true, //是否显示工具栏
+                drawingToolOptions: {
+                    anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+                    offset: new BMap.Size(5, 5), //偏离值,
+                    scale: 0.7, //工具栏的缩放比例,默认为1
+                    drawingModes: [
+                        BMAP_DRAWING_POLYGON
+                    ]
+                },
+                polygonOptions: styleOptions //多边形的样式
+            });
+            //添加鼠标绘制工具监听事件，用于获取绘制结果
+            drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+
+            //添加网格区域
+            var pointArray = new Array();
+            if (F.ui.operatorType.value == "2") {
+                var lonAndLat = JSON.parse(F.ui.lonAndLat.value);
+
+                $.each(lonAndLat, function (index, item) {
+                    pointArray.push(new BMap.Point(item.lng, item.lat));
+                })
+                var polygon = new BMap.Polygon(pointArray, styleOptions);  //创建多边形
+                map.addOverlay(polygon);   //增加多边形
+
+                overlays.push(polygon);
+                var view = map.getViewport(eval(pointArray));
+                var mapZoom = view.zoom;
+                var centerPoint = view.center;
+                map.centerAndZoom(centerPoint, mapZoom);
+                map.enableScrollWheelZoom();
+            }
+            else {
+                map.centerAndZoom("练市", 16);
+                map.enableScrollWheelZoom();
+            }
+        });
+    </script>
+}
+

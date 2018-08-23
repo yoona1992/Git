@@ -1,0 +1,490 @@
+﻿
+@{
+    //ViewBag.Title = "电子地图";
+    var F = Html.F();
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="~/thirdpart/fontawesome/css/all.css">
+    <link rel="stylesheet" href="~/thirdpart/customscrollbar/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="~/thirdpart/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/res/css/custom.css">
+    <link rel="stylesheet" href="~/res/css/custom-themes.css">
+    <link rel="stylesheet" href="~/res/css/map.css" />
+    <link rel="stylesheet" href="~/thirdpart/jqueryui/jquery-ui.min.css" />
+    <!--弹出框提示css-->
+    <link rel="stylesheet" href="~/res/css/jquery.toast.min.css" />
+    <link rel="stylesheet" href="~/thirdpart/ztree/css/bootstrapStyle/bootstrapStyle.css" />
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+    <title>地图展示</title>
+</head>
+<body>
+    <div class="page-wrapper light-theme bg1 toggled" id="wrapper">
+        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+            <div class="sidebar-content">
+                <div class="sidebar-brand">
+                    <a href="#">人员车辆</a>
+                    <div id="close-sidebar">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="sidebar-menu">
+                    <ul id="treeDemo" class="ztree"></ul>
+                </div>
+                <!-- sidebar-menu  -->
+            </div>
+        </nav>
+        <!-- sidebar-wrapper  -->
+        <main class="page-content">
+            <div id="allmap" class="container-fluid">
+            </div>
+            <div id="mid-panel" style="padding:0px">
+                <div id="ry">
+                    显示离线人员<input id="cbRy" type="checkbox" />
+                </div>
+                <div id="wg">
+                    显示网格<input id="cbWg" type="checkbox" />
+                </div>
+                <div id="sxj">
+                    显示摄像机<input id="cbSxj" type="checkbox" />
+                </div>
+            </div>
+        </main>
+        <!-- page-content" -->
+    </div>
+    <!-- page-wrapper -->
+    <script src="~/res/js/libs/jquery-2.1.0.min.js"></script>
+    <script src="~/thirdpart/customscrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/thirdpart/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/thirdpart/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/thirdpart/ztree/js/jquery.ztree.core.js"></script>
+    <script src="~/thirdpart/ztree/js/jquery.ztree.excheck.js"></script>
+    <script src="~/thirdpart/ztree/js/jquery.ztree.exedit.js"></script>
+    <!--弹出框提示js-->
+    <script src="~/res/js/libs/jquery.toast.min.js"></script>
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=A6bc8cb4539b007f51e8aa5ef37ed431"></script>
+    <script src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
+    <script src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+    <script src="~/res/js/custom.js"></script>
+    <script src="~/res/js/intersectant.js"></script>
+    <script type="text/javascript">
+
+        //marker类型（1：摄像机  2：区域  3：人员   4：车辆）
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");
+        map.centerAndZoom("练市", 16);
+        map.enableScrollWheelZoom();
+        var top_left_control = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_TOP_LEFT });// 左上角，添加比例尺
+        var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+        var top_right_navigation = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL }); //右
+
+        map.addControl(top_right_navigation);
+
+        var sContent1 = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>摄像机信息</h4>";
+        sContent1 += "<table width='450px'  borderColor='#808080' cellSpacing='0'  style='border-collapse:collapse' borderColorDark='#ffffff' cellPadding='3' borderColorLight='#808080' border='1'>";
+        sContent1 += "<tr><td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>名称：</td><td style='width:100px;text-align:center;'>湖滨花园出口</td>";
+        sContent1 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>所属单位：</td><td style='width:100px;text-align:center;'>派出所</td></tr><tr>";
+        sContent1 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>经度：</td><td style='width:100px;text-align:center;'>120.4238268410</td>";
+        sContent1 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>机型：</td><td style='width:100px;text-align:center;'>球机</td></tr><tr>";
+        sContent1 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>纬度：</td><td style='width:100px;text-align:center;'>30.7179782019</td>";
+        sContent1 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>品牌：</td><td style='width:100px;text-align:center;'>海康IPC</td></tr><tr>";
+        sContent1 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>建设时间：</td><td style='width:100px;text-align:center;'>2016-01-10</td>";
+        sContent1 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>像素：</td><td style='width:100px;text-align:center;'>500万</td></tr>";
+        sContent1 += "<tr><td colspan='2' style='text-align:center;' bgcolor='#bbe1e1'><a href='###'>实时视频</a></td>";
+        sContent1 += "<td colspan='2' style='text-align:center;' bgcolor='#bbe1e1'><a href='###'>录像回放</a></td></tr>";
+        sContent1 += "</table>";
+
+        var sContent2 = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>摄像机信息</h4>";
+        sContent2 += "<table width='450px'  borderColor='#808080' cellSpacing='0'  style='border-collapse:collapse' borderColorDark='#ffffff' cellPadding='3' borderColorLight='#808080' border='1'>";
+        sContent2 += "<tr><td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>名称：</td><td style='width:100px;text-align:center;'>湖滨花园入口</td>";
+        sContent2 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>所属单位：</td><td style='width:100px;text-align:center;'>派出所</td></tr><tr>";
+        sContent2 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>经度：</td><td style='width:100px;text-align:center;'>120.4230436360</td>";
+        sContent2 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>机型：</td><td style='width:100px;text-align:center;'>球机</td></tr><tr>";
+        sContent2 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>纬度：</td><td style='width:100px;text-align:center;'>30.7163178612</td>";
+        sContent2 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>品牌：</td><td style='width:100px;text-align:center;'>海康IPC</td></tr><tr>";
+        sContent2 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>建设时间：</td><td style='width:100px;text-align:center;'>2016-01-10</td>";
+        sContent2 += "<td style='width:100px;text-align:center;' bgcolor='#bbe1e1'>像素：</td><td style='width:100px;text-align:center;'>500万</td></tr>";
+        sContent2 += "<tr><td colspan='2' style='text-align:center;' bgcolor='#bbe1e1'><a href='###'>实时视频</a></td>";
+        sContent2 += "<td colspan='2' style='text-align:center;' bgcolor='#bbe1e1'><a href='###'>录像回放</a></td></tr>";
+        sContent2 += "</table>";
+
+        var opts2 = {
+            width: 460,     // 信息窗口宽度
+            height: 180,     // 信息窗口高度
+            title: "", // 信息窗口标题
+            enableMessage: true//设置允许信息窗发送短息
+        };
+
+        //网格信息
+        function openNetInfo(netInfo, p) {
+            var tableWidth = ($(document).width() - 300) / 2;
+            var opts = {
+                width: tableWidth,     // 信息窗口宽度
+                height: 210,     // 信息窗口高度
+                title: "", // 信息窗口标题
+                enableMessage: true//设置允许信息窗发送短息
+            };
+            var content = "<h5 style='margin:0 0 5px 0;padding:0.2em 0'>" + netInfo.Name + "</h5>";
+            content += "<table width='100%'  borderColor='#808080' cellSpacing='0'  style='border-collapse:collapse' borderColorDark='#ffffff' cellPadding='3' borderColorLight='#808080' border='1'>";
+            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>网格名称：</td><td style='width:" + (tableWidth-100) + "px;text-align:center;'>" + netInfo.Name + "</td></tr>";
+            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>人口信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.PopulationInfo == null ? "" : netInfo.PopulationInfo) + "</td></tr>";
+            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>房屋信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.HouseInfo == null ? "" : netInfo.HouseInfo) + "</td></tr>";
+            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>单位门店信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.UnitStoreInfo == null ? "" : netInfo.UnitStoreInfo) + "</td></tr>";
+            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>所属部门：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + netInfo.BelongDeptName + "</td></tr>";
+            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>备注：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.Remark == null ? "" : netInfo.Remark) + "</td></tr>";
+            content += "</table>";
+            var infoWindow = new BMap.InfoWindow(content, opts);  // 创建信息窗口对象
+            map.openInfoWindow(infoWindow, p); //开启信息窗口
+        }
+        function addClickHandler(content, marker, p) {
+            marker.addEventListener("click", function (e) {
+                openNetInfo(content, p);
+            }
+            );
+        }
+        var s = [];
+        var options = {
+            renderOptions: { map: map },
+            pageCapacity: 10,
+            onSearchComplete: function (results) {
+                // 判断状态是否正确
+                if (local.getStatus() == BMAP_STATUS_SUCCESS) {
+                    s = [];
+                    for (var i = 0; i < results.getCurrentNumPois() ; i++) {
+                        s.push(results.getPoi(i).title + ", " + results.getPoi(i).address);
+                    }
+                }
+            }
+        };
+        var local = new BMap.LocalSearch(map, options);
+
+        function addRyCl(objectNames) {
+            $.ajax({
+                url: "./GetNewGpsInfo",
+                data: {
+                    objectNames: objectNames
+                },
+                type: "post",
+                async: false,
+                success: function (data) {
+                    removeRyCl();
+                    $.each(data, function (index, item) {
+                        if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
+                        } else {
+                            var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
+                                icon: myIcon_Person
+                            });
+                            // 创建标注
+                            marker.type = 3;
+                            var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
+                            marker.setLabel(label);
+                            map.addOverlay(marker);
+
+                            //报警 根据所属区域id获取区域信息
+                            var polygon = '';
+                            $.each(polygonInfo, function (index, d) {
+                                if (d.objectId == item.BelongNetId) {
+                                    polygon = d;
+                                }
+                            });
+
+                            alarm(item, polygon);
+                        }
+                    });
+                }
+            });
+        }
+        function removeRyCl() {
+            var overlays = map.getOverlays();
+            $.each(overlays, function (index, item) {
+                if (typeof (overlays[index].type) == "undefined") {
+
+                } else {
+                    if (overlays[index].type == 3 || overlays[index].type == 4) {
+                        map.removeOverlay(overlays[index]);
+                    }
+                }
+            });
+        }
+
+        var netInfo = [];
+        var polygonInfo = [];
+        $.ajax({
+            url: "./GetNetInfo",
+            type: "post",
+            success: function (data) {
+                netInfo = data;
+
+                $.each(netInfo, function (index, d) {
+                    var pointArray = [];
+                    var color = d.NetColor;
+                    var lonAndLatArray = $.parseJSON(d.LonAndLat);
+                    $.each(lonAndLatArray, function (index, dd) {
+                        pointArray.push(new BMap.Point(dd.lng, dd.lat));
+                    });
+
+                    var polygon = new BMap.Polygon(pointArray, { strokeColor: "#000093", strokeWeight: 1, strokeOpacity: 0.1, fillColor: color, fillOpacity: 0.5 });
+                    polygon.type = 2;
+                    polygon.objectId = d.Id;
+                    polygon.objectName = d.Name;
+                    polygonInfo.push(polygon);
+
+                });
+            }
+        });
+        function addWg() {
+            polygonInfo = [];
+            if (netInfo.length == 0) {
+            }
+
+            $.each(netInfo, function (index, d) {
+                var pointArray = [];
+                var color = d.NetColor;
+                var lonAndLatArray = $.parseJSON(d.LonAndLat);
+                $.each(lonAndLatArray, function (index, dd) {
+                    pointArray.push(new BMap.Point(dd.lng, dd.lat));
+                });
+
+                var polygon = new BMap.Polygon(pointArray, { strokeColor: "#000093", strokeWeight: 1, strokeOpacity: 0.1, fillColor: color, fillOpacity: 0.5 });
+                polygon.type = 2;
+                polygon.objectId = d.Id;
+                polygon.objectName = d.Name;
+                map.addOverlay(polygon);
+                polygonInfo.push(polygon);
+
+                var bounds = polygon.getBounds();
+                var p = bounds.getCenter();
+                addClickHandler(d, polygon, p);
+
+            });
+        }
+        function removeWg() {
+            $.each(polygonInfo, function (index, p) {
+                map.removeOverlay(p);
+            });
+        }
+
+        var data_info = [[120.4230436360, 30.7163178612, "湖滨花园入口"],
+        [120.4238268410, 30.7179782019, "湖滨花园出口"]
+        ];
+
+        var myIcon = new BMap.Icon("/res/images/i/zpcamera16_jk.gif", new BMap.Size(16, 16));
+        var myIcon_Car = new BMap.Icon("/res/images/i/car.gif", new BMap.Size(25, 25));
+        var myIcon_Person = new BMap.Icon("/res/images/i/person.gif", new BMap.Size(17, 26));
+
+        function addSxj() {
+            var marker = new BMap.Marker(new BMap.Point(data_info[0][0], data_info[0][1]), { icon: myIcon });  // 创建标注
+            var content = data_info[0][2];
+            marker.type = 1;
+            map.addOverlay(marker);               // 将标注添加到地图中
+            addMarkClickHandler(sContent1, marker);
+            var marker = new BMap.Marker(new BMap.Point(data_info[1][0], data_info[1][1]), { icon: myIcon });  // 创建标注
+            var content = data_info[1][2];
+            marker.type = 1;
+            map.addOverlay(marker);               // 将标注添加到地图中
+            addMarkClickHandler(sContent2, marker);
+        }
+        function removeSxj() {
+            var overlays = map.getOverlays();
+            $.each(overlays, function (index, item) {
+                if (typeof (overlays[index].type) == "undefined") {
+
+                } else {
+                    if (overlays[index].type == 1) {
+                        map.removeOverlay(overlays[index]);
+                    }
+                }
+            });
+        }
+
+        function addMarkClickHandler(content, marker) {
+            marker.addEventListener("click", function (e) {
+                openInfo(content, e)
+            }
+            );
+        }
+
+        function openInfo(content, e) {
+            var p = e.target;
+            var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+            var infoWindow = new BMap.InfoWindow(content, opts2);  // 创建信息窗口对象
+            map.openInfoWindow(infoWindow, point); //开启信息窗口
+        }
+        $("#sole-input").autocomplete({
+            source: function (request, response) {
+                local.search($("#sole-input").val());
+                setTimeout(function () {
+                    if (s.length > 0) {
+                        response(s);
+                    }
+                }, 500);
+
+            }
+        });
+
+        $("#cbWg").change(function () {
+            if ($("#cbWg").prop('checked')) {
+                addWg();
+            } else {
+                removeWg();
+            }
+        });
+        $("#cbSxj").change(function () {
+            if ($("#cbSxj").prop('checked')) {
+                addSxj();
+            } else {
+                removeSxj();
+            }
+        });
+
+        //获取当前时间
+        function getNowDate() {
+            var date = new Date();
+            var sign1 = "-";
+            var sign2 = ":";
+            var year = date.getFullYear() // 年
+            var month = date.getMonth() + 1; // 月
+            var day = date.getDate(); // 日
+            var hour = date.getHours(); // 时
+            var minutes = date.getMinutes(); // 分
+            var seconds = date.getSeconds() //秒
+            var weekArr = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天'];
+            var week = weekArr[date.getDay()];
+            // 给一位数数据前面加 “0”
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (day >= 0 && day <= 9) {
+                day = "0" + day;
+            }
+            if (hour >= 0 && hour <= 9) {
+                hour = "0" + hour;
+            }
+            if (minutes >= 0 && minutes <= 9) {
+                minutes = "0" + minutes;
+            }
+            if (seconds >= 0 && seconds <= 9) {
+                seconds = "0" + seconds;
+            }
+            var currentdate = year + sign1 + month + sign1 + day + " " + hour + sign2 + minutes + sign2 + seconds;;
+            return currentdate;
+        }
+
+        //越格报警
+        function alarm(item, polygon) {
+            var lon=item.Lon;
+            var lat = item.Lat;
+            var point = new BMap.Point(lon, lat);
+            var circle = new BMap.Circle(point, 50, {fillOpacity: 0, strokeOpacity: 0 });
+            map.addOverlay(circle);
+            var circlePath = circle.getPath();
+            map.removeOverlay(circle);
+            if (isPointInPolygonBidirectional(polygon.getPath(), circlePath) == false) {
+                $.toast({
+                    heading: '越界提醒',
+                    text: item.ObjectName + '于' + getNowDate() + '超越' + polygon.objectName + '网格边界',
+                    icon: 'warning',
+                    loader: true,        // Change it to false to disable loader
+                    //loaderBg: '#9EC600',  // To change the background
+                    position: 'top-center',
+                    hideAfter: 10 * 1000   // in milli seconds
+                });
+
+                //触发后台事件
+                var info = {
+                    info:item.ObjectName + '于' + getNowDate() + '超越' + polygon.objectName + '网格边界',
+                    alarmAddress: item.Address,
+                    alarmObjectName:item.ObjectName,
+                    alarmType: item.Type,
+                    alarmTime: getNowDate()
+                };
+
+                $.ajax({
+                    url: "./AddAlarmInfo",
+                    data:info,
+                    type: "post",
+                    success: function (data) {
+                    }
+                });
+            }
+        }
+
+        function reSize() {
+            $('#allmap').height($('#wrapper').height() - 45);
+            $('.sidebar-menu').height($('#wrapper').height() - 45);
+        }
+
+        reSize();
+
+        var timeoutId_tree = -1;
+        function zTreeOnCheck(event, treeId, treeNode) {
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+            var nodes = treeObj.getCheckedNodes(true);
+
+            var data = "";
+            $.each(nodes, function (index, dd) {
+                if (dd.objectName != "" && dd.objectName != null) {
+                    data += dd.objectName+";";
+                }
+            });
+            
+            if (timeoutId != -1) {
+                clearInterval(timeoutId);
+            } else {
+                timeoutId = -1;
+            }
+            if (timeoutId_tree != -1) {
+                clearInterval(timeoutId_tree);
+            }
+            timeoutId_tree = setInterval(function () {
+                addRyCl(data);
+            }, 2000);
+        };
+        var setting = {
+            async: {
+                enable: true,
+                type: 'post',
+                url: './GetMapTree',
+                contentType: 'application/json'
+            },
+            check: {
+                enable: true,
+                chkboxType: { "Y": "ps", "N": "ps" }
+            },
+            callback: {
+                onCheck: zTreeOnCheck
+            }
+        };
+
+        var timeoutId = 0;
+        $(document).ready(function () {
+            $.fn.zTree.init($("#treeDemo"), setting);
+
+            $.ajax({
+                url: "./GetAllInfo",
+                type: "post",
+                async: false,
+                success: function (data) {
+                    timeoutId = setInterval(function () {
+                        addRyCl(data);
+                    },2000);
+                }
+            });
+            //
+        });
+
+        $(window).resize(function () {
+            reSize();
+        });
+    </script>
+
+</body>
+</html>

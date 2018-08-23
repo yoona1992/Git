@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.SourceFiles = "~/Models/CarInfoModel.cs";
+    ViewBag.Title = "FormLayout/LayoutCarInfoAdd";
+    var F = Html.F();
+}
+
+@model CCSIM.Web.Models.CarInfoModel
+
+@section body {
+
+    @(F.Form().ID("Form_CarAdd").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).IsViewPort(true)
+    .Items(
+    F.TextBox().ID("VehicleNo").Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>车牌号码"),
+    F.DropDownListFor(m => m.vehicleType.DropDownList).ID("VehicleType").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>车辆类型").AutoSelectFirstItem(false).EmptyText("请选择车辆类型")
+        .Items(Model.vehicleType.DropDownListItem.ToArray()),
+    F.TextBox().ID("VehicleBrand").Label("车辆品牌"),
+    F.DropDownListFor(m => m.belongDept.DropDownList).ID("BelongDeptId").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所属部门").AutoSelectFirstItem(false).EmptyText("请选择所属部门")
+        .Items(Model.belongDept.DropDownListItem.ToArray()),
+    F.DropDownListFor(m => m.belongNet.DropDownList).ID("BelongNetId").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所属网格").AutoSelectFirstItem(false).EmptyText("请选择所属网格")
+        .Items(Model.belongNet.DropDownListItem.ToArray()),
+    F.TextBox().ID("Owner").Label("所有人"),
+    F.TextArea().ID("Remark").Height(160).Label("备注")
+    )
+    .Toolbars(
+    F.Toolbar().ID("Toolbar").ToolbarAlign(ToolbarAlign.Right).Position(ToolbarPosition.Bottom)
+    .Items(
+    F.Button().ID("btnAdd").Text("新增").IconFont(IconFont._Save).OnClick(Url.Action("btnAdd_Click"), "Form_CarAdd").ValidateForms("Form_CarAdd"),
+    F.Button().Type(ButtonType.Reset).ID("btnReset").Text("重置").IconFont(IconFont._Refresh)
+    )
+    )
+    )
+}
+
+
+@section script {
+    <script src="~/res/js/grid.js"></script>
+}
+

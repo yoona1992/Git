@@ -1,0 +1,64 @@
+﻿
+
+@{
+    ViewBag.Title = "GridPaging/AlarmInfo";
+    var F = Html.F();
+}
+
+
+@section body {
+
+    @(F.Grid()
+        .EnableCheckBoxSelect(true)
+        .Width(1000)
+        .ShowHeader(true)
+        .ShowBorder(true)
+        .EnableCollapse(true)
+        .Title("报警数据列表")
+        .ID("Grid1")
+        .DataIDField("Id")
+        .DataTextField("Name")
+        .AllowPaging(true)
+        .PageSize(5)
+        .IsDatabasePaging(true)
+        .OnPageIndexChanged(Url.Action("Grid1_PageIndexChanged"), "Grid1")
+        .Columns(
+            F.RowNumberField(),
+            F.RenderField()
+                .HeaderText("报警对象")
+                .DataField("Name")
+                .Width(150)
+                .ExpandUnusedSpace(true),
+            F.RenderField()
+                .HeaderText("报警地点")
+                .DataField("Location")
+                .Width(150)
+                .ExpandUnusedSpace(true),
+            F.RenderField()
+                .HeaderText("报警时间")
+                .DataField("AlarmTime")
+                .Width(150)
+                .ExpandUnusedSpace(true),
+            F.RenderField()
+                .HeaderText("报警类型")
+                .DataField("Type")
+                .Width(150)
+                .ExpandUnusedSpace(true)
+        )
+        .RecordCount(ViewBag.Grid1RecordCount)
+        .DataSource(ViewBag.Grid1DataSource)
+        .ShowPagingMessage(false)
+
+    )
+    <br>
+    <br>
+    <br>
+
+}
+
+
+@section script {
+
+    <script src="~/res/js/grid.js"></script>
+
+}

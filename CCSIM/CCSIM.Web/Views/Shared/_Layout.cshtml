@@ -1,0 +1,27 @@
+﻿@{
+    var F = Html.F();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - 指挥中心平台</title>
+
+    @F.RenderCss()
+    
+    <link href="~/res/css/common.css" rel="stylesheet" type="text/css" />
+    @RenderSection("head", false)
+
+</head>
+<body>
+    @Html.AntiForgeryToken()
+
+    @F.PageManager
+
+    @RenderSection("body", true)
+
+    @F.RenderScript()
+    @RenderSection("script", false)
+
+</body>
+</html>

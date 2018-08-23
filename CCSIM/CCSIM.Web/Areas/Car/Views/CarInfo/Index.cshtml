@@ -1,0 +1,164 @@
+﻿
+
+@{
+    ViewBag.SourceFiles = "/CarInfo/Detail";
+    ViewBag.Title = "GridPaging/CarInfo";
+    var F = Html.F();
+}
+
+@model CCSIM.Web.Models.CarInfoModel
+
+@F.PageManager.AutoSizePanelID("CarGrid")
+
+@section body {
+
+    @(F.Panel()
+        .Layout(LayoutType.Fit)
+        .ShowHeader(false)
+        .ShowBorder(false)
+        .Items(
+            F.Grid()
+                .EnableCheckBoxSelect(true)
+                .AutoScroll(true)
+                .ShowHeader(false)
+                .ShowBorder(false)
+        .ID("CarGrid")
+        .DataIDField("Id")
+        .DataTextField("Name")
+        .AllowPaging(true)
+        .PageSize(20)
+        .IsDatabasePaging(true)
+        .OnPageIndexChanged(Url.Action("CarGrid_PageIndexChanged"), "CarGrid",
+                                new Parameter("vehicleNo", "F.ui.tbxVehicleNo.getValue()"))
+                .BodyPadding(0)
+                .Toolbars(
+                    F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
+                        .Items(
+                            F.TextBox().Width(300).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("车牌号码").EmptyText("请输入车牌号码").ID("tbxVehicleNo"),
+                            F.ToolbarSeparator(),
+                            F.Button().ID("btnSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnSearch_Click"),
+                                "CarGrid",
+                                new Parameter("vehicleNo", "F.ui.tbxVehicleNo.getValue()")),
+                            F.ToolbarFill().ID("ToolbarFill1"),
+                            F.Button().ID("btnAdd").Text("新增").Icon(Icon.Add).Listener("click", "onbtnAddClick"),
+                            F.Button().ID("btnDelete").Text("删除").Icon(Icon.Delete).Listener("click", "onbtnDeleteClick")
+                         )
+                )
+        .Columns(
+            F.RowNumberField(),
+            F.RenderField()
+                .HeaderText("车牌号码")
+                .DataField("VehicleNo")
+                .Width(150),
+            F.RenderField()
+                .HeaderText("车辆类型")
+                .DataField("VehicleTypeName")
+                .Width(150),
+            F.RenderField()
+                .HeaderText("车辆品牌")
+                .DataField("VehicleBrand")
+                .Width(150),
+            F.RenderField()
+                .HeaderText("所有人")
+                .DataField("Owner")
+                .Width(150),
+            F.RenderField()
+                .HeaderText("所属单位")
+                .DataField("BelongDeptName")
+                .RendererFunction("renderTooltip")
+                .BoxFlex(1),
+            F.RenderField()
+                .HeaderText("所属网格")
+                .DataField("BelongNetName")
+                .RendererFunction("renderTooltip")
+                .BoxFlex(1),
+            F.RenderField()
+                .HeaderText("操作")
+                .EnableHeaderMenu(false)
+                .RendererFunction("renderActionField")
+                .TextAlign(TextAlign.Center)
+                .Width(80)
+        )
+        .RecordCount(ViewBag.Grid1RecordCount)
+        .DataSource(ViewBag.Grid1DataSource)
+        .ShowPagingMessage(true)
+
+    )
+    )
+
+    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("新增").ID("Window1"))
+    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window2_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("编辑").ID("Window2"))
+
+}
+
+
+@section script {
+
+    <script src="~/res/js/grid.js"></script>
+    <script>
+        // 打开窗体
+        function onbtnAddClick(event) {
+            var iframeWindowUrl = '@Url.Content("~/Car/CarInfo/Add")';
+            var iframeUrl = iframeWindowUrl;
+
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '新增 - ' + '车辆');
+        }
+
+        //删除事件
+        function onbtnDeleteClick(event) {
+            var grid = F.ui.CarGrid;
+            if (!grid.hasSelection()) {
+                F.alert('没有选中项!');
+                return;
+            }
+
+            var selectedRows = grid.getSelectedRows();
+            F.confirm({
+                message: '你确定要删除选中的&nbsp;<b>' + selectedRows.length + '</b>&nbsp;行数据吗?',
+                target: '_top',
+                ok: function () {
+                    deletedRows(selectedRows);
+                }
+            })
+        }
+
+        //删除数据
+        function deletedRows(selectedRows) {
+            //触发后台事件
+            F.doPostBack('@Url.Action("DeleteRows")', "CarGrid", {
+                selectedRows: selectedRows,
+                vehicleNo: F.ui.tbxVehicleNo.getValue()
+            });
+        }
+
+        //重新加载Grid
+        function reload() {
+            $('#btnSearch').click();
+        }
+
+        // 打开窗体
+        function openWindow(rowData) {
+            var iframeWindowUrl = '@Url.Content("~/Car/CarInfo/Edit")';
+            var iframeUrl = iframeWindowUrl + '?id=' + rowData.id;
+
+            // 显示窗体
+            F.ui.Window2.show(iframeUrl, '编辑 - ' + '车辆');
+        }
+
+        F.ready(function () {
+
+            var grid = F.ui.CarGrid;
+
+            // 点击表格行中的编辑按钮
+            grid.el.on('click', 'a.editfield', function (event) {
+                var rowEl = $(this).closest('.f-grid-row');
+                var rowData = grid.getRowData(rowEl);
+
+                openWindow(rowData);
+            });
+
+        });
+    </script>
+}
+
