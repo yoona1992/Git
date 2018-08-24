@@ -141,16 +141,17 @@ namespace CCSIM.BLL
                      where ((vehicleNo == "" || vehicleNo == null) ? true : c.VEHICLENO.Contains(vehicleNo)) && c.ISDELETED == 0
                      select new CarInfo
                      {
-                          Id=c.ID,
+                         Id = c.ID,
                          VehicleNo = c.VEHICLENO,
                          VehicleTypeName = v.BMVALUE,
                          VehicleBrand = c.VEHICLEBRAND,
+                         BelongDeptId = c.BELONGDEPTID,
                          BelongDeptName = d.BMVALUE,
                          BelongNetName = n.NAME,
-                         Owner=c.OWNER
+                         Owner = c.OWNER
                      });
             totalCount = q.Count();
-            return q.OrderByDescending(p => p.VehicleNo).Skip((start - 1) * limit).Take(limit).ToList();
+            return q.OrderByDescending(p => p.BelongDeptId).ThenByDescending(p => p.VehicleNo).Skip((start - 1) * limit).Take(limit).ToList();
         }
 
     }

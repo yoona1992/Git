@@ -37,3 +37,7 @@ D:\Project\CCSIM\CCSIM.Common\bin\Debug\CCSIM.Common.pdb
 D:\Project\CCSIM\CCSIM.Common\obj\Debug\CCSIM.Common.dll
 D:\Project\CCSIM\CCSIM.Common\obj\Debug\CCSIM.Common.pdb
 D:\Project\CCSIM\CCSIM.Common\obj\Debug\CCSIM.Common.csprojResolveAssemblyReference.cache
+D:\Git\CCSIM\CCSIM.Common\bin\Debug\CCSIM.Common.dll
+D:\Git\CCSIM\CCSIM.Common\bin\Debug\CCSIM.Common.pdb
+D:\Git\CCSIM\CCSIM.Common\obj\Debug\CCSIM.Common.dll
+D:\Git\CCSIM\CCSIM.Common\obj\Debug\CCSIM.Common.pdb

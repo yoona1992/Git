@@ -150,11 +150,12 @@ namespace CCSIM.BLL
                          Telephone = u.TELEPHONE,
                          CertificateNum = u.CERTIFICATENUM,
                          Address = u.ADDRESS,
+                          BelongDeptId=u.BELONGDEPTID,
                          BelongDeptName = d.BMVALUE,
                          BelongNetName = n.NAME
                      });
             totalCount = q.Count();
-            return q.OrderByDescending(p => p.Name).Skip((start - 1) * limit).Take(limit).ToList();
+            return q.OrderByDescending(p => p.BelongDeptId).ThenByDescending(p=>p.Name).Skip((start - 1) * limit).Take(limit).ToList();
         }
 
     }

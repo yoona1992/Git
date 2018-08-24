@@ -22,10 +22,10 @@ namespace CCSIM.BLL
             var now = DateTime.Now;
             StringBuilder pSBQueryText = new StringBuilder();
             pSBQueryText.Append("SELECT * FROM (SELECT A.NAME,A.TELEPHONE AS OBJECTNAME,B.LON,B.LAT,TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,1 AS TYPE,B.ADDRESS FROM CFG_USERINFO A ");
-            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.TELEPHONE = B.OBJECTNAME WHERE A.ISDELETED = 0 ORDER BY A.NAME DESC)");
+            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.TELEPHONE = B.OBJECTNAME WHERE A.ISDELETED = 0 ORDER BY A.BELONGDEPTID,A.NAME DESC)");
             pSBQueryText.Append("UNION ALL ");
             pSBQueryText.Append("SELECT * FROM(SELECT A.VEHICLENO AS NAME,A.VEHICLENO AS OBJECTNAME,B.LON,B.LAT,TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,2 AS TYPE,B.ADDRESS FROM CFG_CARINFO A ");
-            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.VEHICLENO = B.OBJECTNAME WHERE A.ISDELETED = 0 ORDER BY A.VEHICLENO DESC)");
+            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.VEHICLENO = B.OBJECTNAME WHERE A.ISDELETED = 0 ORDER BY A.BELONGDEPTID,A.VEHICLENO DESC)");
 
             var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
             List<TreeNode> treeNodeList = new List<TreeNode>();
