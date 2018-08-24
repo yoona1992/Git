@@ -29,16 +29,20 @@
         .PageSize(20)
         .IsDatabasePaging(true)
         .OnPageIndexChanged(Url.Action("CarGrid_PageIndexChanged"), "CarGrid",
-                                new Parameter("vehicleNo", "F.ui.tbxVehicleNo.getValue()"))
+                                new Parameter("vehicleNo", "F.ui.tbxVehicleNo.getValue()"),
+                                new Parameter("ownerType", "F.ui.ddlistOwnerType.getValue()"))
                 .BodyPadding(0)
                 .Toolbars(
                     F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
                         .Items(
                             F.TextBox().Width(300).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("车牌号码").EmptyText("请输入车牌号码").ID("tbxVehicleNo"),
+                            F.DropDownListFor(m => m.ownerType.DropDownList).Width(250).LabelWidth(100).ID("ddlistOwnerType").LabelAlign(LabelAlign.Right).Label("所有人类型").EmptyText("请选择所有人类型").EnableEdit(false)
+                                        .ShowRedStar(false).SelectedValue("-1").Items(Model.ownerType.DropDownListItem.ToArray()),
                             F.ToolbarSeparator(),
                             F.Button().ID("btnSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnSearch_Click"),
                                 "CarGrid",
-                                new Parameter("vehicleNo", "F.ui.tbxVehicleNo.getValue()")),
+                                new Parameter("vehicleNo", "F.ui.tbxVehicleNo.getValue()"),
+                                new Parameter("ownerType", "F.ui.ddlistOwnerType.getValue()")),
                             F.ToolbarFill().ID("ToolbarFill1"),
                             F.Button().ID("btnAdd").Text("新增").Icon(Icon.Add).Listener("click", "onbtnAddClick"),
                             F.Button().ID("btnDelete").Text("删除").Icon(Icon.Delete).Listener("click", "onbtnDeleteClick")
@@ -61,6 +65,10 @@
             F.RenderField()
                 .HeaderText("所有人")
                 .DataField("Owner")
+                .Width(150),
+            F.RenderField()
+                .HeaderText("所有人类型")
+                .DataField("OwnerTypeName")
                 .Width(150),
             F.RenderField()
                 .HeaderText("所属单位")
@@ -128,7 +136,8 @@
             //触发后台事件
             F.doPostBack('@Url.Action("DeleteRows")', "CarGrid", {
                 selectedRows: selectedRows,
-                vehicleNo: F.ui.tbxVehicleNo.getValue()
+                vehicleNo: F.ui.tbxVehicleNo.getValue(),
+                ownerType: F.ui.ddlistOwnerType.getValue()
             });
         }
 

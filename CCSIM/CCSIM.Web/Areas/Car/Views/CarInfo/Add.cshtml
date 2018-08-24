@@ -20,6 +20,8 @@
     F.DropDownListFor(m => m.belongNet.DropDownList).ID("BelongNetId").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所属网格").AutoSelectFirstItem(false).EmptyText("请选择所属网格")
         .Items(Model.belongNet.DropDownListItem.ToArray()),
     F.TextBox().ID("Owner").Label("所有人"),
+    F.DropDownListFor(m => m.ownerType.DropDownList).ID("OwnerType").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所有人类型").AutoSelectFirstItem(false).EmptyText("请选择所有人类型")
+        .Items(Model.ownerType.DropDownListItem.ToArray()),
     F.TextArea().ID("Remark").Height(160).Label("备注")
     )
     .Toolbars(

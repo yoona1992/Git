@@ -17,7 +17,30 @@ namespace CCSIM.Web.Areas.Car.Controllers
         public ActionResult Index()
         {
             LoadData();
-            return View();
+            #region 下拉框绑定
+            var ownerTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            var listItems = new List<ListItem>();
+            listItems.Add(new ListItem
+            {
+                Text = "全部",
+                Value = "-1"
+            });
+            foreach (var d in ownerTypeList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var ownerType = new DropDownListModel();
+            ownerType.DropDownList = "VALUE";
+            ownerType.DropDownListItem = listItems;
+            #endregion
+            CarInfoModel model = new CarInfoModel();
+            model.ownerType = ownerType;
+            return View(model);
         }
 
         public ActionResult Add()
@@ -67,11 +90,27 @@ namespace CCSIM.Web.Areas.Car.Controllers
             var belongNet = new DropDownListModel();
             belongNet.DropDownList = "VALUE2";
             belongNet.DropDownListItem = listItems;
+
+            var ownerTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            listItems = new List<ListItem>();
+            foreach (var d in ownerTypeList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var ownerType = new DropDownListModel();
+            ownerType.DropDownList = "VALUE3";
+            ownerType.DropDownListItem = listItems;
             #endregion
             CarInfoModel model = new CarInfoModel();
             model.belongDept = belongDept;
             model.vehicleType = vehicleType;
             model.belongNet = belongNet;
+            model.ownerType = ownerType;
             return View(model);
         }
 
@@ -123,11 +162,27 @@ namespace CCSIM.Web.Areas.Car.Controllers
             var belongNet = new DropDownListModel();
             belongNet.DropDownList = "VALUE2";
             belongNet.DropDownListItem = listItems;
+
+            var ownerTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            listItems = new List<ListItem>();
+            foreach (var d in ownerTypeList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var ownerType = new DropDownListModel();
+            ownerType.DropDownList = "VALUE3";
+            ownerType.DropDownListItem = listItems;
             #endregion
             CarInfoModel model = new CarInfoModel();
             model.belongDept = belongDept;
             model.vehicleType = vehicleType;
             model.belongNet = belongNet;
+            model.ownerType = ownerType;
             var data = CarBLL.Get(id);
             model.carInfo.Id = data.ID;
             model.carInfo.VehicleNo = data.VEHICLENO;
@@ -136,6 +191,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             model.carInfo.BelongDeptId = data.BELONGDEPTID;
             model.carInfo.BelongNetId = data.BELONGNETID;
             model.carInfo.Owner = data.OWNER;
+            model.carInfo.OwnerType = data.OWNERTYPE;
             model.carInfo.Remark = data.REMARK;
             return View(model);
         }
@@ -146,7 +202,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
         private void LoadData()
         {
             var recordCount = 0;
-            var data = CarBLL.GetList("", 1, 20, out recordCount);
+            var data = CarBLL.GetList("",-1, 1, 20, out recordCount);
             ViewBag.Grid1RecordCount = recordCount;
             ViewBag.Grid1DataSource = data;
         }
@@ -155,11 +211,11 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CarGrid_PageIndexChanged(JArray CarGrid_fields, string vehicleNo, int CarGrid_pageIndex, int CarGrid_pageSize)
+        public ActionResult CarGrid_PageIndexChanged(JArray CarGrid_fields, string vehicleNo,int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("CarGrid");
             var recordCount = 0;
-            var data = CarBLL.GetList(vehicleNo, CarGrid_pageIndex + 1, CarGrid_pageSize, out recordCount);
+            var data = CarBLL.GetList(vehicleNo, ownerType, CarGrid_pageIndex + 1, CarGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, CarGrid_fields);
@@ -169,7 +225,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteRows(JArray selectedRows, JArray CarGrid_fields, string vehicleNo, int CarGrid_pageSize)
+        public ActionResult DeleteRows(JArray selectedRows, JArray CarGrid_fields, string vehicleNo,int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var ids = new List<int>();
             foreach (var id in selectedRows)
@@ -190,7 +246,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
             var grid1 = UIHelper.Grid("CarGrid");
             var recordCount = 0;
-            var data = CarBLL.GetList(vehicleNo, 1, CarGrid_pageSize, out recordCount);
+            var data = CarBLL.GetList(vehicleNo, ownerType, CarGrid_pageIndex + 1, CarGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, CarGrid_fields);
@@ -199,11 +255,11 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult btnSearch_Click(JArray CarGrid_fields, string vehicleNo, int CarGrid_pageSize)
+        public ActionResult btnSearch_Click(JArray CarGrid_fields, string vehicleNo,int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("CarGrid");
             var recordCount = 0;
-            var data = CarBLL.GetList(vehicleNo, 1, CarGrid_pageSize, out recordCount);
+            var data = CarBLL.GetList(vehicleNo, ownerType, CarGrid_pageIndex + 1, CarGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, CarGrid_fields);
@@ -223,6 +279,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             info.BELONGNETID = Convert.ToInt32(values["BelongNetId"]);
             info.REMARK = values["Remark"];
             info.OWNER = values["Owner"];
+            info.OWNERTYPE = Convert.ToInt32(values["OwnerType"]);
             info.ISDELETED = 0;
             var isSuccess = CarBLL.Add(info);
             ActiveWindow.HidePostBack();
@@ -249,6 +306,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             info.VEHICLEBRAND = values["VehicleBrand"];
             info.BELONGDEPTID = Convert.ToInt32(values["BelongDeptId"]);
             info.BELONGNETID = Convert.ToInt32(values["BelongNetId"]);
+            info.OWNERTYPE = Convert.ToInt32(values["OwnerType"]);
             info.REMARK = values["Remark"];
             info.OWNER = values["Owner"];
             var isSuccess = CarBLL.Update(info);

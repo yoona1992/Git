@@ -194,6 +194,7 @@
     <Compile Include="Models\DropDownListModel.cs" />
     <Compile Include="Models\LonAndLatModel.cs" />
     <Compile Include="Models\NetInfoModel.cs" />
+    <Compile Include="Models\TrajectoryInfoModel.cs" />
     <Compile Include="Models\UserInfoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using CCSIM.BLL;
+using CCSIM.Web.Models;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,7 +16,38 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
         public ActionResult Index()
         {
             LoadData();
-            return View();
+
+            #region 下拉框绑定
+            var userTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            var listItems = new List<ListItem>();
+            listItems.Add(new ListItem
+            {
+                Text = "全部",
+                Value = "-1"
+            });
+            foreach (var d in userTypeList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var userType = new DropDownListModel();
+            userType.DropDownList = "VALUE";
+            userType.DropDownListItem = listItems;
+            
+            var ownerType = new DropDownListModel();
+            ownerType.DropDownList = "VALUE1";
+            ownerType.DropDownListItem = listItems;
+
+
+            #endregion
+            TrajectoryInfoModel model = new TrajectoryInfoModel();
+            model.userType = userType;
+            model.ownerType = ownerType;
+            return View(model);
         }
 
         public ActionResult Detail_User()
@@ -41,12 +73,12 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
         private void LoadData()
         {
             var recordCount = 0;
-            var data = UserBLL.GetList("", "", -1, 1, 20, out recordCount);
+            var data = UserBLL.GetList("", "", -1, -1, 1, 20, out recordCount);
             ViewBag.UserGridRecordCount = recordCount;
             ViewBag.UserGridDataSource = data;
 
             var recordCount1 = 0;
-            var data1 = CarBLL.GetList("", 1, 20, out recordCount1);
+            var data1 = CarBLL.GetList("",-1, 1, 20, out recordCount1);
             ViewBag.CarGridRecordCount = recordCount1;
             ViewBag.CarGridDataSource = data1;
         }
@@ -66,11 +98,11 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserGrid_PageIndexChanged(JArray UserGrid_fields, string userName, string telephone, int UserGrid_pageIndex, int UserGrid_pageSize)
+        public ActionResult UserGrid_PageIndexChanged(JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("UserGrid");
             var recordCount = 0;
-            var data = UserBLL.GetList(userName, telephone, -1, UserGrid_pageIndex + 1, UserGrid_pageSize, out recordCount);
+            var data = UserBLL.GetList(userName, telephone, -1, userType, UserGrid_pageIndex + 1, UserGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, UserGrid_fields);
@@ -81,11 +113,11 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CarGrid_PageIndexChanged(JArray CarGrid_fields, string vehicleNo, int CarGrid_pageIndex, int CarGrid_pageSize)
+        public ActionResult CarGrid_PageIndexChanged(JArray CarGrid_fields, string vehicleNo,int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("CarGrid");
             var recordCount = 0;
-            var data = CarBLL.GetList(vehicleNo, CarGrid_pageIndex + 1, CarGrid_pageSize, out recordCount);
+            var data = CarBLL.GetList(vehicleNo, ownerType, CarGrid_pageIndex + 1, CarGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, CarGrid_fields);
@@ -111,11 +143,11 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult btnUserSearch_Click(JArray UserGrid_fields, string userName, string telephone, int UserGrid_pageIndex, int UserGrid_pageSize)
+        public ActionResult btnUserSearch_Click(JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("UserGrid");
             var recordCount = 0;
-            var data = UserBLL.GetList(userName, telephone, -1, UserGrid_pageIndex+ 1, UserGrid_pageSize, out recordCount);
+            var data = UserBLL.GetList(userName, telephone, -1, userType, UserGrid_pageIndex + 1, UserGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, UserGrid_fields);
@@ -125,11 +157,11 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult btnCarSearch_Click(JArray CarGrid_fields, string vehicleNo, int CarGrid_pageIndex, int CarGrid_pageSize)
+        public ActionResult btnCarSearch_Click(JArray CarGrid_fields, string vehicleNo,int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("CarGrid");
             var recordCount = 0;
-            var data = CarBLL.GetList(vehicleNo, CarGrid_pageIndex + 1, CarGrid_pageSize, out recordCount);
+            var data = CarBLL.GetList(vehicleNo, ownerType,CarGrid_pageIndex + 1, CarGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, CarGrid_fields);

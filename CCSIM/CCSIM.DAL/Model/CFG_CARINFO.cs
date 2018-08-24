@@ -62,6 +62,11 @@ namespace CCSIM.DAL.Model
         public string OWNER { get; set; }
 
         /// <summary>
+        /// 所有人类型
+        /// </summary>
+        public int? OWNERTYPE { get; set; }
+
+        /// <summary>
         /// 是否删除
         /// </summary>
         [Required]

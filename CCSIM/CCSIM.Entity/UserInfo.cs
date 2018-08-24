@@ -78,5 +78,11 @@ namespace CCSIM.Entity
         /// 是否删除
         /// </summary>
         public int Isdeleted { get; set; }
+
+        /// <summary>
+        /// 用户类型
+        /// </summary>
+        public int UserType { get; set; }
+        public string UserTypeName { get; set; }
     }
 }

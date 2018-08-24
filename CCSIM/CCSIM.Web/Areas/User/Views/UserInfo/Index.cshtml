@@ -1,7 +1,7 @@
 ﻿
 
 @{
-    ViewBag.SourceFiles = "/UserInfo/Detail";
+    ViewBag.SourceFiles = "~/Models/UserInfoModel.cs";
     ViewBag.Title = "GridPaging/UserInfo";
     var F = Html.F();
 }
@@ -30,18 +30,22 @@
         .IsDatabasePaging(true)
         .OnPageIndexChanged(Url.Action("UserGrid_PageIndexChanged"), "UserGrid",
                                 new Parameter("userName", "F.ui.tbxUserName.getValue()"),
-                                new Parameter("telephone", "F.ui.tbxTelephone.getValue()"))
+                                new Parameter("telephone", "F.ui.tbxTelephone.getValue()"),
+                                new Parameter("userType", "F.ui.ddlistUserType.getValue()"))
                 .BodyPadding(0)
                 .Toolbars(
                     F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
                         .Items(
                             F.TextBox().Width(300).LabelWidth(60).LabelAlign(LabelAlign.Right).Label("姓名").EmptyText("请输入姓名").ID("tbxUserName"),
-                            F.TextBox().Width(300).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("联系电话").EmptyText("请输入联系电话").ID("tbxTelephone"),
+                            F.TextBox().Width(300).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("联系电话").EmptyText("请输入联系电话").ID("tbxTelephone"), 
+                            F.DropDownListFor(m => m.userType.DropDownList).Width(220).LabelWidth(80).ID("ddlistUserType").LabelAlign(LabelAlign.Right).Label("人员类型").EmptyText("请选择人员类型").EnableEdit(false)
+                                        .ShowRedStar(false).SelectedValue("-1").Items(Model.userType.DropDownListItem.ToArray()),
                             F.ToolbarSeparator(),
                             F.Button().ID("btnSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnSearch_Click"),
                                 "UserGrid",
                                 new Parameter("userName", "F.ui.tbxUserName.getValue()"),
-                                new Parameter("telephone", "F.ui.tbxTelephone.getValue()")),
+                                new Parameter("telephone", "F.ui.tbxTelephone.getValue()"),
+                                new Parameter("userType", "F.ui.ddlistUserType.getValue()")),
                             F.ToolbarFill().ID("ToolbarFill1"),
                             F.Button().ID("btnAdd").Text("新增").Icon(Icon.Add).Listener("click", "onbtnAddClick"),
                             F.Button().ID("btnDelete").Text("删除").Icon(Icon.Delete).Listener("click", "onbtnDeleteClick")
@@ -58,8 +62,8 @@
                 .DataField("SexName")
                 .Width(100),
             F.RenderField()
-                .HeaderText("年龄")
-                .DataField("Age")
+                .HeaderText("人员类型")
+                .DataField("UserTypeName")
                 .Width(100),
             F.RenderField()
                 .HeaderText("联系电话")
@@ -140,7 +144,9 @@
             //触发后台事件
             F.doPostBack('@Url.Action("DeleteRows")', "UserGrid", {
                 selectedRows: selectedRows,
-                netName: F.ui.tbxUserName.getValue()
+                userName: F.ui.tbxUserName.getValue(),
+                telephone: F.ui.tbxTelephone.getValue(),
+                userType: F.ui.ddlistUserType.getValue()
             });
         }
 

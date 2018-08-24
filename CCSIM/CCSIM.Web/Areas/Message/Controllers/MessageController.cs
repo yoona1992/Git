@@ -52,7 +52,7 @@ namespace CCSIM.Web.Areas.Message.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult btnSearch_Click(JArray MessageGrid_fields, string telephone, string title, DateTime startTime, DateTime endTime, int MessageGrid_pageSize)
+        public ActionResult btnSearch_Click(JArray MessageGrid_fields, string telephone, string title, DateTime startTime, DateTime endTime, int MessageGrid_pageIndex, int MessageGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("MessageGrid");
             var recordCount = 0;
@@ -60,7 +60,7 @@ namespace CCSIM.Web.Areas.Message.Controllers
             var edTime = DateTime.Parse(endTime.ToString("yyyy-MM-dd") + " 23:59:59");
             var telephoneList = new List<string>();
             telephoneList.Add("15989488656");
-            var data = MessageBLL.GetList(telephoneList, title, stTime, edTime, 1, MessageGrid_pageSize, out recordCount);
+            var data = MessageBLL.GetList(telephoneList, title, stTime, edTime, MessageGrid_pageIndex + 1, MessageGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, MessageGrid_fields);

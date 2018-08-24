@@ -93,5 +93,11 @@ namespace CCSIM.DAL.Model
         /// </summary>
         [Required]
         public int ISDELETED { get; set; }
+
+        /// <summary>
+        /// 用户类型
+        /// </summary>
+        [Required]
+        public int USERTYPE { get; set; }
     }
 }

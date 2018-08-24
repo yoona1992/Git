@@ -24,7 +24,7 @@ namespace CCSIM.BLL
             var d = db.FirstOrDefault(p => p.BMCODE == code);
             if (d != null)
             {
-                codeList = db.GetAll(p => p.BMPARENTKEY == d.BMKEY&&p.ISDELETED==0,"BMKEY");
+                codeList = db.GetAll(p => p.BMPARENTKEY == d.BMKEY&&p.ISDELETED==0,"ORDERNUM");
             }
 
             return codeList;

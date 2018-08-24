@@ -13,6 +13,7 @@ namespace CCSIM.Web.Models
         public DropDownListModel belongDept = new DropDownListModel();
         public DropDownListModel vehicleType = new DropDownListModel();
         public DropDownListModel belongNet = new DropDownListModel();
+        public DropDownListModel ownerType = new DropDownListModel();
         public Entity.CarInfo carInfo = new Entity.CarInfo();
     }
 }

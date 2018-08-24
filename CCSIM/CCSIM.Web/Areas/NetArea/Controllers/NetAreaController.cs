@@ -117,7 +117,7 @@ namespace CCSIM.Web.Areas.NetArea.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteRows(JArray selectedRows, JArray NetGrid_fields, string netName, int NetGrid_pageSize)
+        public ActionResult DeleteRows(JArray selectedRows, JArray NetGrid_fields, string netName, int NetGrid_pageIndex, int NetGrid_pageSize)
         {
             var ids = new List<int>();
             foreach (var id in selectedRows)
@@ -138,7 +138,7 @@ namespace CCSIM.Web.Areas.NetArea.Controllers
 
             var grid1 = UIHelper.Grid("NetGrid");
             var recordCount = 0;
-            var data = NetManageBLL.GetList(netName, -1, 1, NetGrid_pageSize, out recordCount);
+            var data = NetManageBLL.GetList(netName, -1, NetGrid_pageIndex + 1, NetGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, NetGrid_fields);
@@ -147,11 +147,11 @@ namespace CCSIM.Web.Areas.NetArea.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult btnSearch_Click(JArray NetGrid_fields, string netName, int NetGrid_pageSize)
+        public ActionResult btnSearch_Click(JArray NetGrid_fields, string netName, int NetGrid_pageIndex, int NetGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("NetGrid");
             var recordCount = 0;
-            var data = NetManageBLL.GetList(netName, -1, 1, NetGrid_pageSize, out recordCount);
+            var data = NetManageBLL.GetList(netName, -1, NetGrid_pageIndex + 1, NetGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, NetGrid_fields);

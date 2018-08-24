@@ -17,7 +17,32 @@ namespace CCSIM.Web.Areas.User.Controllers
         public ActionResult Index()
         {
             LoadData();
-            return View();
+
+            #region 下拉框绑定
+            var userTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            var listItems = new List<ListItem>();
+            listItems.Add(new ListItem
+            {
+                Text = "全部",
+                Value = "-1"
+            });
+            foreach (var d in userTypeList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var userType = new DropDownListModel();
+            userType.DropDownList = "VALUE";
+            userType.DropDownListItem = listItems;
+
+            #endregion
+            UserInfoModel model = new UserInfoModel();
+            model.userType = userType;
+            return View(model);
         }
 
         public ActionResult Add()
@@ -82,12 +107,28 @@ namespace CCSIM.Web.Areas.User.Controllers
             var belongNet = new DropDownListModel();
             belongNet.DropDownList = "VALUE3";
             belongNet.DropDownListItem = listItems;
+
+            var userTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            listItems = new List<ListItem>();
+            foreach (var d in userTypeList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var userType = new DropDownListModel();
+            userType.DropDownList = "VALUE4";
+            userType.DropDownListItem = listItems;
             #endregion
             UserInfoModel model = new UserInfoModel();
             model.belongDept = belongDept;
             model.sex = sex;
             model.certificateType = certificateType;
             model.belongNet = belongNet;
+            model.userType = userType;
             return View(model);
         }
 
@@ -154,12 +195,28 @@ namespace CCSIM.Web.Areas.User.Controllers
             var belongNet = new DropDownListModel();
             belongNet.DropDownList = "VALUE3";
             belongNet.DropDownListItem = listItems;
+
+            var userTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            listItems = new List<ListItem>();
+            foreach (var d in userTypeList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var userType = new DropDownListModel();
+            userType.DropDownList = "VALUE4";
+            userType.DropDownListItem = listItems;
             #endregion
             UserInfoModel model = new UserInfoModel();
             model.belongDept = belongDept;
             model.sex = sex;
             model.certificateType = certificateType;
             model.belongNet = belongNet;
+            model.userType = userType;
             var data = UserBLL.Get(id);
             model.userInfo.Id = data.ID;
             model.userInfo.Name = data.NAME;
@@ -173,6 +230,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             model.userInfo.Direction = data.DIRECTION;
             model.userInfo.Address = data.ADDRESS;
             model.userInfo.Remark = data.REMARK;
+            model.userInfo.UserType = data.USERTYPE;
             return View(model);
         }
 
@@ -182,7 +240,7 @@ namespace CCSIM.Web.Areas.User.Controllers
         private void LoadData()
         {
             var recordCount = 0;
-            var data = UserBLL.GetList("","", -1, 1, 20, out recordCount);
+            var data = UserBLL.GetList("","", -1, -1, 1, 20, out recordCount);
             ViewBag.Grid1RecordCount = recordCount;
             ViewBag.Grid1DataSource = data;
         }
@@ -191,11 +249,11 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserGrid_PageIndexChanged(JArray UserGrid_fields, string userName, string telephone, int UserGrid_pageIndex, int UserGrid_pageSize)
+        public ActionResult UserGrid_PageIndexChanged(JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("UserGrid");
             var recordCount = 0;
-            var data = UserBLL.GetList(userName, telephone, -1, UserGrid_pageIndex + 1, UserGrid_pageSize, out recordCount);
+            var data = UserBLL.GetList(userName, telephone, -1,userType, UserGrid_pageIndex + 1, UserGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, UserGrid_fields);
@@ -205,7 +263,7 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteRows(JArray selectedRows, JArray UserGrid_fields, string userName, string telephone, int UserGrid_pageSize)
+        public ActionResult DeleteRows(JArray selectedRows, JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var ids = new List<int>();
             foreach (var id in selectedRows)
@@ -226,7 +284,7 @@ namespace CCSIM.Web.Areas.User.Controllers
 
             var grid1 = UIHelper.Grid("UserGrid");
             var recordCount = 0;
-            var data = UserBLL.GetList(userName,telephone, -1, 1, UserGrid_pageSize, out recordCount);
+            var data = UserBLL.GetList(userName,telephone, -1, userType, UserGrid_pageIndex + 1, UserGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, UserGrid_fields);
@@ -235,11 +293,11 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult btnSearch_Click(JArray UserGrid_fields, string userName, string telephone, int UserGrid_pageSize)
+        public ActionResult btnSearch_Click(JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("UserGrid");
             var recordCount = 0;
-            var data = UserBLL.GetList(userName,telephone, -1, 1, UserGrid_pageSize, out recordCount);
+            var data = UserBLL.GetList(userName,telephone, -1,userType, UserGrid_pageIndex+1, UserGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, UserGrid_fields);
@@ -262,6 +320,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             info.ADDRESS = values["Address"];
             info.BELONGDEPTID = Convert.ToInt32(values["BelongDeptId"]);
             info.BELONGNETID = Convert.ToInt32(values["BelongNetId"]);
+            info.USERTYPE = Convert.ToInt32(values["UserType"]);
             info.REMARK = values["Remark"];
             info.ISDELETED = 0;
             var isSuccess = UserBLL.Add(info);
@@ -294,6 +353,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             info.ADDRESS = values["Address"];
             info.BELONGDEPTID = Convert.ToInt32(values["BelongDeptId"]);
             info.BELONGNETID = Convert.ToInt32(values["BelongNetId"]);
+            info.USERTYPE = Convert.ToInt32(values["UserType"]);
             info.REMARK = values["Remark"];
             var isSuccess = UserBLL.Update(info);
             ActiveWindow.HidePostBack();

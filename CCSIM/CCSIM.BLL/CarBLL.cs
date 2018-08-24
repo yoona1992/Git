@@ -128,17 +128,21 @@ namespace CCSIM.BLL
         /// 获取车辆信息列表
         /// </summary>
         /// <param name="vehicleNo"></param>
+        /// <param name="ownerType"></param>
         /// <param name="start"></param>
         /// <param name="limit"></param>
         /// <param name="totalCount"></param>
         /// <returns></returns>
-        public static List<CarInfo> GetList(string vehicleNo, int start, int limit, out int totalCount)
+        public static List<CarInfo> GetList(string vehicleNo, int ownerType, int start, int limit, out int totalCount)
         {
             var q = (from c in SlaveDb.Set<CFG_CARINFO>()
                      join n in SlaveDb.Set<CFG_NETINFO>() on c.BELONGNETID equals n.ID
                      join v in SlaveDb.Set<SYS_BM_CODE>() on c.VEHICLETYPE equals v.BMKEY
                      join d in SlaveDb.Set<SYS_BM_CODE>() on c.BELONGDEPTID equals d.BMKEY
-                     where ((vehicleNo == "" || vehicleNo == null) ? true : c.VEHICLENO.Contains(vehicleNo)) && c.ISDELETED == 0
+                     join o in SlaveDb.Set<SYS_BM_CODE>() on c.OWNERTYPE equals o.BMKEY into oo
+                     from ooo in oo.DefaultIfEmpty()
+                     where ((vehicleNo == "" || vehicleNo == null) ? true : c.VEHICLENO.Contains(vehicleNo))
+                     && ((ownerType == -1) ? true : c.OWNERTYPE == ownerType) && c.ISDELETED == 0
                      select new CarInfo
                      {
                          Id = c.ID,
@@ -148,10 +152,12 @@ namespace CCSIM.BLL
                          BelongDeptId = c.BELONGDEPTID,
                          BelongDeptName = d.BMVALUE,
                          BelongNetName = n.NAME,
-                         Owner = c.OWNER
+                         Owner = c.OWNER,
+                         OwnerType = c.OWNERTYPE,
+                         OwnerTypeName = ooo.BMVALUE
                      });
             totalCount = q.Count();
-            return q.OrderByDescending(p => p.BelongDeptId).ThenByDescending(p => p.VehicleNo).Skip((start - 1) * limit).Take(limit).ToList();
+            return q.OrderByDescending(p => p.OwnerType).ThenByDescending(p=>p.BelongDeptId).ThenByDescending(p => p.VehicleNo).Skip((start - 1) * limit).Take(limit).ToList();
         }
 
     }

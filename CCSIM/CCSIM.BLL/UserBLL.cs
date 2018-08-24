@@ -132,14 +132,16 @@ namespace CCSIM.BLL
         /// <param name="limit"></param>
         /// <param name="totalCount"></param>
         /// <returns></returns>
-        public static List<UserInfo> GetList(string name,string telephone, int belongDeptId, int start, int limit, out int totalCount)
+        public static List<UserInfo> GetList(string name, string telephone, int belongDeptId, int userType, int start, int limit, out int totalCount)
         {
             var q = (from u in SlaveDb.Set<CFG_USERINFO>()
                      join n in SlaveDb.Set<CFG_NETINFO>() on u.BELONGNETID equals n.ID
                      join s in SlaveDb.Set<SYS_BM_CODE>() on u.SEX equals s.BMKEY
                      join d in SlaveDb.Set<SYS_BM_CODE>() on u.BELONGDEPTID equals d.BMKEY
+                     join t in SlaveDb.Set<SYS_BM_CODE>() on u.USERTYPE equals t.BMKEY
                      where ((name == "" || name == null) ? true : u.NAME.Contains(name))
                      && ((telephone == "" || telephone == null) ? true : u.TELEPHONE.Contains(telephone))
+                     && (userType == -1 ? true : u.USERTYPE == userType)
                      && (belongDeptId == -1 ? true : u.BELONGDEPTID == belongDeptId) && u.ISDELETED == 0
                      select new UserInfo
                      {
@@ -150,12 +152,14 @@ namespace CCSIM.BLL
                          Telephone = u.TELEPHONE,
                          CertificateNum = u.CERTIFICATENUM,
                          Address = u.ADDRESS,
-                          BelongDeptId=u.BELONGDEPTID,
+                         BelongDeptId = u.BELONGDEPTID,
                          BelongDeptName = d.BMVALUE,
-                         BelongNetName = n.NAME
+                         BelongNetName = n.NAME,
+                         UserType = u.USERTYPE,
+                         UserTypeName = t.BMVALUE
                      });
             totalCount = q.Count();
-            return q.OrderByDescending(p => p.BelongDeptId).ThenByDescending(p=>p.Name).Skip((start - 1) * limit).Take(limit).ToList();
+            return q.OrderByDescending(p => p.UserType).ThenByDescending(p=>p.BelongDeptId).ThenByDescending(p => p.Name).Skip((start - 1) * limit).Take(limit).ToList();
         }
 
     }

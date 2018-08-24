@@ -48,5 +48,10 @@ namespace CCSIM.DAL.Model
         /// </summary>
         [Required]
         public int ISDELETED { get; set; }
+
+        /// <summary>
+        /// 排序值
+        /// </summary>
+        public int? ORDERNUM { get; set; }
     }
 }

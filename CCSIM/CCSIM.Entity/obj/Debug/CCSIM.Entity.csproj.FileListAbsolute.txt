@@ -41,3 +41,9 @@ D:\Git\CCSIM\CCSIM.Entity\bin\Debug\CCSIM.Entity.dll
 D:\Git\CCSIM\CCSIM.Entity\bin\Debug\CCSIM.Entity.pdb
 D:\Git\CCSIM\CCSIM.Entity\obj\Debug\CCSIM.Entity.dll
 D:\Git\CCSIM\CCSIM.Entity\obj\Debug\CCSIM.Entity.pdb
+F:\Git\Git\CCSIM\CCSIM.Entity\bin\Debug\CCSIM.Entity.dll
+F:\Git\Git\CCSIM\CCSIM.Entity\bin\Debug\CCSIM.Entity.pdb
+F:\Git\Git\CCSIM\CCSIM.Entity\obj\Debug\CCSIM.Entity.csproj.CoreCompileInputs.cache
+F:\Git\Git\CCSIM\CCSIM.Entity\obj\Debug\CCSIM.Entity.dll
+F:\Git\Git\CCSIM\CCSIM.Entity\obj\Debug\CCSIM.Entity.pdb
+F:\Git\Git\CCSIM\CCSIM.Entity\obj\Debug\CCSIM.Entity.csprojResolveAssemblyReference.cache

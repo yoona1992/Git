@@ -36,6 +36,8 @@
                                     F.DropDownListFor(m => m.belongNet.DropDownList).ID("BelongNetId").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所属网格").AutoSelectFirstItem(false).EmptyText("请选择所属网格")
                                         .Items(Model.belongNet.DropDownListItem.ToArray()).SelectedValue(Model.userInfo.BelongNetId.ToString()).BoxFlex(1)
                                 ),
+    F.DropDownListFor(m => m.userType.DropDownList).ID("UserType").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>人员类型").AutoSelectFirstItem(false).EmptyText("请选择人员类型")
+        .Items(Model.userType.DropDownListItem.ToArray()).SelectedValue(Model.userInfo.UserType.ToString()),
     F.TextBox().ID("Direction").Text(Model.userInfo.Direction).Label("去向"),
     F.TextBox().ID("Address").Text(Model.userInfo.Address).Label("家庭地址"),
     F.TextArea().ID("Remark").Text(Model.userInfo.Remark).Height(160).Label("备注")

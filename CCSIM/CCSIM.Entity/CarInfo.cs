@@ -58,5 +58,11 @@ namespace CCSIM.Entity
         /// 是否删除
         /// </summary>
         public int Isdeleted { get; set; }
+
+        /// <summary>
+        /// 所有人类型
+        /// </summary>
+        public int? OwnerType { get; set; }
+        public string OwnerTypeName { get; set; }
     }
 }
