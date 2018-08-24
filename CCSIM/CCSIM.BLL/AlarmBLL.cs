@@ -86,11 +86,11 @@ namespace CCSIM.BLL
             pSBQueryText.Append("SELECT * FROM INFO_ALARMINFO WHERE ALARMTIME BETWEEN TO_DATE('" + stTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss') AND TO_DATE('" + endTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss') ");
             if (string.IsNullOrWhiteSpace(objectName) == false)
             {
-                pSBQueryCount.Append("AND ALARMOBJECTNAME LIKE '%" + objectName + "%'");
+                pSBQueryText.Append("AND ALARMOBJECTNAME LIKE '%" + objectName + "%'");
             }
             if (alarmType != -1)
             {
-                pSBQueryCount.Append("AND ALARMTYPE = " + alarmType);
+                pSBQueryText.Append("AND ALARMTYPE = " + alarmType);
             }
             pSBQueryText.Append(" ORDER BY ALARMTIME DESC) A ");
             pSBQueryText.Append("WHERE rownum<=" + pEndNum + ") B WHERE r>=" + pStartNum);

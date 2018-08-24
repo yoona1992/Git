@@ -139,7 +139,7 @@ namespace CCSIM.BLL
                      join s in SlaveDb.Set<SYS_BM_CODE>() on u.SEX equals s.BMKEY
                      join d in SlaveDb.Set<SYS_BM_CODE>() on u.BELONGDEPTID equals d.BMKEY
                      where ((name == "" || name == null) ? true : u.NAME.Contains(name))
-                     && ((telephone == "" || telephone == null) ? true : u.NAME.Contains(telephone))
+                     && ((telephone == "" || telephone == null) ? true : u.TELEPHONE.Contains(telephone))
                      && (belongDeptId == -1 ? true : u.BELONGDEPTID == belongDeptId) && u.ISDELETED == 0
                      select new UserInfo
                      {

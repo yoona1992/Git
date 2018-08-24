@@ -1,4 +1,5 @@
-﻿using FineUIMvc;
+﻿using CCSIM.BLL;
+using FineUIMvc;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,36 +17,49 @@ namespace CCSIM.Web.Areas.AlarmInfo.Controllers
             LoadData();
             return View();
         }
+
         #region BindGrid
 
         private void LoadData()
         {
-            var recordCount = DataSourceUtil.GetTotalCount7();
-
-            // 1.设置总项数（特别注意：数据库分页初始化时，一定要设置总记录数RecordCount）
+            var recordCount = 0;
+            var stTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00");
+            var endTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
+            var data = AlarmBLL.GetList("",-1,stTime,endTime, 1, 20, out recordCount);
             ViewBag.Grid1RecordCount = recordCount;
-
-            // 2.获取当前分页数据
-            ViewBag.Grid1DataSource = DataSourceUtil.GetPagedDataTable7(pageIndex: 0, pageSize: 5, recordCount: recordCount);
-
+            ViewBag.Grid1DataSource = data;
         }
 
         #endregion
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Grid1_PageIndexChanged(JArray Grid1_fields, int Grid1_pageIndex)
+        public ActionResult AlarmInfoGrid_PageIndexChanged(JArray AlarmInfoGrid_fields, string objectName, int alarmType,DateTime startTime, DateTime endTime, int AlarmInfoGrid_pageIndex, int AlarmInfoGrid_pageSize)
         {
-            var grid1 = UIHelper.Grid("Grid1");
+            var grid1 = UIHelper.Grid("AlarmInfoGrid");
+            var recordCount = 0;
+            var stTime = DateTime.Parse(startTime.ToString("yyyy-MM-dd") + " 00:00:00");
+            var edTime = DateTime.Parse(endTime.ToString("yyyy-MM-dd") + " 23:59:59");
+            var data = AlarmBLL.GetList(objectName,alarmType, stTime, edTime, AlarmInfoGrid_pageIndex + 1, AlarmInfoGrid_pageSize, out recordCount);
 
-            var recordCount = DataSourceUtil.GetTotalCount7();
-
-            // 1.设置总项数（数据库分页回发时，如果总记录数不变，可以不设置RecordCount）
             grid1.RecordCount(recordCount);
+            grid1.DataSource(data, AlarmInfoGrid_fields);
 
-            // 2.获取当前分页数据
-            var dataSource = DataSourceUtil.GetPagedDataTable7(pageIndex: Grid1_pageIndex, pageSize: 5, recordCount: recordCount);
-            grid1.DataSource(dataSource, Grid1_fields);
+            return UIHelper.Result();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult btnSearch_Click(JArray AlarmInfoGrid_fields, string objectName, int alarmType, DateTime startTime, DateTime endTime, int AlarmInfoGrid_pageIndex, int AlarmInfoGrid_pageSize)
+        {
+            var grid1 = UIHelper.Grid("AlarmInfoGrid");
+            var recordCount = 0;
+            var stTime = DateTime.Parse(startTime.ToString("yyyy-MM-dd") + " 00:00:00");
+            var edTime = DateTime.Parse(endTime.ToString("yyyy-MM-dd") + " 23:59:59");
+            var data = AlarmBLL.GetList(objectName, alarmType, stTime, edTime, AlarmInfoGrid_pageIndex + 1, AlarmInfoGrid_pageSize, out recordCount);
+
+            grid1.RecordCount(recordCount);
+            grid1.DataSource(data, AlarmInfoGrid_fields);
 
             return UIHelper.Result();
         }

@@ -46,7 +46,7 @@ namespace CCSIM.BLL
         /// <param name="limit"></param>
         /// <param name="totalCount"></param>
         /// <returns></returns>
-        public static List<GpsData> GetList(string telephone, DateTime stTime, DateTime endTime, int start, int limit, out int totalCount)
+        public static List<GpsData> GetList_User(string telephone, DateTime stTime, DateTime endTime, int start, int limit, out int totalCount)
         {
             StringBuilder pSBQueryCount = new StringBuilder();
             pSBQueryCount.Append("SELECT COUNT(*) FROM GPS_DATA WHERE CREATE_TIME BETWEEN TO_DATE('" + stTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss') AND TO_DATE('" + endTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss') ");
@@ -83,7 +83,7 @@ namespace CCSIM.BLL
 
             return gpsDataList;
         }
-        public static List<GpsData> GetList(string telephone, DateTime stTime, DateTime endTime)
+        public static List<GpsData> GetList_User(string telephone, DateTime stTime, DateTime endTime)
         {
             StringBuilder pSBQueryText = new StringBuilder();
             pSBQueryText.Append("SELECT LON,LAT,CREATE_TIME,ADDRESS FROM GPS_DATA WHERE CREATE_TIME BETWEEN TO_DATE('" + stTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss') AND TO_DATE('" + endTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss') ");

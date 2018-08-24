@@ -32,22 +32,22 @@ namespace CCSIM.BLL
 
         #endregion EF上下文对象(从库)
 
-       /// <summary>
-       /// 获取消息列表
-       /// </summary>
-       /// <param name="telephone"></param>
-       /// <param name="title"></param>
-       /// <param name="startTime"></param>
-       /// <param name="endTime"></param>
-       /// <param name="start"></param>
-       /// <param name="limit"></param>
-       /// <param name="totalCount"></param>
-       /// <returns></returns>
-        public static List<MessageInfo> GetList(string telephone, string title,DateTime startTime,DateTime endTime, int start, int limit, out int totalCount)
+        /// <summary>
+        /// 获取消息列表
+        /// </summary>
+        /// <param name="telephoneList">手机列表</param>
+        /// <param name="title">标题</param>
+        /// <param name="startTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        /// <param name="start"></param>
+        /// <param name="limit"></param>
+        /// <param name="totalCount"></param>
+        /// <returns></returns>
+        public static List<MessageInfo> GetList(List<string> telephoneList, string title,DateTime startTime,DateTime endTime, int start, int limit, out int totalCount)
         {
             var q = (from m in SlaveDb.Set<MESSAGE>()
                      where ((title == "" || title == null) ? true : m.TITLE.Contains(title))
-                     && ((telephone == "" || telephone == null) ? true : m.PHONE==telephone)
+                     && (telephoneList.Count==0 ? true : telephoneList.Contains(m.PHONE))
                      &&m.CREATE_DATE>=startTime&&m.CREATE_DATE<=endTime
                      select new MessageInfo
                      {

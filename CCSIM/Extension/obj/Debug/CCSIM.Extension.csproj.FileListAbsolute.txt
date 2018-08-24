@@ -60,3 +60,4 @@ D:\Git\CCSIM\Extension\bin\Debug\AutoMapper.pdb
 D:\Git\CCSIM\Extension\bin\Debug\AutoMapper.xml
 D:\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.dll
 D:\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.pdb
+D:\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.csprojResolveAssemblyReference.cache

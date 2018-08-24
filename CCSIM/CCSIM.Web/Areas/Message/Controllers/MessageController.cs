@@ -25,7 +25,7 @@ namespace CCSIM.Web.Areas.Message.Controllers
             var recordCount = 0;
             var stTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00");
             var endTime= DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
-            var data = MessageBLL.GetList("","", stTime, endTime, 1, 20, out recordCount);
+            var data = MessageBLL.GetList(new List<string>(),"", stTime, endTime, 1, 20, out recordCount);
             ViewBag.Grid1RecordCount = recordCount;
             ViewBag.Grid1DataSource = data;
         }
@@ -40,7 +40,9 @@ namespace CCSIM.Web.Areas.Message.Controllers
             var recordCount = 0;
             var stTime = DateTime.Parse(startTime.ToString("yyyy-MM-dd") + " 00:00:00");
             var edTime = DateTime.Parse(endTime.ToString("yyyy-MM-dd") + " 23:59:59");
-            var data = MessageBLL.GetList(telephone,title, stTime, edTime, MessageGrid_pageIndex + 1, MessageGrid_pageSize, out recordCount);
+            var telephoneList = new List<string>();
+            telephoneList.Add("15989488656");
+            var data = MessageBLL.GetList(telephoneList, title, stTime, edTime, MessageGrid_pageIndex + 1, MessageGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, MessageGrid_fields);
@@ -56,7 +58,9 @@ namespace CCSIM.Web.Areas.Message.Controllers
             var recordCount = 0;
             var stTime = DateTime.Parse(startTime.ToString("yyyy-MM-dd") + " 00:00:00");
             var edTime = DateTime.Parse(endTime.ToString("yyyy-MM-dd") + " 23:59:59");
-            var data = MessageBLL.GetList(telephone, title, stTime, edTime, 1, MessageGrid_pageSize, out recordCount);
+            var telephoneList = new List<string>();
+            telephoneList.Add("15989488656");
+            var data = MessageBLL.GetList(telephoneList, title, stTime, edTime, 1, MessageGrid_pageSize, out recordCount);
 
             grid1.RecordCount(recordCount);
             grid1.DataSource(data, MessageGrid_fields);

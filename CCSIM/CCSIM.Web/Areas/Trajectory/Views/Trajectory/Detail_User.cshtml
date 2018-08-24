@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "GridPaging/TrajectoryDetailUser";
+    var F = Html.F();
+}
+
+@F.PageManager.AutoSizePanelID("TrajectoryDetailUserGrid")
+
+@section body {
+
+    @(F.Panel()
+        .Layout(LayoutType.Fit)
+        .ShowHeader(false)
+        .ShowBorder(false)
+        .Items(
+            F.Grid()
+                .EnableCheckBoxSelect(true)
+                .AutoScroll(true)
+                .ShowHeader(false)
+                .ShowBorder(false)
+        .ID("TrajectoryDetailUserGrid")
+        .DataTextField("Address")
+        .AllowPaging(true)
+        .PageSize(20)
+        .IsDatabasePaging(true)
+        .OnPageIndexChanged(Url.Action("TrajectoryDetailUserGrid_PageIndexChanged"), "TrajectoryDetailUserGrid",
+                                new Parameter("passTime", "F.ui.PassTime.getValue().getFullYear()+'-'+(F.ui.PassTime.getValue().getMonth()+1)+'-'+F.ui.PassTime.getValue().getDate()"),
+                                new Parameter("telephone", "F.ui.TelePhone.getValue()"))
+                .BodyPadding(0)
+                .Toolbars(
+                    F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
+                        .Items(
+                            F.TextBox().ID("TelePhone").Text(Request.QueryString["telephone"]).Hidden(true),
+                            F.TextBox().ID("UserName").Text(Request.QueryString["username"]).Hidden(true),
+                            F.DatePicker().Width(200).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("经过日期").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now).ID("PassTime"),
+                            F.ToolbarSeparator(),
+                            F.Button().ID("btnDetailUserSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnDetailUserSearch_Click"),
+                                "TrajectoryDetailUserGrid",
+                                new Parameter("passTime", "F.ui.PassTime.getValue().getFullYear()+'-'+(F.ui.PassTime.getValue().getMonth()+1)+'-'+F.ui.PassTime.getValue().getDate()"),
+                                new Parameter("telephone", "F.ui.TelePhone.getValue()")),
+                            F.ToolbarFill().ID("ToolbarFill1"),
+                            F.Button().ID("btnMap").Text("地图轨迹").Icon(Icon.MapMagnify).Listener("click", "onbtnMapClick")
+                         )
+                )
+        .Columns(
+            F.RowNumberField(),
+            F.RenderField()
+                .HeaderText("经过地址")
+                .DataField("Address")
+                .RendererFunction("renderTooltip")
+                .BoxFlex(1),
+            F.RenderField()
+                .HeaderText("经过时间")
+                .DataField("Create_Time")
+                .Width(200)
+        )
+    .RecordCount(ViewBag.TrajectoryDetailUserGridRecordCount)
+    .DataSource(ViewBag.TrajectoryDetailUserGridDataSource)
+    .ShowPagingMessage(true)
+
+    )
+    )
+
+@(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("地图").ID("Window1").Maximized(true))
+
+}
+
+@section script {
+    <script src="~/res/js/grid.js"></script>
+    <script>
+        function onbtnMapClick(event) {
+            var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Map_User")';
+            var iframeUrl = iframeWindowUrl + '?telephone=' + F.ui.TelePhone.getValue() + "&username=" + F.ui.UserName.getValue() + "&passtime=" + (F.ui.PassTime.getValue().getFullYear() + '-' + (F.ui.PassTime.getValue().getMonth() + 1) + '-' + F.ui.PassTime.getValue().getDate());
+
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '地图 - ' + '历史轨迹');
+        }
+    </script>
+}
+
