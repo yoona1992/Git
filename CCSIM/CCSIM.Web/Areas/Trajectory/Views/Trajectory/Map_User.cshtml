@@ -61,7 +61,6 @@
             // 百度地图API功能
             map = new BMap.Map("Form_TrajectoryMap");
             map.enableScrollWheelZoom();
-            map.centerAndZoom("练市", 16);
             var top_right_navigation = new BMap.NavigationControl({
                 anchor: BMAP_ANCHOR_TOP_RIGHT
             }); //右上角
@@ -136,8 +135,8 @@
                                     me.setRotation(proPos, initPos, targetPos);
                                 }
                                 if (me._opts.autoView) {
-                                    if (!me._map.getBounds().containsPoint(pos)) {
-                                        me._map.setCenter(pos);
+                                    if (!map.getBounds().containsPoint(pos)) {
+                                        map.setCenter(pos);
                                     }
                                 }
                             }
@@ -160,6 +159,9 @@
                     ]
 
                 });
+            }
+            else {
+                map.centerAndZoom("练市", 16);
             }
         });
     </script>
