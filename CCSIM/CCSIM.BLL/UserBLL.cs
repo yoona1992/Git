@@ -162,5 +162,14 @@ namespace CCSIM.BLL
             return q.OrderByDescending(p => p.UserType).ThenByDescending(p=>p.BelongDeptId).ThenByDescending(p => p.Name).Skip((start - 1) * limit).Take(limit).ToList();
         }
 
+        /// <summary>
+        /// 获取所有人员
+        /// </summary>
+        /// <returns></returns>
+        public static List<CFG_USERINFO> GetAll()
+        {
+            DbBase<CFG_USERINFO> db = new DbBase<CFG_USERINFO>();
+            return db.GetAll(p => p.ISDELETED == 0, "NAME");
+        }
     }
 }

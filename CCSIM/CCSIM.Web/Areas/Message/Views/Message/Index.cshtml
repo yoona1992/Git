@@ -1,6 +1,6 @@
 ﻿
-
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "GridPaging/MessageInfo";
     var F = Html.F();
 }
@@ -8,14 +8,6 @@
 @F.PageManager.AutoSizePanelID("MessageGrid")
 
 @section head {
-
-    @*<style>
-            .f-grid-row .f-grid-cell-inner {
-                white-space: normal;
-                word-break: break-all;
-            }
-        </style>*@
-
 }
 
 @section body {
@@ -40,7 +32,7 @@
                                         new Parameter("startTime", "F.ui.StartTime.getValue().getFullYear()+'-'+(F.ui.StartTime.getValue().getMonth()+1)+'-'+F.ui.StartTime.getValue().getDate()"),
                                         new Parameter("endTime", "F.ui.EndTime.getValue().getFullYear()+'-'+(F.ui.EndTime.getValue().getMonth()+1)+'-'+F.ui.EndTime.getValue().getDate()"),
                                         new Parameter("title", "F.ui.tbxTitle.getValue()"),
-                                        new Parameter("name", "F.ui.tbxName.getValue()"))
+                                        new Parameter("username", "F.ui.tbxName.getValue()"))
                         .BodyPadding(0)
                         .Toolbars(
                             F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
@@ -48,14 +40,14 @@
                                     F.DatePicker().Width(200).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("开始时间").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now).ID("StartTime"),
                                     F.DatePicker().Width(200).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("结束时间").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now).ID("EndTime"),
                                     F.TextBox().Width(250).LabelWidth(50).LabelAlign(LabelAlign.Right).Label("标题").EmptyText("请输入标题").ID("tbxTitle"),
-                                    F.TextBox().Width(250).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("姓名").EmptyText("请输入姓名").ID("tbxName"),
+                                    F.TextBox().Width(250).LabelWidth(50).LabelAlign(LabelAlign.Right).Label("姓名").EmptyText("请输入姓名").ID("tbxName"),
                                     F.ToolbarSeparator(),
                                     F.Button().ID("btnSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnSearch_Click"),
                                         "MessageGrid",
                                         new Parameter("startTime", "F.ui.StartTime.getValue().getFullYear()+'-'+(F.ui.StartTime.getValue().getMonth()+1)+'-'+F.ui.StartTime.getValue().getDate()"),
                                         new Parameter("endTime", "F.ui.EndTime.getValue().getFullYear()+'-'+(F.ui.EndTime.getValue().getMonth()+1)+'-'+F.ui.EndTime.getValue().getDate()"),
                                         new Parameter("title", "F.ui.tbxTitle.getValue()"),
-                                        new Parameter("name", "F.ui.tbxName.getValue()"))
+                                        new Parameter("username", "F.ui.tbxName.getValue()"))
                                  )
                         )
                 .Columns(
@@ -70,8 +62,8 @@
                         .RendererFunction("renderTooltip")
                         .Width(400),
                     F.RenderField()
-                        .HeaderText("手机号码")
-                        .DataField("Phone")
+                        .HeaderText("上传人")
+                        .DataField("Name")
                         .Width(120),
                     F.RenderField()
                         .HeaderText("上传时间")
@@ -90,6 +82,9 @@
 
             )
     )
+
+@(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("新增").ID("Window1"))
+
 }
 
 
@@ -97,6 +92,28 @@
 
     <script src="~/res/js/grid.js"></script>
     <script>
+        // 打开窗体
+        function openWindow(rowData) {debugger
+            var iframeWindowUrl = '@Url.Content("~/Message/Message/Detail")';
+            var iframeUrl = iframeWindowUrl + '?id=' + rowData.id;
+
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
+        }
+
+        F.ready(function () {
+
+            var grid = F.ui.MessageGrid;
+
+            // 点击表格行中的编辑按钮
+            grid.el.on('click', 'a.editfield', function (event) {
+                var rowEl = $(this).closest('.f-grid-row');
+                var rowData = grid.getRowData(rowEl);
+
+                openWindow(rowData);
+            });
+
+        });
     </script>
 }
 

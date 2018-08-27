@@ -83,6 +83,7 @@
     <Compile Include="Model\GPS_DATA.cs" />
     <Compile Include="Model\INFO_ALARMINFO.cs" />
     <Compile Include="Model\MESSAGE.cs" />
+    <Compile Include="Model\NOTIFICATION.cs" />
     <Compile Include="Model\SYS_BM_CODE.cs" />
     <Compile Include="Model\CFG_USERINFO.cs" />
     <Compile Include="Model\CFG_CARINFO.cs" />

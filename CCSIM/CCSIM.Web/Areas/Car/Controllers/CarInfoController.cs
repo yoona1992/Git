@@ -241,7 +241,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             }
             else
             {
-                ShowNotify("数据删除成功！");
+                ShowNotify("数据删除失败！");
             }
 
             var grid1 = UIHelper.Grid("CarGrid");
@@ -290,7 +290,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             }
             else
             {
-                ShowNotify("数据新增成功！");
+                ShowNotify("数据新增失败！");
             }
             return UIHelper.Result();
         }
@@ -318,7 +318,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             }
             else
             {
-                ShowNotify("数据修改成功！");
+                ShowNotify("数据修改失败！");
             }
             return UIHelper.Result();
         }

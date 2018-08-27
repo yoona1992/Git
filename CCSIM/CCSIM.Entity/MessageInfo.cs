@@ -28,6 +28,11 @@ namespace CCSIM.Entity
         public string Phone { get; set; }
 
         /// <summary>
+        /// 姓名
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// 地址
         /// </summary>
         public string Address { get; set; }

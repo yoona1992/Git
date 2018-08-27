@@ -1,10 +1,13 @@
-﻿using CCSIM.DAL.DBContext;
+﻿using CCSIM.DAL.Base;
+using CCSIM.DAL.DBContext;
 using CCSIM.DAL.Model;
 using CCSIM.Entity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,7 +38,7 @@ namespace CCSIM.BLL
         /// <summary>
         /// 获取消息列表
         /// </summary>
-        /// <param name="telephoneList">手机列表</param>
+        /// <param name="username">用户名称</param>
         /// <param name="title">标题</param>
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">结束时间</param>
@@ -43,28 +46,40 @@ namespace CCSIM.BLL
         /// <param name="limit"></param>
         /// <param name="totalCount"></param>
         /// <returns></returns>
-        public static List<MessageInfo> GetList(List<string> telephoneList, string title,DateTime startTime,DateTime endTime, int start, int limit, out int totalCount)
+        public static List<MessageInfo> GetList(string username, string title, DateTime startTime, DateTime endTime, int start, int limit, out int totalCount)
         {
             var q = (from m in SlaveDb.Set<MESSAGE>()
+                     join u in SlaveDb.Set<CFG_USERINFO>() on m.PHONE equals u.TELEPHONE
                      where ((title == "" || title == null) ? true : m.TITLE.Contains(title))
-                     && (telephoneList.Count==0 ? true : telephoneList.Contains(m.PHONE))
-                     &&m.CREATE_DATE>=startTime&&m.CREATE_DATE<=endTime
+                     && ((username == "" || username == null) ? true : u.NAME.Contains(username))
+                     && m.CREATE_DATE >= startTime && m.CREATE_DATE <= endTime
                      select new MessageInfo
                      {
                          Id = m.ID,
-                         Title=m.TITLE,
-                         Phone=m.PHONE,
-                         Address=m.ADDRESS,
-                         Create_Date=m.CREATE_DATE
+                         Title = m.TITLE,
+                         Phone = m.PHONE,
+                         Address = m.ADDRESS,
+                         Name=u.NAME,
+                         Create_Date = m.CREATE_DATE
                      });
             totalCount = q.Count();
-            var data= q.OrderByDescending(p => p.Create_Date).ThenByDescending(p=>p.Title).Skip((start - 1) * limit).Take(limit).ToList();
-            foreach(var d in data)
+            var data = q.OrderByDescending(p => p.Create_Date).ThenByDescending(p => p.Title).Skip((start - 1) * limit).Take(limit).ToList();
+            foreach (var d in data)
             {
                 d.UploadDate = d.Create_Date.ToString("yyyy-MM-dd HH:mm:ss");
             }
             return data;
         }
 
+        /// <summary>
+        /// 获取车辆信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static MESSAGE Get(int id)
+        {
+            DbBase<MESSAGE> db = new DbBase<MESSAGE>();
+            return db.FirstOrDefault(p => p.ID == id);
+        }
     }
 }

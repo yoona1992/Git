@@ -90,8 +90,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Vendor\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess">
       <HintPath>..\packages\Oracle.ManagedDataAccess.12.2.1100\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
@@ -179,6 +179,8 @@
     <Compile Include="Areas\Message\MessageAreaRegistration.cs" />
     <Compile Include="Areas\NetArea\NetAreaRegistration.cs" />
     <Compile Include="Areas\NetArea\Controllers\NetAreaController.cs" />
+    <Compile Include="Areas\Notification\Controllers\NotificationController.cs" />
+    <Compile Include="Areas\Notification\NotificationAreaRegistration.cs" />
     <Compile Include="Areas\Trajectory\Controllers\TrajectoryController.cs" />
     <Compile Include="Areas\Trajectory\TrajectoryRegistration.cs" />
     <Compile Include="Areas\User\Controllers\UserInfoController.cs" />
@@ -194,6 +196,7 @@
     <Compile Include="Models\DropDownListModel.cs" />
     <Compile Include="Models\LonAndLatModel.cs" />
     <Compile Include="Models\NetInfoModel.cs" />
+    <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Models\TrajectoryInfoModel.cs" />
     <Compile Include="Models\UserInfoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2016,6 +2019,15 @@
     <Content Include="res\themes\pure_orange\theme.css" />
     <Content Include="res\themes\pure_purple\theme.css" />
     <Content Include="res\themes\pure_red\theme.css" />
+    <Content Include="thirdpart\baguetteBox\baguetteBox.css" />
+    <Content Include="thirdpart\baguetteBox\baguetteBox.js" />
+    <Content Include="thirdpart\baguetteBox\baguetteBox.min.css" />
+    <Content Include="thirdpart\baguetteBox\baguetteBox.min.js" />
+    <Content Include="thirdpart\baguetteBox\bootstrap.css" />
+    <Content Include="thirdpart\baguetteBox\bootstrap.min.css" />
+    <Content Include="thirdpart\baguetteBox\msgbox.css" />
+    <Content Include="thirdpart\baguetteBox\msgbox.js" />
+    <Content Include="thirdpart\baguetteBox\thumbnail-gallery.css" />
     <Content Include="thirdpart\bootstrap\.babelrc.js" />
     <Content Include="thirdpart\bootstrap\assets\brand\bootstrap-outline.svg" />
     <Content Include="thirdpart\bootstrap\assets\brand\bootstrap-punchout.svg" />
@@ -3694,10 +3706,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Trajectory\Views\Trajectory\Map_User.cshtml" />
-    <Content Include="Areas\Message\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Message\Views\web.config" />
     <Content Include="Areas\Message\Views\Message\Index.cshtml" />
     <Content Include="Areas\Trajectory\Views\Trajectory\Detail_Car.cshtml" />
+    <Content Include="Areas\Message\Views\Message\Detail.cshtml" />
+    <Content Include="Areas\Notification\Views\Notification\Index.cshtml" />
+    <Content Include="Areas\Notification\Views\web.config" />
+    <Content Include="Areas\Notification\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Notification\Views\Notification\Add.cshtml" />
     <None Include="Dockerfile" />
     <Content Include="thirdpart\bootstrap\.editorconfig" />
     <Content Include="thirdpart\bootstrap\.eslintignore" />

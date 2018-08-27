@@ -21,6 +21,7 @@ namespace CCSIM.DAL.DBContext
         public DbSet<GPS_DATA> GpsDatas { get; set; }
         public DbSet<MESSAGE> MessageInfos { get; set; }
         public DbSet<INFO_ALARMINFO> AlarmInfos { get; set; }
+        public DbSet<NOTIFICATION> Notifications { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

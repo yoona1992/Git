@@ -279,7 +279,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             }
             else
             {
-                ShowNotify("数据删除成功！");
+                ShowNotify("数据删除失败！");
             }
 
             var grid1 = UIHelper.Grid("UserGrid");
@@ -332,7 +332,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             }
             else
             {
-                ShowNotify("数据新增成功！");
+                ShowNotify("数据新增失败！");
             }
             return UIHelper.Result();
         }
@@ -364,7 +364,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             }
             else
             {
-                ShowNotify("数据修改成功！");
+                ShowNotify("数据修改失败！");
             }
             return UIHelper.Result();
         }

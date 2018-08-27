@@ -58,7 +58,12 @@
                         F.MenuButton()
                             .IconFont(IconFont._Mail)
                             .Text("资料数据管理")
-                            .Listener("click", "addTap('/Message/Message','message','资料数据管理');")
+                            .Listener("click", "addTap('/Message/Message','message','资料数据管理');"),
+                        F.MenuSeparator(),
+                        F.MenuButton()
+                            .IconFont(IconFont._Info)
+                            .Text("通知数据管理")
+                            .Listener("click", "addTap('/Notification/Notification','notification','通知数据管理');")
                     )
                 )
                     )
@@ -172,6 +177,9 @@
                     break;
                 case "message":
                     tapIcon = '@Url.Content("~/res/icon/email.png")';
+                    break;
+                case "notification":
+                    tapIcon = '@Url.Content("~/res/icon/information.png")';
                     break;
                 default:
                     break;
