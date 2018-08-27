@@ -157,7 +157,7 @@ namespace CCSIM.BLL
                          OwnerTypeName = ooo.BMVALUE
                      });
             totalCount = q.Count();
-            return q.OrderByDescending(p => p.OwnerType).ThenByDescending(p=>p.BelongDeptId).ThenByDescending(p => p.VehicleNo).Skip((start - 1) * limit).Take(limit).ToList();
+            return q.OrderByDescending(p => p.OwnerType).ThenByDescending(p=>p.BelongDeptId).ThenBy(p => p.VehicleNo).Skip((start - 1) * limit).Take(limit).ToList();
         }
 
     }

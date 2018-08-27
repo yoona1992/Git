@@ -36,7 +36,7 @@
                     F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
                         .Items(
                             F.TextBox().Width(300).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("车牌号码").EmptyText("请输入车牌号码").ID("tbxVehicleNo"),
-                            F.DropDownListFor(m => m.ownerType.DropDownList).Width(250).LabelWidth(100).ID("ddlistOwnerType").LabelAlign(LabelAlign.Right).Label("所有人类型").EmptyText("请选择所有人类型").EnableEdit(false)
+                            F.DropDownListFor(m => m.ownerType.DropDownList).Width(250).LabelWidth(100).ID("ddlistOwnerType").LabelAlign(LabelAlign.Right).Label("用车部门").EmptyText("请选择用车部门").EnableEdit(false)
                                         .ShowRedStar(false).SelectedValue("-1").Items(Model.ownerType.DropDownListItem.ToArray()),
                             F.ToolbarSeparator(),
                             F.Button().ID("btnSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnSearch_Click"),
@@ -67,7 +67,7 @@
                 .DataField("Owner")
                 .Width(150),
             F.RenderField()
-                .HeaderText("所有人类型")
+                .HeaderText("用车部门")
                 .DataField("OwnerTypeName")
                 .Width(150),
             F.RenderField()

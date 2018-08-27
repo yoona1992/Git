@@ -60,7 +60,7 @@ namespace CCSIM.Entity
         public int Isdeleted { get; set; }
 
         /// <summary>
-        /// 所有人类型
+        /// 用车部门
         /// </summary>
         public int? OwnerType { get; set; }
         public string OwnerTypeName { get; set; }

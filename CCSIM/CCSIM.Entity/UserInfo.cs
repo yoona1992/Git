@@ -66,7 +66,7 @@ namespace CCSIM.Entity
         /// <summary>
         /// 所属网格
         /// </summary>
-        public int BelongNetId { get; set; }
+        public int? BelongNetId { get; set; }
         public string BelongNetName { get; set; }
 
         /// <summary>
@@ -84,5 +84,10 @@ namespace CCSIM.Entity
         /// </summary>
         public int UserType { get; set; }
         public string UserTypeName { get; set; }
+
+        /// <summary>
+        /// 虚拟短号
+        /// </summary>
+        public string VirtualTrumpet { get; set; }
     }
 }

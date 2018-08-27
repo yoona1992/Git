@@ -70,19 +70,18 @@
                 .DataField("Telephone")
                 .Width(150),
             F.RenderField()
+                .HeaderText("虚拟短号")
+                .DataField("VirtualTrumpet")
+                .Width(150),
+            F.RenderField()
                 .HeaderText("证件号码")
                 .DataField("CertificateNum")
                 .Width(170),
             F.RenderField()
-                .HeaderText("家庭地址")
-                .DataField("Address")
-                .RendererFunction("renderTooltip")
-                .BoxFlex(1),
-            F.RenderField()
                 .HeaderText("所属部门")
                 .DataField("BelongDeptName")
                 .RendererFunction("renderTooltip")
-                .Width(200),
+                .BoxFlex(1),
             F.RenderField()
                 .HeaderText("所属网格")
                 .DataField("BelongNetName")
@@ -102,8 +101,8 @@
     )
     )
 
-    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("新增").ID("Window1"))
-    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window2_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("编辑").ID("Window2"))
+    @(F.Window().Hidden(true).Height(490).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("新增").ID("Window1"))
+    @(F.Window().Hidden(true).Height(490).Width(750).IsModal(true).OnClose(Url.Action("Window2_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("编辑").ID("Window2"))
 
 }
 

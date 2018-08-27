@@ -18,7 +18,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
         {
             LoadData();
             #region 下拉框绑定
-            var ownerTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            var ownerTypeList = CodeBLL.GetCodeListByParentCode("YCBM");
             var listItems = new List<ListItem>();
             listItems.Add(new ListItem
             {
@@ -91,7 +91,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             belongNet.DropDownList = "VALUE2";
             belongNet.DropDownListItem = listItems;
 
-            var ownerTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            var ownerTypeList = CodeBLL.GetCodeListByParentCode("YCBM");
             listItems = new List<ListItem>();
             foreach (var d in ownerTypeList)
             {
@@ -163,7 +163,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             belongNet.DropDownList = "VALUE2";
             belongNet.DropDownListItem = listItems;
 
-            var ownerTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
+            var ownerTypeList = CodeBLL.GetCodeListByParentCode("YCBM");
             listItems = new List<ListItem>();
             foreach (var d in ownerTypeList)
             {

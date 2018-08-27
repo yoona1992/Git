@@ -62,7 +62,7 @@ namespace CCSIM.DAL.Model
         public string OWNER { get; set; }
 
         /// <summary>
-        /// 所有人类型
+        /// 用车部门
         /// </summary>
         public int? OWNERTYPE { get; set; }
 

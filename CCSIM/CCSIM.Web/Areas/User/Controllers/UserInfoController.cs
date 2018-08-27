@@ -48,7 +48,7 @@ namespace CCSIM.Web.Areas.User.Controllers
         public ActionResult Add()
         {
             #region 下拉框绑定
-            var belongDeptList = CodeBLL.GetCodeListByParentCode("PCS");
+            var belongDeptList = CodeBLL.GetCodeListByParentCode("SSBM_RY");
             var listItems = new List<ListItem>();
             foreach (var d in belongDeptList)
             {
@@ -136,7 +136,7 @@ namespace CCSIM.Web.Areas.User.Controllers
         {
             var id = Convert.ToInt32(Request.QueryString["id"]);
             #region 下拉框绑定
-            var belongDeptList = CodeBLL.GetCodeListByParentCode("PCS");
+            var belongDeptList = CodeBLL.GetCodeListByParentCode("SSBM_RY");
             var listItems = new List<ListItem>();
             foreach (var d in belongDeptList)
             {
@@ -231,6 +231,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             model.userInfo.Address = data.ADDRESS;
             model.userInfo.Remark = data.REMARK;
             model.userInfo.UserType = data.USERTYPE;
+            model.userInfo.VirtualTrumpet = data.VIRTUALTRUMPET;
             return View(model);
         }
 
@@ -319,9 +320,10 @@ namespace CCSIM.Web.Areas.User.Controllers
             info.DIRECTION = values["Direction"];
             info.ADDRESS = values["Address"];
             info.BELONGDEPTID = Convert.ToInt32(values["BelongDeptId"]);
-            info.BELONGNETID = Convert.ToInt32(values["BelongNetId"]);
+            info.BELONGNETID = string.IsNullOrWhiteSpace(values["BelongNetId"])?-1:Convert.ToInt32(values["BelongNetId"]);
             info.USERTYPE = Convert.ToInt32(values["UserType"]);
             info.REMARK = values["Remark"];
+            info.VIRTUALTRUMPET = values["VirtualTrumpet"];
             info.ISDELETED = 0;
             var isSuccess = UserBLL.Add(info);
             ActiveWindow.HidePostBack();
@@ -352,9 +354,10 @@ namespace CCSIM.Web.Areas.User.Controllers
             info.DIRECTION = values["Direction"];
             info.ADDRESS = values["Address"];
             info.BELONGDEPTID = Convert.ToInt32(values["BelongDeptId"]);
-            info.BELONGNETID = Convert.ToInt32(values["BelongNetId"]);
+            info.BELONGNETID = string.IsNullOrWhiteSpace(values["BelongNetId"]) ? -1 : Convert.ToInt32(values["BelongNetId"]);
             info.USERTYPE = Convert.ToInt32(values["UserType"]);
             info.REMARK = values["Remark"];
+            info.VIRTUALTRUMPET = values["VirtualTrumpet"];
             var isSuccess = UserBLL.Update(info);
             ActiveWindow.HidePostBack();
 

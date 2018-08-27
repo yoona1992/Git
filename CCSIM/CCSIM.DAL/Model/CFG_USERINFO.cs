@@ -80,7 +80,7 @@ namespace CCSIM.DAL.Model
         /// 所属网格
         /// </summary>
         [Required]
-        public int BELONGNETID { get; set; }
+        public int? BELONGNETID { get; set; }
 
         /// <summary>
         /// 备注
@@ -99,5 +99,11 @@ namespace CCSIM.DAL.Model
         /// </summary>
         [Required]
         public int USERTYPE { get; set; }
+
+        /// <summary>
+        /// 虚拟短号
+        /// </summary>
+        [MaxLength(50)]
+        public string VIRTUALTRUMPET { get; set; }
     }
 }

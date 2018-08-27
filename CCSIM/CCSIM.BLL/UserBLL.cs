@@ -135,10 +135,11 @@ namespace CCSIM.BLL
         public static List<UserInfo> GetList(string name, string telephone, int belongDeptId, int userType, int start, int limit, out int totalCount)
         {
             var q = (from u in SlaveDb.Set<CFG_USERINFO>()
-                     join n in SlaveDb.Set<CFG_NETINFO>() on u.BELONGNETID equals n.ID
+                     join n in SlaveDb.Set<CFG_NETINFO>() on u.BELONGNETID equals n.ID into nn
                      join s in SlaveDb.Set<SYS_BM_CODE>() on u.SEX equals s.BMKEY
                      join d in SlaveDb.Set<SYS_BM_CODE>() on u.BELONGDEPTID equals d.BMKEY
                      join t in SlaveDb.Set<SYS_BM_CODE>() on u.USERTYPE equals t.BMKEY
+                     from nnn in nn.DefaultIfEmpty()
                      where ((name == "" || name == null) ? true : u.NAME.Contains(name))
                      && ((telephone == "" || telephone == null) ? true : u.TELEPHONE.Contains(telephone))
                      && (userType == -1 ? true : u.USERTYPE == userType)
@@ -154,12 +155,14 @@ namespace CCSIM.BLL
                          Address = u.ADDRESS,
                          BelongDeptId = u.BELONGDEPTID,
                          BelongDeptName = d.BMVALUE,
-                         BelongNetName = n.NAME,
+                         BelongNetId=u.BELONGNETID,
+                         BelongNetName = nnn.NAME,
                          UserType = u.USERTYPE,
-                         UserTypeName = t.BMVALUE
+                         UserTypeName = t.BMVALUE,
+                         VirtualTrumpet=u.VIRTUALTRUMPET
                      });
             totalCount = q.Count();
-            return q.OrderByDescending(p => p.UserType).ThenByDescending(p=>p.BelongDeptId).ThenByDescending(p => p.Name).Skip((start - 1) * limit).Take(limit).ToList();
+            return q.OrderByDescending(p => p.UserType).ThenByDescending(p=>p.BelongDeptId).ThenByDescending(p => p.BelongNetId).ThenBy(p => p.Name).Skip((start - 1) * limit).Take(limit).ToList();
         }
 
         /// <summary>
