@@ -4,6 +4,7 @@ using CCSIM.Entity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -77,7 +78,7 @@ namespace CCSIM.BLL
         /// <returns></returns>
         public static string SendMessage(string phone, string title, string content)
         {
-            var url = "http://122.225.122.106:18082/notify/notifyToSingle?phone="+phone+"&title="+title+"&content="+content;
+            var url = ConfigurationManager.AppSettings["NotificationUrl"] +"phone=" +phone+"&title="+title+"&content="+content;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/json";

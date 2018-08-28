@@ -21,26 +21,15 @@ namespace CCSIM.BLL
         {
             var now = DateTime.Now;
             StringBuilder pSBQueryText = new StringBuilder();
-            pSBQueryText.Append("SELECT * FROM (SELECT A.NAME,A.TELEPHONE AS OBJECTNAME,B.LON,B.LAT,TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,1 AS TYPE,B.ADDRESS FROM CFG_USERINFO A ");
-            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.TELEPHONE = B.OBJECTNAME WHERE A.ISDELETED = 0 ORDER BY A.BELONGDEPTID,A.NAME DESC)");
+            pSBQueryText.Append("SELECT * FROM (SELECT A.NAME,A.TELEPHONE AS OBJECTNAME,B.LON,B.LAT,TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,1 AS TYPE,B.ADDRESS,C.BMVALUE AS BELONGDEPTNAME,'' AS OWNER FROM CFG_USERINFO A ");
+            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.TELEPHONE = B.OBJECTNAME LEFT JOIN SYS_BM_CODE C ON A.BELONGDEPTID = C.BMKEY WHERE A.ISDELETED = 0 ORDER BY A.BELONGDEPTID,A.NAME)");
             pSBQueryText.Append("UNION ALL ");
-            pSBQueryText.Append("SELECT * FROM(SELECT A.VEHICLENO AS NAME,A.VEHICLENO AS OBJECTNAME,B.LON,B.LAT,TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,2 AS TYPE,B.ADDRESS FROM CFG_CARINFO A ");
-            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.VEHICLENO = B.OBJECTNAME WHERE A.ISDELETED = 0 ORDER BY A.BELONGDEPTID,A.VEHICLENO DESC)");
+            pSBQueryText.Append("SELECT * FROM(SELECT A.VEHICLENO AS NAME,A.VEHICLENO AS OBJECTNAME,B.LON,B.LAT,TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,2 AS TYPE,B.ADDRESS,C.BMVALUE AS BELONGDEPTNAME,A.OWNER FROM CFG_CARINFO A ");
+            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.VEHICLENO = B.OBJECTNAME LEFT JOIN SYS_BM_CODE C ON A.BELONGDEPTID = C.BMKEY WHERE A.ISDELETED = 0 ORDER BY A.BELONGDEPTID,A.VEHICLENO)");
 
             var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
-            List<TreeNode> treeNodeList = new List<TreeNode>();
-            TreeNode userNode = new TreeNode();
-            userNode.name = "人员";
-            userNode.open = true;
-            userNode.@checked = true;
-            userNode.id = "1";
-            TreeNode carNode = new TreeNode();
-            carNode.name = "车辆";
-            carNode.open = true;
-            carNode.@checked = true;
-            carNode.id = "2";
-            var index = 0;
-            foreach (DataRow dr in data.Rows)
+            List<TreeInfo> infoList = new List<TreeInfo>();
+            foreach(DataRow dr in data.Rows)
             {
                 var name = dr["NAME"].ToString();
                 var objectName = dr["OBJECTNAME"].ToString();
@@ -48,38 +37,121 @@ namespace CCSIM.BLL
                 var lat = dr["LAT"].ToString();
                 var passTime = dr["PASSTIME"].ToString();
                 var type = dr["TYPE"].ToString();
+                var address = dr["ADDRESS"].ToString();
+                var belongDeptName = dr["BELONGDEPTNAME"].ToString();
+                var owner = dr["OWNER"].ToString();
 
-                TreeNode n = new TreeNode();
-                n.objectName = objectName;
-                if (string.IsNullOrWhiteSpace(passTime)) //实时表没有数据，表示离线
+                TreeInfo info = new TreeInfo();
+                info.Name = name;
+                info.ObjectName = objectName;
+                info.Lon = lon;
+                info.Lat = lat;
+                info.PassTime = passTime;
+                info.Type = type;
+                info.Address = address;
+                info.BelongDeptName = belongDeptName;
+                info.Owner = owner;
+
+                infoList.Add(info);
+            }
+            
+            List<TreeNode> treeNodeList = new List<TreeNode>();
+            TreeNode userNode = new TreeNode();
+            userNode.name = "人员";
+            userNode.open = true;
+            userNode.@checked = true;
+            userNode.id = "1";
+            //找到所有人员信息
+            var userInfoList = infoList.Where(p => p.Type == "1").ToList();
+            var belongDeptList_User = infoList.Where(p => p.Type == "1").Select(p => p.BelongDeptName).Distinct().OrderBy(p=>p).ToList();
+            foreach(var dept in belongDeptList_User)
+            {
+                TreeNode deptNode = new TreeNode();
+                deptNode.open = false;
+                deptNode.@checked = true;
+                var id = "1_" + belongDeptList_User.IndexOf(dept);
+                deptNode.id = id;
+
+                var userList = infoList.Where(p => p.Type == "1" && p.BelongDeptName == dept).ToList();
+                deptNode.name = dept + "(" + userList.Count + "人)";
+                foreach (var u in userList)
                 {
-                    n.name = name + "(离线)";
-                    n.id = type + "_" + index.ToString();
-                }
-                else
-                {
-                    //如果时间大于5min，表示离线
-                    if (now.Subtract(DateTime.Parse(passTime)).TotalSeconds >= 300)
+                    var id_child = id + "_" + userList.IndexOf(u);
+                    TreeNode n = new TreeNode();
+                    n.objectName = u.ObjectName;
+                    if (string.IsNullOrWhiteSpace(u.PassTime)) //实时表没有数据，表示离线
                     {
-                        n.name = name + "(" + passTime + "后离线)";
-                        n.id = type + "_" + index.ToString();
+                        n.name = u.Name + "(离线)";
+                        n.id = id_child;
                     }
                     else
                     {
-                        n.name = name;
-                        n.id = type + "_" + index.ToString();
+                        //如果时间大于5min，表示离线
+                        if (now.Subtract(DateTime.Parse(u.PassTime)).TotalSeconds >= 300)
+                        {
+                            n.name = u.Name + "(" + u.PassTime + "后离线)";
+                            n.id = id_child;
+                        }
+                        else
+                        {
+                            n.name = u.Name;
+                            n.id = id_child;
+                        }
                     }
-                }
 
-                n.@checked = true;
-                if (type == "1")
-                {
-                    userNode.children.Add(n);
+                    n.@checked = true;
+                    deptNode.children.Add(n);
                 }
-                else
+                userNode.children.Add(deptNode);
+            }
+
+            TreeNode carNode = new TreeNode();
+            carNode.name = "车辆";
+            carNode.open = true;
+            carNode.@checked = true;
+            carNode.id = "2";
+            //找到所有车辆信息
+            var carInfoList = infoList.Where(p => p.Type == "2").ToList();
+            var belongDeptList_Car = infoList.Where(p => p.Type == "2").Select(p => p.BelongDeptName).Distinct().OrderBy(p => p).ToList();
+            foreach (var dept in belongDeptList_Car)
+            {
+                TreeNode deptNode = new TreeNode();
+                deptNode.open = false;
+                deptNode.@checked = true;
+                var id = "1_" + belongDeptList_Car.IndexOf(dept);
+                deptNode.id = id;
+
+                var carList = infoList.Where(p => p.Type == "2" && p.BelongDeptName == dept).ToList();
+                deptNode.name = dept+"("+carList.Count+"辆)";
+                foreach (var c in carList)
                 {
-                    carNode.children.Add(n);
+                    var id_child = id + "_" + carList.IndexOf(c);
+                    TreeNode n = new TreeNode();
+                    n.objectName = c.ObjectName;
+                    if (string.IsNullOrWhiteSpace(c.PassTime)) //实时表没有数据，表示离线
+                    {
+                        n.name = c.Name + "(离线)";
+                        n.id = id_child;
+                    }
+                    else
+                    {
+                        //如果时间大于5min，表示离线
+                        if (now.Subtract(DateTime.Parse(c.PassTime)).TotalSeconds >= 300)
+                        {
+                            n.name = c.Name + "(" + c.PassTime + "后离线)";
+                            n.id = id_child;
+                        }
+                        else
+                        {
+                            n.name = c.Name;
+                            n.id = id_child;
+                        }
+                    }
+
+                    n.@checked = true;
+                    deptNode.children.Add(n);
                 }
+                carNode.children.Add(deptNode);
             }
 
             if (userNode.children.Count > 0)
