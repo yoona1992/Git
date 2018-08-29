@@ -24,12 +24,12 @@ namespace CCSIM.BLL
             pSBQueryText.Append("SELECT * FROM (SELECT A.NAME,A.TELEPHONE AS OBJECTNAME,B.LON,B.LAT,TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,1 AS TYPE,B.ADDRESS,C.BMVALUE AS BELONGDEPTNAME,'' AS OWNER FROM CFG_USERINFO A ");
             pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.TELEPHONE = B.OBJECTNAME LEFT JOIN SYS_BM_CODE C ON A.BELONGDEPTID = C.BMKEY WHERE A.ISDELETED = 0 ORDER BY A.BELONGDEPTID,A.NAME)");
             pSBQueryText.Append("UNION ALL ");
-            pSBQueryText.Append("SELECT * FROM(SELECT A.VEHICLENO AS NAME,A.VEHICLENO AS OBJECTNAME,B.LON,B.LAT,TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,2 AS TYPE,B.ADDRESS,C.BMVALUE AS BELONGDEPTNAME,A.OWNER FROM CFG_CARINFO A ");
-            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.VEHICLENO = B.OBJECTNAME LEFT JOIN SYS_BM_CODE C ON A.BELONGDEPTID = C.BMKEY WHERE A.ISDELETED = 0 ORDER BY A.BELONGDEPTID,A.VEHICLENO)");
+            pSBQueryText.Append("SELECT * FROM(SELECT A.VEHICLENO AS NAME,TO_CHAR(D.ID) AS OBJECTNAME,B.LON,B.LAT,TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,2 AS TYPE,B.ADDRESS,C.BMVALUE AS BELONGDEPTNAME,A.OWNER FROM CFG_CARINFO A ");
+            pSBQueryText.Append("LEFT JOIN CFG_VEHICLEINFO D ON A.CLDWZDSBH = D.CLDWZDSBH LEFT JOIN GPS_REAL B ON D.ID = B.OBJECTNAME AND B.OBJECTTYPE=1 LEFT JOIN SYS_BM_CODE C ON A.BELONGDEPTID = C.BMKEY WHERE A.ISDELETED = 0 ORDER BY A.BELONGDEPTID,A.VEHICLENO)");
 
             var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
             List<TreeInfo> infoList = new List<TreeInfo>();
-            foreach(DataRow dr in data.Rows)
+            foreach (DataRow dr in data.Rows)
             {
                 var name = dr["NAME"].ToString();
                 var objectName = dr["OBJECTNAME"].ToString();
@@ -54,17 +54,19 @@ namespace CCSIM.BLL
 
                 infoList.Add(info);
             }
-            
+
             List<TreeNode> treeNodeList = new List<TreeNode>();
             TreeNode userNode = new TreeNode();
             userNode.name = "人员";
             userNode.open = true;
             userNode.@checked = true;
             userNode.id = "1";
+            int userOffline = 0;
+            int userCount = 0;
             //找到所有人员信息
             var userInfoList = infoList.Where(p => p.Type == "1").ToList();
-            var belongDeptList_User = infoList.Where(p => p.Type == "1").Select(p => p.BelongDeptName).Distinct().OrderBy(p=>p).ToList();
-            foreach(var dept in belongDeptList_User)
+            var belongDeptList_User = infoList.Where(p => p.Type == "1").Select(p => p.BelongDeptName).Distinct().OrderBy(p => p).ToList();
+            foreach (var dept in belongDeptList_User)
             {
                 TreeNode deptNode = new TreeNode();
                 deptNode.open = false;
@@ -83,6 +85,7 @@ namespace CCSIM.BLL
                     {
                         n.name = u.Name + "(离线)";
                         n.id = id_child;
+                        userOffline++;
                     }
                     else
                     {
@@ -91,6 +94,7 @@ namespace CCSIM.BLL
                         {
                             n.name = u.Name + "(" + u.PassTime + "后离线)";
                             n.id = id_child;
+                            userOffline++;
                         }
                         else
                         {
@@ -101,15 +105,20 @@ namespace CCSIM.BLL
 
                     n.@checked = true;
                     deptNode.children.Add(n);
+
+                    userCount++;
                 }
                 userNode.children.Add(deptNode);
             }
+            userNode.name = "人员(" + (userCount - userOffline) + "/" + userCount + ")";
 
             TreeNode carNode = new TreeNode();
             carNode.name = "车辆";
             carNode.open = true;
             carNode.@checked = true;
             carNode.id = "2";
+            int carOffline = 0;
+            int carCount = 0;
             //找到所有车辆信息
             var carInfoList = infoList.Where(p => p.Type == "2").ToList();
             var belongDeptList_Car = infoList.Where(p => p.Type == "2").Select(p => p.BelongDeptName).Distinct().OrderBy(p => p).ToList();
@@ -122,7 +131,7 @@ namespace CCSIM.BLL
                 deptNode.id = id;
 
                 var carList = infoList.Where(p => p.Type == "2" && p.BelongDeptName == dept).ToList();
-                deptNode.name = dept+"("+carList.Count+"辆)";
+                deptNode.name = dept + "(" + carList.Count + "辆)";
                 foreach (var c in carList)
                 {
                     var id_child = id + "_" + carList.IndexOf(c);
@@ -130,29 +139,34 @@ namespace CCSIM.BLL
                     n.objectName = c.ObjectName;
                     if (string.IsNullOrWhiteSpace(c.PassTime)) //实时表没有数据，表示离线
                     {
-                        n.name = c.Name + "(离线)";
+                        n.name = c.Name+"("+c.Owner+")" + "(离线)";
                         n.id = id_child;
+                        carOffline++;
                     }
                     else
                     {
                         //如果时间大于5min，表示离线
                         if (now.Subtract(DateTime.Parse(c.PassTime)).TotalSeconds >= 300)
                         {
-                            n.name = c.Name + "(" + c.PassTime + "后离线)";
+                            n.name = c.Name + "(" + c.Owner + ")" + "(" + c.PassTime + "后离线)";
                             n.id = id_child;
+                            carOffline++;
                         }
                         else
                         {
-                            n.name = c.Name;
+                            n.name = c.Name + "(" + c.Owner + ")";
                             n.id = id_child;
                         }
                     }
 
                     n.@checked = true;
                     deptNode.children.Add(n);
+
+                    carCount++;
                 }
                 carNode.children.Add(deptNode);
             }
+            carNode.name = "车辆(" + (carCount - carOffline) + "/" + carCount + ")";
 
             if (userNode.children.Count > 0)
             {
@@ -178,8 +192,8 @@ namespace CCSIM.BLL
             pSBQueryText.Append("SELECT A.NAME,A.TELEPHONE AS OBJECTNAME,CASE WHEN B.PASSTIME IS NULL THEN '1753-01-01 00:00:00' ELSE TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') END AS PASSTIME FROM CFG_USERINFO A ");
             pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.TELEPHONE = B.OBJECTNAME WHERE A.ISDELETED = 0 ");
             pSBQueryText.Append("UNION ALL ");
-            pSBQueryText.Append("SELECT A.VEHICLENO AS NAME,A.VEHICLENO AS OBJECTNAME,CASE WHEN B.PASSTIME IS NULL THEN '1753-01-01 00:00:00' ELSE TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') END AS PASSTIME FROM CFG_CARINFO A ");
-            pSBQueryText.Append("LEFT JOIN GPS_REAL B ON A.VEHICLENO = B.OBJECTNAME WHERE A.ISDELETED = 0 ");
+            pSBQueryText.Append("SELECT A.VEHICLENO AS NAME,TO_CHAR(D.ID) AS OBJECTNAME,CASE WHEN B.PASSTIME IS NULL THEN '1753-01-01 00:00:00' ELSE TO_CHAR(B.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') END AS PASSTIME FROM CFG_CARINFO A ");
+            pSBQueryText.Append("LEFT JOIN CFG_VEHICLEINFO D ON A.CLDWZDSBH = D.CLDWZDSBH LEFT JOIN GPS_REAL B ON A.VEHICLENO = B.OBJECTNAME AND B.OBJECTTYPE=1 WHERE A.ISDELETED = 0 ");
 
             var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
             foreach (DataRow dr in data.Rows)
@@ -204,25 +218,35 @@ namespace CCSIM.BLL
         {
             var now = DateTime.Now;
             StringBuilder pSBQueryText = new StringBuilder();
-            pSBQueryText.Append("SELECT LON,LAT,CASE WHEN B.BELONGNETID IS NULL THEN C.BELONGNETID ELSE B.BELONGNETID END AS BELONGNETID,");
-            pSBQueryText.Append("CASE WHEN B.NAME IS NULL THEN C.VEHICLENO ELSE B.NAME END AS NAME,TO_CHAR(A.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,A.ADDRESS,CASE WHEN B.NAME IS NULL THEN 2 ELSE 1 END AS TYPE FROM GPS_REAL A ");
+            pSBQueryText.Append("SELECT A.OBJECTNAME AS OBJECTID,LON,LAT,CASE WHEN B.BELONGNETID IS NULL THEN C.BELONGNETID ELSE B.BELONGNETID END AS BELONGNETID,");
+            pSBQueryText.Append("CASE WHEN B.NAME IS NULL THEN C.VEHICLENO ELSE B.NAME END AS NAME,CASE WHEN B.NAME IS NULL THEN C.OWNER ELSE B.NAME END AS OWNER,TO_CHAR(A.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,A.ADDRESS,CASE WHEN B.NAME IS NULL THEN 2 ELSE 1 END AS TYPE FROM GPS_REAL A ");
             pSBQueryText.Append("LEFT JOIN CFG_USERINFO B ON A.OBJECTNAME = B.TELEPHONE ");
-            pSBQueryText.Append("LEFT JOIN CFG_CARINFO C ON A.OBJECTNAME = C.VEHICLENO WHERE A.OBJECTNAME IN('" + string.Join("','", objectNames) + "')");
+            pSBQueryText.Append("LEFT JOIN CFG_VEHICLEINFO D ON A.OBJECTNAME = D.ID AND A.OBJECTTYPE = 1 LEFT JOIN CFG_CARINFO C ON D.CLDWZDSBH=C.CLDWZDSBH WHERE A.OBJECTNAME IN('" + string.Join("','", objectNames) + "')");
 
             var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
             List<GpsRealData> dataList = new List<GpsRealData>();
             foreach (DataRow dr in data.Rows)
             {
+                var objectId = dr["OBJECTID"].ToString();
                 var objectName = dr["NAME"].ToString();
                 var lon = dr["LON"].ToString();
                 var lat = dr["LAT"].ToString();
                 var belongNetId = dr["BELONGNETID"].ToString();
                 var passTime = dr["PASSTIME"].ToString();
-                var address= dr["ADDRESS"].ToString();
+                var address = dr["ADDRESS"].ToString();
                 var type = dr["TYPE"].ToString();
+                var owner = dr["OWNER"].ToString();
 
                 GpsRealData d = new GpsRealData();
-                d.ObjectName = objectName;
+                d.ObjectId = objectId;
+                if (type == "1")
+                {
+                    d.ObjectName = objectName;
+                }
+                else
+                {
+                    d.ObjectName= objectName+"("+owner+")";
+                }
                 d.Lon = lon;
                 d.Lat = lat;
                 d.BelongNetId = belongNetId;

@@ -4,7 +4,6 @@
     var F = Html.F();
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,7 +47,7 @@
             </div>
             <div id="mid-panel" style="padding:0px">
                 <div id="ry">
-                    显示离线人员<input id="cbRy" type="checkbox" />
+                    显示离线人员车辆<input id="cbRy" type="checkbox" />
                 </div>
                 <div id="wg">
                     显示网格<input id="cbWg" type="checkbox" />
@@ -79,13 +78,14 @@
 
         //marker类型（1：摄像机  2：区域  3：人员   4：车辆）
         // 百度地图API功能
-        var map = new BMap.Map("allmap");
+        var map = new BMap.Map("allmap", { minZoom: 11, maxZoom: 21 });
         map.centerAndZoom("练市", 16);
         map.enableScrollWheelZoom();
-        var top_left_control = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_TOP_LEFT });// 左上角，添加比例尺
+        var bottom_left_control = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });// 左上角，添加比例尺
         var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
         var top_right_navigation = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL }); //右
 
+        map.addControl(bottom_left_control);
         map.addControl(top_right_navigation);
 
         var sContent1 = "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>摄像机信息</h4>";
@@ -134,7 +134,7 @@
             };
             var content = "<h5 style='margin:0 0 5px 0;padding:0.2em 0'>" + netInfo.Name + "</h5>";
             content += "<table width='100%'  borderColor='#808080' cellSpacing='0'  style='border-collapse:collapse' borderColorDark='#ffffff' cellPadding='3' borderColorLight='#808080' border='1'>";
-            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>网格名称：</td><td style='width:" + (tableWidth-100) + "px;text-align:center;'>" + netInfo.Name + "</td></tr>";
+            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>网格名称：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + netInfo.Name + "</td></tr>";
             content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>人口信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.PopulationInfo == null ? "" : netInfo.PopulationInfo) + "</td></tr>";
             content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>房屋信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.HouseInfo == null ? "" : netInfo.HouseInfo) + "</td></tr>";
             content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>单位门店信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.UnitStoreInfo == null ? "" : netInfo.UnitStoreInfo) + "</td></tr>";
@@ -176,29 +176,67 @@
                 async: false,
                 success: function (data) {
                     removeRyCl();
-                    $.each(data, function (index, item) {
-                        if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
-                        } else {
-                            var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
-                                icon: myIcon_Person
-                            });
-                            // 创建标注
-                            marker.type = 3;
-                            var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
-                            marker.setLabel(label);
-                            map.addOverlay(marker);
 
-                            //报警 根据所属区域id获取区域信息
-                            var polygon = '';
-                            $.each(polygonInfo, function (index, d) {
-                                if (d.objectId == item.BelongNetId) {
-                                    polygon = d;
+                    var tree = $.fn.zTree.getZTreeObj("treeDemo");
+                    var selectedNodes = tree.getSelectedNodes();
+                    var objectId = "";
+                    if (selectedNodes.length > 0) {
+                        objectId = selectedNodes[0].objectName;
+                    }
+
+                    if (objectId == "") {
+                        $.each(data, function (index, item) {
+                            if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
+                            } else {
+                                var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
+                                    icon: (item.Type == "1" ? myIcon_Person : myIcon_Car)
+                                });
+                                // 创建标注
+                                marker.type = 3;
+                                var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
+                                marker.setLabel(label);
+                                map.addOverlay(marker);
+
+                                //报警 根据所属区域id获取区域信息
+                                var polygon = '';
+                                $.each(polygonInfo, function (index, d) {
+                                    if (d.objectId == item.BelongNetId) {
+                                        polygon = d;
+                                    }
+                                });
+
+
+                                //alarm(item, polygon);
+                            }
+                        });
+                    } else {
+                        $.each(data, function (index, item) {
+                            if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
+                            } else {
+                                var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
+                                    icon: (item.Type == "1" ? myIcon_Person : myIcon_Car)
+                                });
+                                // 创建标注
+                                marker.type = 3;
+                                var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
+                                marker.setLabel(label);
+                                map.addOverlay(marker);
+
+                                //报警 根据所属区域id获取区域信息
+                                var polygon = '';
+                                $.each(polygonInfo, function (index, d) {
+                                    if (d.objectId == item.BelongNetId) {
+                                        polygon = d;
+                                    }
+                                });
+
+                                if (item.ObjectId == objectId) {
+                                    map.centerAndZoom(new BMap.Point(item.Lon, item.Lat), 18);
                                 }
-                            });
-
-                            alarm(item, polygon);
-                        }
-                    });
+                                //alarm(item, polygon);
+                            }
+                        });
+                    }
                 }
             });
         }
@@ -380,10 +418,10 @@
 
         //越格报警
         function alarm(item, polygon) {
-            var lon=item.Lon;
+            var lon = item.Lon;
             var lat = item.Lat;
             var point = new BMap.Point(lon, lat);
-            var circle = new BMap.Circle(point, 50, {fillOpacity: 0, strokeOpacity: 0 });
+            var circle = new BMap.Circle(point, 50, { fillOpacity: 0, strokeOpacity: 0 });
             map.addOverlay(circle);
             var circlePath = circle.getPath();
             map.removeOverlay(circle);
@@ -400,16 +438,16 @@
 
                 //触发后台事件
                 var info = {
-                    info:item.ObjectName + '于' + getNowDate() + '超越' + polygon.objectName + '网格边界',
+                    info: item.ObjectName + '于' + getNowDate() + '超越' + polygon.objectName + '网格边界',
                     alarmAddress: item.Address,
-                    alarmObjectName:item.ObjectName,
+                    alarmObjectName: item.ObjectName,
                     alarmType: item.Type,
                     alarmTime: getNowDate()
                 };
 
                 $.ajax({
                     url: "./AddAlarmInfo",
-                    data:info,
+                    data: info,
                     type: "post",
                     success: function (data) {
                     }
@@ -432,10 +470,10 @@
             var data = "";
             $.each(nodes, function (index, dd) {
                 if (dd.objectName != "" && dd.objectName != null) {
-                    data += dd.objectName+";";
+                    data += dd.objectName + ";";
                 }
             });
-            
+
             if (timeoutId != -1) {
                 clearInterval(timeoutId);
             } else {
@@ -448,7 +486,29 @@
                 addRyCl(data);
             }, 2000);
         };
+        function zTreeBeforeClick(treeId, treeNode, clickFlag) {
+
+            var tree = $.fn.zTree.getZTreeObj(treeId);
+            var selectedNodes = tree.getSelectedNodes();
+            var isSelected = false;
+            $.each(selectedNodes, function (index, item) {
+                if (item.id == treeNode.id) {
+                    isSelected = true;
+                }
+            });
+
+            if (isSelected) { //取消选中
+                tree.cancelSelectedNode();
+                map.centerAndZoom("练市", 16);
+                return false;
+            } else { //不执行
+
+            }
+        };
         var setting = {
+            view: {
+                autoCancelSelected: false
+            },
             async: {
                 enable: true,
                 type: 'post',
@@ -460,7 +520,8 @@
                 chkboxType: { "Y": "ps", "N": "ps" }
             },
             callback: {
-                onCheck: zTreeOnCheck
+                onCheck: zTreeOnCheck,
+                beforeClick: zTreeBeforeClick
             }
         };
 
@@ -475,7 +536,7 @@
                 success: function (data) {
                     timeoutId = setInterval(function () {
                         addRyCl(data);
-                    },2000);
+                    }, 2000);
                 }
             });
             //
@@ -485,6 +546,5 @@
             reSize();
         });
     </script>
-
 </body>
 </html>

@@ -11,6 +11,9 @@ namespace CCSIM.Entity
     /// </summary>
     public class GpsRealData
     {
+
+        public string ObjectId { get; set; }
+
         public string ObjectName { get; set; }
 
         public string Lon { get; set; }
