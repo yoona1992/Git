@@ -83,6 +83,10 @@ namespace CCSIM.Web.Areas.Message.Controllers
                 info.FileUrl = ConfigurationManager.AppSettings["FileUrl"] + file;
                 fileList.Add(info);
             }
+
+            //修改消息为已读
+            data.ISREAD_PLATFORM = 1;
+            MessageBLL.Update(data);
             return new JsonResult
             {
                 Data = fileList

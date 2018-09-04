@@ -80,6 +80,7 @@
     <Compile Include="DBContext\WriteDbContext.cs" />
     <Compile Include="ModelConfigurations\VehicleModelConfiguration.cs" />
     <Compile Include="Model\CFG_NETINFO.cs" />
+    <Compile Include="Model\CFG_VEHICLEINFO.cs" />
     <Compile Include="Model\GPS_DATA.cs" />
     <Compile Include="Model\INFO_ALARMINFO.cs" />
     <Compile Include="Model\MESSAGE.cs" />

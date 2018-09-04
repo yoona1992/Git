@@ -9,6 +9,11 @@ function renderCredentialType(value, params) {
     return value == 1 ? '身份证' : '其他证件';
 }
 
+// 文本 - 状态
+function renderStatus(value, params) {
+    return value == 1 ? '已读' : '未读';
+}
+
 // 文本 - 车辆类型 
 function renderPlateType(value, params) {
     return value == 1 ? '小型汽车' : '大型汽车';

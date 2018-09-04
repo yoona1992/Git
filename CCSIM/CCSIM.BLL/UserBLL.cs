@@ -122,6 +122,11 @@ namespace CCSIM.BLL
             DbBase<CFG_USERINFO> db = new DbBase<CFG_USERINFO>();
             return db.FirstOrDefault(p => p.ID == id);
         }
+        public static CFG_USERINFO Get(string phone)
+        {
+            DbBase<CFG_USERINFO> db = new DbBase<CFG_USERINFO>();
+            return db.FirstOrDefault(p => p.TELEPHONE == phone);
+        }
 
         /// <summary>
         /// 获取用户信息列表

@@ -215,6 +215,7 @@
     <Content Include="res\css\Login\bootstrap.min.css" />
     <Content Include="res\css\Login\font-awesome.min.css" />
     <Content Include="res\css\Login\templatemo_style.css" />
+    <Content Include="res\css\twinkle.css" />
     <Content Include="res\icon\accept.png" />
     <Content Include="res\icon\add.png" />
     <Content Include="res\icon\anchor.png" />
@@ -3714,6 +3715,7 @@
     <Content Include="Areas\Notification\Views\web.config" />
     <Content Include="Areas\Notification\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Notification\Views\Notification\Add.cshtml" />
+    <Content Include="Areas\Trajectory\Views\Trajectory\Map_Car.cshtml" />
     <None Include="Dockerfile" />
     <Content Include="thirdpart\bootstrap\.editorconfig" />
     <Content Include="thirdpart\bootstrap\.eslintignore" />
@@ -4014,6 +4016,11 @@
     <Content Include="thirdpart\fontawesome\webfonts\fa-solid-900.ttf" />
     <Content Include="thirdpart\fontawesome\webfonts\fa-solid-900.woff" />
     <Content Include="thirdpart\fontawesome\webfonts\fa-solid-900.woff2" />
+    <Content Include="Views\Home\UserMessage.cshtml" />
+    <Content Include="Views\Home\UserMessageDetail.cshtml" />
+    <Content Include="Views\Home\MessageSend.cshtml" />
+    <Content Include="Views\Home\UserDetail.cshtml" />
+    <Content Include="Views\Home\CarDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".dockerignore">

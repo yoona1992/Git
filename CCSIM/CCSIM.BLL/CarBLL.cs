@@ -123,6 +123,27 @@ namespace CCSIM.BLL
             DbBase<CFG_CARINFO> db = new DbBase<CFG_CARINFO>();
             return db.FirstOrDefault(p => p.ID == id);
         }
+        public static CarInfo GetByVehId(int vehId)
+        {
+            var q = (from c in SlaveDb.Set<CFG_CARINFO>()
+                     join v in SlaveDb.Set<CFG_VEHICLEINFO>() on c.CLDWZDSBH equals v.CLDWZDSBH
+                     where v.ID == vehId
+                     select new CarInfo
+                     {
+                         Id = c.ID,
+                         VehicleNo = c.VEHICLENO,
+                         VehicleType = c.VEHICLETYPE,
+                         VehicleBrand = c.VEHICLEBRAND,
+                         BelongDeptId = c.BELONGDEPTID,
+                         BelongNetId = c.BELONGNETID,
+                         Owner = c.OWNER,
+                         OwnerType = c.OWNERTYPE,
+                         Cldwzdsbh = c.CLDWZDSBH,
+                         Remark = c.REMARK,
+                         Wlwkhm = c.WLWKHM
+                     });
+            return q.FirstOrDefault();
+        }
 
         /// <summary>
         /// 获取车辆信息列表
@@ -154,10 +175,12 @@ namespace CCSIM.BLL
                          BelongNetName = n.NAME,
                          Owner = c.OWNER,
                          OwnerType = c.OWNERTYPE,
-                         OwnerTypeName = ooo.BMVALUE
+                         OwnerTypeName = ooo.BMVALUE,
+                         Cldwzdsbh = c.CLDWZDSBH,
+                         Wlwkhm = c.WLWKHM
                      });
             totalCount = q.Count();
-            return q.OrderByDescending(p => p.OwnerType).ThenByDescending(p=>p.BelongDeptId).ThenBy(p => p.VehicleNo).Skip((start - 1) * limit).Take(limit).ToList();
+            return q.OrderByDescending(p => p.OwnerType).ThenByDescending(p => p.BelongDeptId).ThenBy(p => p.VehicleNo).Skip((start - 1) * limit).Take(limit).ToList();
         }
 
     }

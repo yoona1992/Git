@@ -58,11 +58,15 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         public ActionResult Detail_Car()
         {
-            //LoadData_DetailCar();
+            LoadData_DetailCar();
             return View();
         }
 
         public ActionResult Map_User()
+        {
+            return View();
+        }
+        public ActionResult Map_Car()
         {
             return View();
         }
@@ -92,6 +96,17 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
             var data = TrajectoryBLL.GetList_User(telephone, stTime, endTime, 1, 20, out recordCount);
             ViewBag.TrajectoryDetailUserGridRecordCount = recordCount;
             ViewBag.TrajectoryDetailUserGridDataSource = data;
+        }
+
+        private void LoadData_DetailCar()
+        {
+            var cldwzdsbh = Request.QueryString["cldwzdsbh"];
+            var recordCount = 0;
+            var stTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00");
+            var endTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
+            var data = TrajectoryBLL.GetList_Car(cldwzdsbh, stTime, endTime, 1, 20, out recordCount);
+            ViewBag.TrajectoryDetailCarGridRecordCount = recordCount;
+            ViewBag.TrajectoryDetailCarGridDataSource = data;
         }
 
         #endregion
@@ -143,6 +158,22 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult TrajectoryDetailCarGrid_PageIndexChanged(JArray TrajectoryDetailCarGrid_fields, string cldwzdsbh, DateTime passTime, int TrajectoryDetailCarGrid_pageIndex, int TrajectoryDetailCarGrid_pageSize)
+        {
+            var grid1 = UIHelper.Grid("TrajectoryDetailCarGrid");
+            var recordCount = 0;
+            var stTime = DateTime.Parse(passTime.ToString("yyyy-MM-dd") + " 00:00:00");
+            var endTime = DateTime.Parse(passTime.ToString("yyyy-MM-dd") + " 23:59:59");
+            var data = TrajectoryBLL.GetList_Car(cldwzdsbh, stTime, endTime, TrajectoryDetailCarGrid_pageIndex + 1, TrajectoryDetailCarGrid_pageSize, out recordCount);
+
+            grid1.RecordCount(recordCount);
+            grid1.DataSource(data, TrajectoryDetailCarGrid_fields);
+
+            return UIHelper.Result();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult btnUserSearch_Click(JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("UserGrid");
@@ -184,12 +215,39 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
             return UIHelper.Result();
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult btnDetailCarSearch_Click(JArray TrajectoryDetailCarGrid_fields, string cldwzdsbh, DateTime passTime, int TrajectoryDetailCarGrid_pageIndex, int TrajectoryDetailCarGrid_pageSize)
+        {
+            var grid1 = UIHelper.Grid("TrajectoryDetailCarGrid");
+            var recordCount = 0;
+            var stTime = DateTime.Parse(passTime.ToString("yyyy-MM-dd") + " 00:00:00");
+            var endTime = DateTime.Parse(passTime.ToString("yyyy-MM-dd") + " 23:59:59");
+            var data = TrajectoryBLL.GetList_Car(cldwzdsbh, stTime, endTime, TrajectoryDetailCarGrid_pageIndex + 1, TrajectoryDetailCarGrid_pageSize, out recordCount);
+
+            grid1.RecordCount(recordCount);
+            grid1.DataSource(data, TrajectoryDetailCarGrid_fields);
+
+            return UIHelper.Result();
+        }
+
         public ActionResult GetList_User(string telephone,DateTime passTime)
         {
             var stTime = DateTime.Parse(passTime.ToString("yyyy-MM-dd") + " 00:00:00");
             var endTime = DateTime.Parse(passTime.ToString("yyyy-MM-dd") + " 23:59:59");
             var data = TrajectoryBLL.GetList_User(telephone,stTime,endTime);
+
+            return new JsonResult
+            {
+                Data = data
+            };
+        }
+        public ActionResult GetList_Car(string cldwzdsbh, DateTime passTime)
+        {
+            var stTime = DateTime.Parse(passTime.ToString("yyyy-MM-dd") + " 00:00:00");
+            var endTime = DateTime.Parse(passTime.ToString("yyyy-MM-dd") + " 23:59:59");
+            var data = TrajectoryBLL.GetList_Car(cldwzdsbh, stTime, endTime);
 
             return new JsonResult
             {

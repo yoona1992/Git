@@ -62,5 +62,10 @@ namespace CCSIM.DAL.Model
         /// 状态
         /// </summary>
         public int STATUS { get; set; }
+
+        /// <summary>
+        /// 是否已读
+        /// </summary>
+        public int? ISREAD_PLATFORM { get; set; }
     }
 }

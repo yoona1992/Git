@@ -59,7 +59,7 @@ namespace CCSIM.BLL
                          Title = m.TITLE,
                          Phone = m.PHONE,
                          Address = m.ADDRESS,
-                         Name=u.NAME,
+                         Name = u.NAME,
                          Create_Date = m.CREATE_DATE
                      });
             totalCount = q.Count();
@@ -70,6 +70,34 @@ namespace CCSIM.BLL
             }
             return data;
         }
+        public static List<MessageInfo> GetList_Map(string phone, string title, int type, DateTime startTime, DateTime endTime, int start, int limit, out int totalCount)
+        {
+            var q = (from m in SlaveDb.Set<MESSAGE>()
+                     join u in SlaveDb.Set<CFG_USERINFO>() on m.PHONE equals u.TELEPHONE
+                     where ((title == "" || title == null) ? true : m.TITLE.Contains(title))
+                     && ((phone == "" || phone == null) ? true : u.TELEPHONE.Contains(phone))
+                     && (type == -1 ? true : m.ISREAD_PLATFORM == type)
+                     && m.CREATE_DATE >= startTime && m.CREATE_DATE <= endTime
+                     select new MessageInfo
+                     {
+                         Id = m.ID,
+                         Title = m.TITLE,
+                         Phone = m.PHONE,
+                         Address = m.ADDRESS,
+                         Name = u.NAME,
+                         Create_Date = m.CREATE_DATE,
+                         Remarks=m.REMARKS,
+                         IsRead_Platform = m.ISREAD_PLATFORM
+                     });
+            totalCount = q.Count();
+            var data = q.OrderByDescending(p => p.Create_Date).ThenByDescending(p => p.Title).Skip((start - 1) * limit).Take(limit).ToList();
+            foreach (var d in data)
+            {
+                d.UploadDate = d.Create_Date.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            return data;
+        }
+
 
         /// <summary>
         /// 获取车辆信息
@@ -80,6 +108,25 @@ namespace CCSIM.BLL
         {
             DbBase<MESSAGE> db = new DbBase<MESSAGE>();
             return db.FirstOrDefault(p => p.ID == id);
+        }
+
+        /// <summary>
+        /// 修改信息
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public static bool Update(MESSAGE info)
+        {
+            DbBase<MESSAGE> db = new DbBase<MESSAGE>();
+            db.Update(info);
+            if (db.SaveChanges() >= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

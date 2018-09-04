@@ -64,5 +64,15 @@ namespace CCSIM.Entity
         /// </summary>
         public int? OwnerType { get; set; }
         public string OwnerTypeName { get; set; }
+
+        /// <summary>
+        /// 车辆定位终端识别号
+        /// </summary>
+        public string Cldwzdsbh { get; set; }
+
+        /// <summary>
+        /// 物联网卡号码
+        /// </summary>
+        public string Wlwkhm { get; set; }
     }
 }

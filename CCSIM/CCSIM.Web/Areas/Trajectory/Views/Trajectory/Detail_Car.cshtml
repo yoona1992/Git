@@ -18,26 +18,26 @@
                 .AutoScroll(true)
                 .ShowHeader(false)
                 .ShowBorder(false)
-        .ID("TrajectoryDetailUserGrid")
+        .ID("TrajectoryDetailCarGrid")
         .DataTextField("Address")
         .AllowPaging(true)
         .PageSize(20)
         .IsDatabasePaging(true)
-        .OnPageIndexChanged(Url.Action("TrajectoryDetailUserGrid_PageIndexChanged"), "TrajectoryDetailUserGrid",
+        .OnPageIndexChanged(Url.Action("TrajectoryDetailCarGrid_PageIndexChanged"), "TrajectoryDetailCarGrid",
                                 new Parameter("passTime", "F.ui.PassTime.getValue().getFullYear()+'-'+(F.ui.PassTime.getValue().getMonth()+1)+'-'+F.ui.PassTime.getValue().getDate()"),
-                                new Parameter("telephone", "F.ui.TelePhone.getValue()"))
+                                new Parameter("cldwzdsbh", "F.ui.Cldwzdsbh.getValue()"))
                 .BodyPadding(0)
                 .Toolbars(
                     F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
                         .Items(
-                            F.TextBox().ID("TelePhone").Text(Request.QueryString["telephone"]).Hidden(true),
-                            F.TextBox().ID("UserName").Text(Request.QueryString["username"]).Hidden(true),
+                            F.TextBox().ID("Cldwzdsbh").Text(Request.QueryString["cldwzdsbh"]).Hidden(true),
+                            F.TextBox().ID("Cphm").Text(Request.QueryString["cphm"]).Hidden(true),
                             F.DatePicker().Width(200).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("经过日期").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now).ID("PassTime"),
                             F.ToolbarSeparator(),
-                            F.Button().ID("btnDetailUserSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnDetailUserSearch_Click"),
-                                "TrajectoryDetailUserGrid",
+                            F.Button().ID("btnDetailCarSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnDetailCarSearch_Click"),
+                                "TrajectoryDetailCarGrid",
                                 new Parameter("passTime", "F.ui.PassTime.getValue().getFullYear()+'-'+(F.ui.PassTime.getValue().getMonth()+1)+'-'+F.ui.PassTime.getValue().getDate()"),
-                                new Parameter("telephone", "F.ui.TelePhone.getValue()")),
+                                new Parameter("cldwzdsbh", "F.ui.Cldwzdsbh.getValue()")),
                             F.ToolbarFill().ID("ToolbarFill1"),
                             F.Button().ID("btnMap").Text("地图轨迹").Icon(Icon.MapMagnify).Listener("click", "onbtnMapClick")
                          )
@@ -45,17 +45,20 @@
         .Columns(
             F.RowNumberField(),
             F.RenderField()
-                .HeaderText("经过地址")
-                .DataField("Address")
-                .RendererFunction("renderTooltip")
+                .HeaderText("经度")
+                .DataField("Lon")
+                .BoxFlex(1),
+            F.RenderField()
+                .HeaderText("纬度")
+                .DataField("Lat")
                 .BoxFlex(1),
             F.RenderField()
                 .HeaderText("经过时间")
                 .DataField("Create_Time")
-                .Width(200)
+                .BoxFlex(1)
         )
-    .RecordCount(ViewBag.TrajectoryDetailUserGridRecordCount)
-    .DataSource(ViewBag.TrajectoryDetailUserGridDataSource)
+    .RecordCount(ViewBag.TrajectoryDetailCarGridRecordCount)
+    .DataSource(ViewBag.TrajectoryDetailCarGridDataSource)
     .ShowPagingMessage(true)
 
     )
@@ -69,8 +72,8 @@
     <script src="~/res/js/grid.js"></script>
     <script>
         function onbtnMapClick(event) {
-            var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Map_User")';
-            var iframeUrl = iframeWindowUrl + '?telephone=' + F.ui.TelePhone.getValue() + "&username=" + F.ui.UserName.getValue() + "&passtime=" + (F.ui.PassTime.getValue().getFullYear() + '-' + (F.ui.PassTime.getValue().getMonth() + 1) + '-' + F.ui.PassTime.getValue().getDate());
+            var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Map_Car")';
+            var iframeUrl = iframeWindowUrl + '?cldwzdsbh=' + F.ui.Cldwzdsbh.getValue() + "&cphm=" + F.ui.Cphm.getValue() + "&passtime=" + (F.ui.PassTime.getValue().getFullYear() + '-' + (F.ui.PassTime.getValue().getMonth() + 1) + '-' + F.ui.PassTime.getValue().getDate());
 
             // 显示窗体
             F.ui.Window1.show(iframeUrl, '地图 - ' + '历史轨迹');

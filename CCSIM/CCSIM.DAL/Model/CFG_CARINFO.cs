@@ -67,6 +67,18 @@ namespace CCSIM.DAL.Model
         public int? OWNERTYPE { get; set; }
 
         /// <summary>
+        /// 车辆定位终端识别号
+        /// </summary>
+        [MaxLength(50)]
+        public string CLDWZDSBH { get; set; }
+
+        /// <summary>
+        /// 物联网卡号码
+        /// </summary>
+        [MaxLength(50)]
+        public string WLWKHM { get; set; }
+
+        /// <summary>
         /// 是否删除
         /// </summary>
         [Required]

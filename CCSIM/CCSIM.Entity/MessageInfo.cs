@@ -57,5 +57,10 @@ namespace CCSIM.Entity
         /// 状态
         /// </summary>
         public int Status { get; set; }
+
+        /// <summary>
+        /// 是否已读
+        /// </summary>
+        public int? IsRead_Platform { get; set; }
     }
 }

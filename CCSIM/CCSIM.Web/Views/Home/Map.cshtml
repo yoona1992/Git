@@ -1,14 +1,11 @@
 ﻿
 @{
-    //ViewBag.Title = "电子地图";
+    ViewBag.Title = "电子地图";
     var F = Html.F();
-    Layout = null;
+    //Layout = null;
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+@section head {
     <link rel="stylesheet" href="~/thirdpart/fontawesome/css/all.css">
     <link rel="stylesheet" href="~/thirdpart/customscrollbar/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="~/thirdpart/bootstrap/dist/css/bootstrap.min.css">
@@ -18,11 +15,24 @@
     <link rel="stylesheet" href="~/thirdpart/jqueryui/jquery-ui.min.css" />
     <!--弹出框提示css-->
     <link rel="stylesheet" href="~/res/css/jquery.toast.min.css" />
+    <link rel="stylesheet" href="~/res/css/twinkle.css" />
     <link rel="stylesheet" href="~/thirdpart/ztree/css/bootstrapStyle/bootstrapStyle.css" />
     <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
-    <title>地图展示</title>
-</head>
-<body>
+
+    <style>
+        body {
+            padding: 0px;
+        }
+
+        .ui-widget-content a {
+            color: #fff;
+        }
+    </style>
+
+}
+
+
+@section body {
     <div class="page-wrapper light-theme bg1 toggled" id="wrapper">
         <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
             <i class="fas fa-bars"></i>
@@ -59,11 +69,15 @@
         </main>
         <!-- page-content" -->
     </div>
+
+    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("查看").ID("Window1"))
+    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window2_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("详情").ID("Window2"))
+}
+
+@section script {
     <!-- page-wrapper -->
-    <script src="~/res/js/libs/jquery-2.1.0.min.js"></script>
     <script src="~/thirdpart/customscrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/thirdpart/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="~/thirdpart/jqueryui/jquery-ui.min.js"></script>
     <script src="~/thirdpart/ztree/js/jquery.ztree.core.js"></script>
     <script src="~/thirdpart/ztree/js/jquery.ztree.excheck.js"></script>
     <script src="~/thirdpart/ztree/js/jquery.ztree.exedit.js"></script>
@@ -74,11 +88,12 @@
     <script src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
     <script src="~/res/js/custom.js"></script>
     <script src="~/res/js/intersectant.js"></script>
+
     <script type="text/javascript">
 
         //marker类型（1：摄像机  2：区域  3：人员   4：车辆）
         // 百度地图API功能
-        var map = new BMap.Map("allmap", { minZoom: 11, maxZoom: 21 });
+        var map = new BMap.Map("allmap", { minZoom: 11, maxZoom: 21, enableMapClick: false });
         map.centerAndZoom("练市", 16);
         map.enableScrollWheelZoom();
         var bottom_left_control = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });// 左上角，添加比例尺
@@ -166,6 +181,37 @@
         };
         var local = new BMap.LocalSearch(map, options);
 
+        function messageLook(e, ee, marker) {
+            var iframeWindowUrl = '@Url.Content("~/Home/UserMessage")';
+            var iframeUrl = iframeWindowUrl + '?phone=' + marker.objectId;
+
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '详情 - ' + '消息');
+        }
+
+        //人员车辆信息
+        function openRyClInfo(marker) {
+            if (marker.objectType == "1") {
+                var iframeWindowUrl = '@Url.Content("~/Home/UserDetail")';
+                var iframeUrl = iframeWindowUrl + '?phone=' + marker.objectId;
+
+                // 显示窗体
+                F.ui.Window1.show(iframeUrl, '详情 - ' + '人员');
+            } else {
+                var iframeWindowUrl = '@Url.Content("~/Home/CarDetail")';
+                var iframeUrl = iframeWindowUrl + '?id=' + marker.objectId;
+
+                // 显示窗体
+                F.ui.Window1.show(iframeUrl, '详情 - ' + '车辆');
+            }
+
+        }
+        function addRyClClickHandler(marker) {
+            marker.addEventListener("click", function (e) {
+                openRyClInfo(marker);
+            }
+            );
+        }
         function addRyCl(objectNames) {
             $.ajax({
                 url: "./GetNewGpsInfo",
@@ -186,15 +232,38 @@
 
                     if (objectId == "") {
                         $.each(data, function (index, item) {
+
                             if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
                             } else {
+                                var icon = myIcon_Person;
+                                if (item.Type != "1") {
+                                    if (item.ObjectType == "19" || item.ObjectType == "11") {
+                                        icon = myIcon_Llmtc;
+                                    }
+                                    else if (item.ObjectType == "18" || item.ObjectType == "37") {
+                                        icon = myIcon_Llddc;
+                                    }
+                                    else {
+                                        icon = myIcon_Xqc;
+                                    }
+                                }
                                 var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
-                                    icon: (item.Type == "1" ? myIcon_Person : myIcon_Car)
+                                    icon: icon
                                 });
                                 // 创建标注
                                 marker.type = 3;
+                                marker.objectId = item.ObjectId;
+                                marker.objectType = item.Type;
                                 var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
                                 marker.setLabel(label);
+
+                                //如果是人员，添加右键查看消息菜单
+                                if (item.Type == "1") {
+                                    var markerMenu = new BMap.ContextMenu();
+                                    markerMenu.addItem(new BMap.MenuItem('消息查看', messageLook.bind(marker)));
+                                    marker.addContextMenu(markerMenu);
+                                }
+                                addRyClClickHandler(marker);
                                 map.addOverlay(marker);
 
                                 //报警 根据所属区域id获取区域信息
@@ -213,13 +282,35 @@
                         $.each(data, function (index, item) {
                             if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
                             } else {
+                                var icon = myIcon_Person;
+                                if (item.Type != "1") {
+                                    if (item.ObjectType == "19" || item.ObjectType == "11") {
+                                        icon = myIcon_Llmtc;
+                                    }
+                                    else if (item.ObjectType == "18" || item.ObjectType == "37") {
+                                        icon = myIcon_Llddc;
+                                    }
+                                    else {
+                                        icon = myIcon_Xqc;
+                                    }
+                                }
                                 var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
-                                    icon: (item.Type == "1" ? myIcon_Person : myIcon_Car)
+                                    icon: icon
                                 });
                                 // 创建标注
                                 marker.type = 3;
+                                marker.objectId = item.ObjectId;
+                                marker.objectType = item.Type;
                                 var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
                                 marker.setLabel(label);
+
+                                //如果是人员，添加右键查看消息菜单
+                                if (item.Type == "1") {
+                                    var markerMenu = new BMap.ContextMenu();
+                                    markerMenu.addItem(new BMap.MenuItem('消息查看', messageLook.bind(marker)));
+                                    marker.addContextMenu(markerMenu);
+                                }
+                                addRyClClickHandler(marker);
                                 map.addOverlay(marker);
 
                                 //报警 根据所属区域id获取区域信息
@@ -315,7 +406,9 @@
         ];
 
         var myIcon = new BMap.Icon("/res/images/i/zpcamera16_jk.gif", new BMap.Size(16, 16));
-        var myIcon_Car = new BMap.Icon("/res/images/i/car.gif", new BMap.Size(25, 25));
+        var myIcon_Xqc = new BMap.Icon("/res/images/i/xqc.gif", new BMap.Size(25, 25)); //小汽车
+        var myIcon_Llddc = new BMap.Icon("/res/images/i/llddc.gif", new BMap.Size(25, 25)); //小汽车
+        var myIcon_Llmtc = new BMap.Icon("/res/images/i/llmtc.gif", new BMap.Size(25, 25)); //小汽车
         var myIcon_Person = new BMap.Icon("/res/images/i/person.gif", new BMap.Size(17, 26));
 
         function addSxj() {
@@ -356,17 +449,6 @@
             var infoWindow = new BMap.InfoWindow(content, opts2);  // 创建信息窗口对象
             map.openInfoWindow(infoWindow, point); //开启信息窗口
         }
-        $("#sole-input").autocomplete({
-            source: function (request, response) {
-                local.search($("#sole-input").val());
-                setTimeout(function () {
-                    if (s.length > 0) {
-                        response(s);
-                    }
-                }, 500);
-
-            }
-        });
 
         $("#cbWg").change(function () {
             if ($("#cbWg").prop('checked')) {
@@ -546,5 +628,6 @@
             reSize();
         });
     </script>
-</body>
-</html>
+}
+
+

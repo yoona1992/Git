@@ -198,6 +198,6 @@ D:\Git\CCSIM\CCSIM.DAL\bin\Debug\EntityFramework.Extended.xml
 D:\Git\CCSIM\CCSIM.DAL\bin\Debug\EntityFramework.SqlServer.xml
 D:\Git\CCSIM\CCSIM.DAL\bin\Debug\OracleSugar.xml
 D:\Git\CCSIM\CCSIM.DAL\bin\Debug\Z.EntityFramework.Extensions.xml
+D:\Git\CCSIM\CCSIM.DAL\obj\Debug\CCSIM.DAL.csprojResolveAssemblyReference.cache
 D:\Git\CCSIM\CCSIM.DAL\obj\Debug\CCSIM.DAL.dll
 D:\Git\CCSIM\CCSIM.DAL\obj\Debug\CCSIM.DAL.pdb
-D:\Git\CCSIM\CCSIM.DAL\obj\Debug\CCSIM.DAL.csprojResolveAssemblyReference.cache

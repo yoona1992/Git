@@ -16,6 +16,8 @@ namespace CCSIM.Entity
 
         public string ObjectName { get; set; }
 
+        public String ObjectType { get; set; }
+
         public string Lon { get; set; }
 
         public string Lat { get; set; }

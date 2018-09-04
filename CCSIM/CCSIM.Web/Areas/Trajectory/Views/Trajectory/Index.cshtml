@@ -159,6 +159,11 @@
                                             .RendererFunction("renderTooltip")
                                             .BoxFlex(1),
                                         F.RenderField()
+                                            .HeaderText("车辆定位终端识别号")
+                                            .DataField("Cldwzdsbh")
+                                            .BoxFlex(1)
+                                            .Hidden(true),
+                                        F.RenderField()
                                             .HeaderText("操作")
                                             .EnableHeaderMenu(false)
                                             .RendererFunction("renderCarTrajectory")
@@ -198,11 +203,12 @@
             F.ui.Window1.show(iframeUrl, '查看 - ' + '历史轨迹');
         }
         function openWindow_Car(rowData) {
-            @*var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Detail_Car")';
-            var iframeUrl = iframeWindowUrl + '?vehicleno=' + rowData.values.VehicleNo;
+            debugger
+            var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Detail_Car")';
+            var iframeUrl = iframeWindowUrl + '?cldwzdsbh=' + rowData.values.Cldwzdsbh + "&cphm=" + rowData.values.VehicleNo;
 
             // 显示窗体
-            F.ui.Window2.show(iframeUrl, '查看 - ' + '历史轨迹');*@
+            F.ui.Window2.show(iframeUrl, '查看 - ' + '历史轨迹');
         }
 
         F.ready(function () {

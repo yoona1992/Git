@@ -75,7 +75,8 @@ namespace CCSIM.BLL
                 deptNode.id = id;
 
                 var userList = infoList.Where(p => p.Type == "1" && p.BelongDeptName == dept).ToList();
-                deptNode.name = dept + "(" + userList.Count + "人)";
+                var userOffline_Dept = 0;
+                var userCount_Dept = 0;
                 foreach (var u in userList)
                 {
                     var id_child = id + "_" + userList.IndexOf(u);
@@ -86,6 +87,7 @@ namespace CCSIM.BLL
                         n.name = u.Name + "(离线)";
                         n.id = id_child;
                         userOffline++;
+                        userOffline_Dept++;
                     }
                     else
                     {
@@ -95,6 +97,7 @@ namespace CCSIM.BLL
                             n.name = u.Name + "(" + u.PassTime + "后离线)";
                             n.id = id_child;
                             userOffline++;
+                            userOffline_Dept++;
                         }
                         else
                         {
@@ -107,7 +110,9 @@ namespace CCSIM.BLL
                     deptNode.children.Add(n);
 
                     userCount++;
+                    userCount_Dept++;
                 }
+                deptNode.name = dept + "(" + (userCount_Dept - userOffline_Dept) + "/" + userCount_Dept + ")";
                 userNode.children.Add(deptNode);
             }
             userNode.name = "人员(" + (userCount - userOffline) + "/" + userCount + ")";
@@ -131,7 +136,8 @@ namespace CCSIM.BLL
                 deptNode.id = id;
 
                 var carList = infoList.Where(p => p.Type == "2" && p.BelongDeptName == dept).ToList();
-                deptNode.name = dept + "(" + carList.Count + "辆)";
+                int carOffline_Dept = 0;
+                int carCount_Dept = 0;
                 foreach (var c in carList)
                 {
                     var id_child = id + "_" + carList.IndexOf(c);
@@ -139,9 +145,10 @@ namespace CCSIM.BLL
                     n.objectName = c.ObjectName;
                     if (string.IsNullOrWhiteSpace(c.PassTime)) //实时表没有数据，表示离线
                     {
-                        n.name = c.Name+"("+c.Owner+")" + "(离线)";
+                        n.name = c.Name + "(" + c.Owner + ")" + "(离线)";
                         n.id = id_child;
                         carOffline++;
+                        carOffline_Dept++;
                     }
                     else
                     {
@@ -151,6 +158,7 @@ namespace CCSIM.BLL
                             n.name = c.Name + "(" + c.Owner + ")" + "(" + c.PassTime + "后离线)";
                             n.id = id_child;
                             carOffline++;
+                            carOffline_Dept++;
                         }
                         else
                         {
@@ -163,7 +171,9 @@ namespace CCSIM.BLL
                     deptNode.children.Add(n);
 
                     carCount++;
+                    carCount_Dept++;
                 }
+                deptNode.name = dept + "(" + (carCount_Dept - carOffline_Dept) + "/" + carCount_Dept + ")";
                 carNode.children.Add(deptNode);
             }
             carNode.name = "车辆(" + (carCount - carOffline) + "/" + carCount + ")";
@@ -219,10 +229,17 @@ namespace CCSIM.BLL
             var now = DateTime.Now;
             StringBuilder pSBQueryText = new StringBuilder();
             pSBQueryText.Append("SELECT A.OBJECTNAME AS OBJECTID,LON,LAT,CASE WHEN B.BELONGNETID IS NULL THEN C.BELONGNETID ELSE B.BELONGNETID END AS BELONGNETID,");
-            pSBQueryText.Append("CASE WHEN B.NAME IS NULL THEN C.VEHICLENO ELSE B.NAME END AS NAME,CASE WHEN B.NAME IS NULL THEN C.OWNER ELSE B.NAME END AS OWNER,TO_CHAR(A.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,A.ADDRESS,CASE WHEN B.NAME IS NULL THEN 2 ELSE 1 END AS TYPE FROM GPS_REAL A ");
+            pSBQueryText.Append("CASE WHEN B.NAME IS NULL THEN C.VEHICLENO ELSE B.NAME END AS NAME,CASE WHEN B.NAME IS NULL THEN C.OWNER ELSE B.NAME END AS OWNER,TO_CHAR(A.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,A.ADDRESS,CASE WHEN B.NAME IS NULL THEN 2 ELSE 1 END AS TYPE,CASE WHEN B.NAME IS NULL THEN C.VEHICLETYPE ELSE 0 END AS OBJECTTYPE FROM GPS_REAL A ");
             pSBQueryText.Append("LEFT JOIN CFG_USERINFO B ON A.OBJECTNAME = B.TELEPHONE ");
             pSBQueryText.Append("LEFT JOIN CFG_VEHICLEINFO D ON A.OBJECTNAME = D.ID AND A.OBJECTTYPE = 1 LEFT JOIN CFG_CARINFO C ON D.CLDWZDSBH=C.CLDWZDSBH WHERE A.OBJECTNAME IN('" + string.Join("','", objectNames) + "')");
 
+            //获取所有需要提醒的用户手机号码
+            var phone_Alarm = OracleOperateBLL.FillDataTable("SELECT DISTINCT PHONE FROM MESSAGE WHERE ROUND(TO_NUMBER(SYSDATE - CREATE_DATE) * 24 * 60 * 60)<=60 AND ISREAD_PLATFORM=0");
+            List<string> phone_AlarmList = new List<string>();
+            foreach (DataRow dr in phone_Alarm.Rows)
+            {
+                phone_AlarmList.Add(dr["PHONE"].ToString());
+            }
             var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
             List<GpsRealData> dataList = new List<GpsRealData>();
             foreach (DataRow dr in data.Rows)
@@ -236,16 +253,25 @@ namespace CCSIM.BLL
                 var address = dr["ADDRESS"].ToString();
                 var type = dr["TYPE"].ToString();
                 var owner = dr["OWNER"].ToString();
+                var objectType= dr["OBJECTTYPE"].ToString();
 
                 GpsRealData d = new GpsRealData();
                 d.ObjectId = objectId;
-                if (type == "1")
+                d.ObjectType = objectType;
+                if (type == "1")  //人员
                 {
-                    d.ObjectName = objectName;
+                    if (phone_AlarmList.Contains(d.ObjectId))
+                    {
+                        d.ObjectName = "<span class='box'>" + objectName + "</span>";
+                    }
+                    else
+                    {
+                        d.ObjectName = objectName;
+                    }
                 }
                 else
                 {
-                    d.ObjectName= objectName+"("+owner+")";
+                    d.ObjectName = objectName;
                 }
                 d.Lon = lon;
                 d.Lat = lat;
