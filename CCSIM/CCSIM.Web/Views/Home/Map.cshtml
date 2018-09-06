@@ -544,15 +544,15 @@
                     hideAfter: 10 * 1000   // in milli seconds
                 });
 
+                debugger
                 //触发后台事件
                 var info = {
                     info: item.ObjectName + '于' + getNowDate() + '超越' + polygon.objectName + '网格边界',
-                    alarmAddress: item.Address,
+                    alarmAddress: ((item.Address == "" || item.Address == null) ? "经度：" + item.Lon + "，纬度：" + item.Lat : item.Address),
                     alarmObjectName: item.ObjectName,
                     alarmType: item.Type,
                     alarmTime: getNowDate()
                 };
-
                 $.ajax({
                     url: "./AddAlarmInfo",
                     data: info,

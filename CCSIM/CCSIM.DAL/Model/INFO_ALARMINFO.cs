@@ -35,7 +35,6 @@ namespace CCSIM.DAL.Model
         /// 报警地点
         /// </summary>
         [MaxLength(255)]
-        [Required]
         public string ALARMADDRESS { get; set; }
         
         /// <summary>
