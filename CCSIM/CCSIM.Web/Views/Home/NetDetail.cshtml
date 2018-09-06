@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.SourceFiles = "~/Models/NetInfoModel.cs";
+    ViewBag.Title = "FormLayout/LayoutNetDetail";
+    var F = Html.F();
+}
+
+@model CCSIM.Web.Models.NetInfoModel
+
+@section body {
+    @(F.Form().ID("Form_NetDetail").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).IsViewPort(true)
+    .Items(
+   F.Panel().ID("Panel_NetEdit").Layout(LayoutType.HBox).BoxConfigAlign(BoxLayoutAlign.Stretch).ShowHeader(false).ShowBorder(false)
+                                        .Items(
+                                            F.TextBox().ID("Id").Text(Model.netInfo.Id.ToString()).Hidden(true),
+                                            F.TextBox().ID("Name").Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>名称").Text(Model.netInfo.Name).BoxFlex(1).Readonly(true),
+                                            F.DropDownListFor(m => m.dropDownList.DropDownList).ID("BelongDeptId").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所属部门").AutoSelectFirstItem(false).EmptyText("请选择所属单位")
+                                                .Items(Model.dropDownList.DropDownListItem.ToArray()).SelectedValue(Model.netInfo.BelongDeptId.ToString()).BoxFlex(1).Readonly(true)
+                                        ),
+            F.TextBox().ID("PopulationInfo").Label("人口信息").Text(Model.netInfo.PopulationInfo).Readonly(true),
+            F.TextBox().ID("HouseInfo").Label("房屋信息").Text(Model.netInfo.HouseInfo).Readonly(true),
+            F.TextBox().ID("BelongArea").Label("所属区域").Text(Model.netInfo.BelongArea).Readonly(true),
+            F.TextBox().ID("UnitStoreInfo").Label("单位门店信息").Text(Model.netInfo.UnitStoreInfo).Readonly(true),
+            F.TextArea().ID("Remark").Height(100).Label("备注").Text(Model.netInfo.Remark).Readonly(true)
+    )
+    )
+}
