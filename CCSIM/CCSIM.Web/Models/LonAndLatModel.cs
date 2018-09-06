@@ -19,5 +19,7 @@ namespace CCSIM.Web.Models
         /// 操作类型（1：新增 2：修改）
         /// </summary>
         public int operatorType { get; set; }
+
+        public int id { get; set; }
     }
 }

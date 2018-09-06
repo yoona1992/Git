@@ -43,6 +43,43 @@ namespace CCSIM.Web.Controllers
             return View();
         }
 
+        public ActionResult NetDetail()
+        {
+            var id = Convert.ToInt32(Request.QueryString["id"]);
+            #region 下拉框绑定
+            var belongDeptList = CodeBLL.GetCodeListByParentCode("PCS");
+            var listItems = new List<ListItem>();
+            foreach (var d in belongDeptList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var model = new DropDownListModel();
+            model.DropDownList = "VALUE";
+            model.DropDownListItem = listItems;
+            #endregion
+
+            var data = NetManageBLL.Get(id);
+            //UIHelper.DropDownList("").SelectedValue("");
+            NetInfoModel info = new NetInfoModel();
+            info.dropDownList = model;
+            info.netInfo.Id = data.ID;
+            info.netInfo.Name = data.NAME;
+            info.netInfo.BelongDeptId = data.BELONGDEPTID;
+            info.netInfo.PopulationInfo = data.POPULATIONINFO;
+            info.netInfo.HouseInfo = data.HOUSEINFO;
+            info.netInfo.BelongArea = data.BELONGAREA;
+            info.netInfo.UnitStoreInfo = data.UNITSTOREINFO;
+            info.netInfo.NetColor = data.NETCOLOR;
+            info.netInfo.LonAndLat = data.LONANDLAT;
+            info.netInfo.Remark = data.REMARK;
+            return View(info);
+        }
+
         public ActionResult MessageSend()
         {
             #region 下拉框绑定

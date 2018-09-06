@@ -117,7 +117,7 @@
                                             F.Toolbar().ToolbarAlign(ToolbarAlign.Left)
                                              .Items(
                                                 F.TextBox().Width(300).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("车牌号码").EmptyText("请输入车牌号码").ID("tbxVehicleNo"),
-                                                F.DropDownListFor(m => m.ownerType.DropDownList).Width(250).LabelWidth(100).ID("ddlistOwnerType").LabelAlign(LabelAlign.Right).Label("所有人类型").EmptyText("请选择所有人类型").EnableEdit(false)
+                                                F.DropDownListFor(m => m.ownerType.DropDownList).Width(250).LabelWidth(100).ID("ddlistOwnerType").LabelAlign(LabelAlign.Right).Label("用车单位").EmptyText("请选择用车单位").EnableEdit(false)
                                                     .ShowRedStar(false).SelectedValue("-1").Items(Model.ownerType.DropDownListItem.ToArray()),
                                                 F.ToolbarSeparator(),
                                                 F.Button().ID("btnCarSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnCarSearch_Click"),
@@ -145,7 +145,7 @@
                                             .DataField("Owner")
                                             .Width(150),
                                         F.RenderField()
-                                            .HeaderText("所有人类型")
+                                            .HeaderText("用车部门")
                                             .DataField("OwnerTypeName")
                                             .Width(150),
                                         F.RenderField()
@@ -161,6 +161,11 @@
                                         F.RenderField()
                                             .HeaderText("车辆定位终端识别号")
                                             .DataField("Cldwzdsbh")
+                                            .BoxFlex(1)
+                                            .Hidden(true),
+                                        F.RenderField()
+                                            .HeaderText("车辆类型代码")
+                                            .DataField("VehicleType")
                                             .BoxFlex(1)
                                             .Hidden(true),
                                         F.RenderField()
@@ -203,9 +208,8 @@
             F.ui.Window1.show(iframeUrl, '查看 - ' + '历史轨迹');
         }
         function openWindow_Car(rowData) {
-            debugger
             var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Detail_Car")';
-            var iframeUrl = iframeWindowUrl + '?cldwzdsbh=' + rowData.values.Cldwzdsbh + "&cphm=" + rowData.values.VehicleNo;
+            var iframeUrl = iframeWindowUrl + '?cldwzdsbh=' + rowData.values.Cldwzdsbh + "&cphm=" + rowData.values.VehicleNo + "&cllx=" + rowData.values.VehicleType;
 
             // 显示窗体
             F.ui.Window2.show(iframeUrl, '查看 - ' + '历史轨迹');

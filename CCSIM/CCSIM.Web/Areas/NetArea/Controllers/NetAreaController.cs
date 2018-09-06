@@ -84,7 +84,7 @@ namespace CCSIM.Web.Areas.NetArea.Controllers
         {
             LonAndLatModel model = new LonAndLatModel();
             model.operatorType = Convert.ToInt32(Request.QueryString["type"]);
-            model.lonAndLat = Request.QueryString["lonAndLat"];
+            model.id = Convert.ToInt32(Request.QueryString["id"]);
             return View(model);
         }
 
@@ -235,6 +235,15 @@ namespace CCSIM.Web.Areas.NetArea.Controllers
             PageContext.RegisterStartupScript("reload();");
 
             return UIHelper.Result();
+        }
+        public ActionResult GetLonAndLat(int id)
+        {
+            var data = NetManageBLL.Get(id);
+
+            return new JsonResult
+            {
+                Data = data.LONANDLAT
+            };
         }
     }
 }

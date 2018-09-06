@@ -6,6 +6,11 @@
 
 @F.PageManager.AutoSizePanelID("TrajectoryDetailUserGrid")
 
+@section head{
+    <link href="~/thirdpart/jeDate/jeDate-test.css" rel="stylesheet" />
+    <link href="~/thirdpart/jeDate/jedate.css" rel="stylesheet" />
+}
+
 @section body {
 
     @(F.Panel()
@@ -24,7 +29,7 @@
         .PageSize(20)
         .IsDatabasePaging(true)
         .OnPageIndexChanged(Url.Action("TrajectoryDetailUserGrid_PageIndexChanged"), "TrajectoryDetailUserGrid",
-                                new Parameter("passTime", "F.ui.PassTime.getValue().getFullYear()+'-'+(F.ui.PassTime.getValue().getMonth()+1)+'-'+F.ui.PassTime.getValue().getDate()"),
+                                new Parameter("passTime", "F.ui.PassTimeStr.getValue()"),
                                 new Parameter("telephone", "F.ui.TelePhone.getValue()"))
                 .BodyPadding(0)
                 .Toolbars(
@@ -32,11 +37,16 @@
                         .Items(
                             F.TextBox().ID("TelePhone").Text(Request.QueryString["telephone"]).Hidden(true),
                             F.TextBox().ID("UserName").Text(Request.QueryString["username"]).Hidden(true),
-                            F.DatePicker().Width(200).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("经过日期").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now).ID("PassTime"),
+                            F.TextBox().ID("PassTimeStr").Text("").Hidden(true),
+                            F.Panel().ShowHeader(false).ShowBorder(false).ContentEl("<div class='jeitem' style='width:100%;margin:0px'>" +
+                                "<label class='jelabel' style='padding-left:0px;paddint-right:5px;padding-top:8px;width:90px'>时间范围：</label>" +
+                                "<div class='jeinpbox' style='padding-top:4px;margin-right:1px;width:300px'><input type='text' class='f-field-body ui-corner-all ui-widget-content f-field-textbox' placeholder='YYYY-MM-DD hh:mm:ss' id='passTime'></div></div>"),
+
+                            //F.DatePicker().Width(200).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("经过日期").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now).ID("PassTime"),
                             F.ToolbarSeparator(),
                             F.Button().ID("btnDetailUserSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnDetailUserSearch_Click"),
                                 "TrajectoryDetailUserGrid",
-                                new Parameter("passTime", "F.ui.PassTime.getValue().getFullYear()+'-'+(F.ui.PassTime.getValue().getMonth()+1)+'-'+F.ui.PassTime.getValue().getDate()"),
+                                new Parameter("passTime", "F.ui.PassTimeStr.getValue()"),
                                 new Parameter("telephone", "F.ui.TelePhone.getValue()")),
                             F.ToolbarFill().ID("ToolbarFill1"),
                             F.Button().ID("btnMap").Text("地图轨迹").Icon(Icon.MapMagnify).Listener("click", "onbtnMapClick")
@@ -67,10 +77,47 @@
 
 @section script {
     <script src="~/res/js/grid.js"></script>
+<script src="~/thirdpart/jeDate/jedate.min.js"></script>
     <script>
+        F.ready(function () {
+            jeDate("#passTime", {
+                festival: true,
+                minDate: "1900-01-01",              //最小日期
+                maxDate: "2099-12-31",              //最大日期
+                donefun: function (obj) {
+                    F.ui.PassTimeStr.setValue(obj.val);
+                },
+                method: {
+                    choose: function (params) {
+
+                    }
+                },
+                format: "YYYY-MM-DD hh:mm:ss",
+                multiPane: false,
+                range: " 至 ",
+            });
+            var date = getNowFormatDate();
+            $('#passTime').val(date + " 00:00:00" + " 至 " + date + " 23:59:59");
+            F.ui.PassTimeStr.setValue(date + " 00:00:00" + " 至 " + date + " 23:59:59");
+        });
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
         function onbtnMapClick(event) {
             var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Map_User")';
-            var iframeUrl = iframeWindowUrl + '?telephone=' + F.ui.TelePhone.getValue() + "&username=" + F.ui.UserName.getValue() + "&passtime=" + (F.ui.PassTime.getValue().getFullYear() + '-' + (F.ui.PassTime.getValue().getMonth() + 1) + '-' + F.ui.PassTime.getValue().getDate());
+            var iframeUrl = iframeWindowUrl + '?telephone=' + F.ui.TelePhone.getValue() + "&username=" + F.ui.UserName.getValue() + "&passtime=" + F.ui.PassTimeStr.getValue();
 
             // 显示窗体
             F.ui.Window1.show(iframeUrl, '地图 - ' + '历史轨迹');

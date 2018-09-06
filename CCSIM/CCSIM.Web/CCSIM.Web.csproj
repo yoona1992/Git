@@ -3558,6 +3558,11 @@
     <Content Include="thirdpart\fontawesome\webfonts\fa-brands-400.svg" />
     <Content Include="thirdpart\fontawesome\webfonts\fa-regular-400.svg" />
     <Content Include="thirdpart\fontawesome\webfonts\fa-solid-900.svg" />
+    <Content Include="thirdpart\jeDate\jeDate-test.css" />
+    <Content Include="thirdpart\jeDate\jedate.css" />
+    <Content Include="thirdpart\jeDate\jedate.min.js" />
+    <Content Include="thirdpart\jeDate\jedate.png" />
+    <Content Include="thirdpart\jeDate\jedatefont.svg" />
     <Content Include="thirdpart\jqueryui\jquery-ui.min.css" />
     <Content Include="thirdpart\jqueryui\jquery-ui.min.js" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\bootstrapStyle.css" />
@@ -4021,6 +4026,10 @@
     <Content Include="Views\Home\MessageSend.cshtml" />
     <Content Include="Views\Home\UserDetail.cshtml" />
     <Content Include="Views\Home\CarDetail.cshtml" />
+    <Content Include="Views\Home\NetDetail.cshtml" />
+    <Content Include="thirdpart\jeDate\jedatefont.eot" />
+    <Content Include="thirdpart\jeDate\jedatefont.ttf" />
+    <Content Include="thirdpart\jeDate\jedatefont.woff" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".dockerignore">

@@ -1,4 +1,5 @@
 ﻿using CCSIM.Entity;
+using CCSIM.Extension;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -86,6 +87,7 @@ namespace CCSIM.BLL
                     {
                         n.name = u.Name + "(离线)";
                         n.id = id_child;
+                        n.iconSkin = "dark";
                         userOffline++;
                         userOffline_Dept++;
                     }
@@ -96,6 +98,7 @@ namespace CCSIM.BLL
                         {
                             n.name = u.Name + "(" + u.PassTime + "后离线)";
                             n.id = id_child;
+                            n.iconSkin = "dark";
                             userOffline++;
                             userOffline_Dept++;
                         }
@@ -103,6 +106,7 @@ namespace CCSIM.BLL
                         {
                             n.name = u.Name;
                             n.id = id_child;
+                            n.iconSkin = "light";
                         }
                     }
 
@@ -147,6 +151,7 @@ namespace CCSIM.BLL
                     {
                         n.name = c.Name + "(" + c.Owner + ")" + "(离线)";
                         n.id = id_child;
+                        n.iconSkin = "dark";
                         carOffline++;
                         carOffline_Dept++;
                     }
@@ -157,6 +162,7 @@ namespace CCSIM.BLL
                         {
                             n.name = c.Name + "(" + c.Owner + ")" + "(" + c.PassTime + "后离线)";
                             n.id = id_child;
+                            n.iconSkin = "dark";
                             carOffline++;
                             carOffline_Dept++;
                         }
@@ -164,6 +170,7 @@ namespace CCSIM.BLL
                         {
                             n.name = c.Name + "(" + c.Owner + ")";
                             n.id = id_child;
+                            n.iconSkin = "light";
                         }
                     }
 
@@ -268,13 +275,16 @@ namespace CCSIM.BLL
                     {
                         d.ObjectName = objectName;
                     }
+                    var lonAndLat = GpsTranslate.gcj2bd(Convert.ToDouble(lat), Convert.ToDouble(lon));
+                    d.Lat = lonAndLat[0].ToString();
+                    d.Lon = lonAndLat[1].ToString();
                 }
                 else
                 {
                     d.ObjectName = objectName;
+                    d.Lon = lon;
+                    d.Lat = lat;
                 }
-                d.Lon = lon;
-                d.Lat = lat;
                 d.BelongNetId = belongNetId;
                 d.Address = address;
                 d.Type = type;

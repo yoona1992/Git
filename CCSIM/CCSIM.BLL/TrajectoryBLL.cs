@@ -2,6 +2,7 @@
 using CCSIM.DAL.DBContext;
 using CCSIM.DAL.Model;
 using CCSIM.Entity;
+using CCSIM.Extension;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
@@ -99,8 +100,9 @@ namespace CCSIM.BLL
                 GpsData d = new GpsData();
                 d.Address = dr["ADDRESS"].ToString();
                 d.Create_Time = DateTime.Parse(dr["CREATE_TIME"].ToString()).ToString("yyyy-MM-dd HH:mm:ss");
-                d.Lat = dr["LAT"].ToString();
-                d.Lon = dr["LON"].ToString();
+                var lonAndLat = GpsTranslate.gcj2bd(Convert.ToDouble(dr["LAT"].ToString()), Convert.ToDouble(dr["LON"].ToString()));
+                d.Lat = lonAndLat[0].ToString();
+                d.Lon = lonAndLat[1].ToString();
 
                 gpsDataList.Add(d);
             }

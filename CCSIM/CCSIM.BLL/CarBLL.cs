@@ -168,6 +168,7 @@ namespace CCSIM.BLL
                      {
                          Id = c.ID,
                          VehicleNo = c.VEHICLENO,
+                         VehicleType=c.VEHICLETYPE,
                          VehicleTypeName = v.BMVALUE,
                          VehicleBrand = c.VEHICLEBRAND,
                          BelongDeptId = c.BELONGDEPTID,

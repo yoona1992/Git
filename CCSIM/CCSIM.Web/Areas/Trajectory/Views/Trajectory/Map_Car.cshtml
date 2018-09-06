@@ -20,6 +20,7 @@
             .Items(
                 F.TextBox().ID("Cldwzdsbh").Text(Request.QueryString["cldwzdsbh"]).Hidden(true),
                 F.TextBox().ID("Cphm").Text(Request.QueryString["cphm"]).Hidden(true),
+                F.TextBox().ID("Cllx").Text(Request.QueryString["cllx"]).Hidden(true),
                 F.TextBox().ID("PassTime").Text(Request.QueryString["passtime"]).Hidden(true),
                 F.Form().ID("Form_TrajectoryMap").ShowHeader(true).ShowBorder(false)
             )
@@ -59,7 +60,7 @@
 
         F.ready(function () {
             // 百度地图API功能
-            map = new BMap.Map("Form_TrajectoryMap");
+            map = new BMap.Map("Form_TrajectoryMap", { enableMapClick: false });
             map.enableScrollWheelZoom();
             var top_right_navigation = new BMap.NavigationControl({
                 anchor: BMAP_ANCHOR_TOP_RIGHT
@@ -80,11 +81,20 @@
                     });
                 }
             });
-
+            
             if (arrPois.length != 0) {
                 map.setViewport(arrPois);
+                var icon = [];
+                var cllx = F.ui.Cllx.getValue();
+                var speed = 500;
+                if (cllx == "11" || cllx == "18" || cllx == "19" || cllx == "37") {
+                    speed = 300;
+                    icon=new BMap.Icon('../../res/images/i/mtc_gj.gif', new BMap.Size(40, 47), { anchor: new BMap.Size(20, 24) });
+                } else {
+                    icon=new BMap.Icon('../../res/images/i/xqc_gj.gif', new BMap.Size(52, 26), { anchor: new BMap.Size(26, 12) });
+                }
                 marker = new BMap.Marker(arrPois[0], {
-                    icon: new BMap.Icon('../../res/images/i/car.png', new BMap.Size(52, 26), { anchor: new BMap.Size(27, 13) })
+                    icon: icon
                 });
                 var label = new BMap.Label(F.ui.Cphm.getValue(), { offset: new BMap.Size(0, -30) });
                 label.setStyle({ border: "1px solid rgb(204, 204, 204)", color: "rgb(0, 0, 0)", borderRadius: "10px", padding: "5px", background: "rgb(255, 255, 255)", });
@@ -148,13 +158,13 @@
                     }, timer);
                 };
 
-
                 map.addOverlay(new BMap.Polyline(arrPois, { strokeColor: '#111' }));
+
                 lushu = new BMapLib.LuShu(map, arrPois, {
                     defaultContent: F.ui.Cphm.getValue(),//"从天安门到百度大厦"
                     autoView: true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
-                    icon: new BMap.Icon('../../res/images/i/car.png', new BMap.Size(52, 26), { anchor: new BMap.Size(27, 13) }),
-                    speed: 500,
+                    icon: icon,
+                    speed: speed,
                     enableRotation: true,//是否设置marker随着道路的走向进行旋转
                     landmarkPois: [
                     ]

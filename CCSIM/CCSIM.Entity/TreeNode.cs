@@ -37,6 +37,11 @@ namespace CCSIM.Entity
         public bool @checked { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public string iconSkin { get; set; }
+
+        /// <summary>
         /// 子节点
         /// </summary>
         public List<TreeNode> children = new List<TreeNode>();

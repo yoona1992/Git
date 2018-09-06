@@ -1,7 +1,7 @@
 ﻿$(function () {
     //marker类型（1：摄像机  2：区域  3：人员   4：车辆）
     // 百度地图API功能
-    var map = new BMap.Map("allmap");
+    var map = new BMap.Map("allmap", { enableMapClick: false });
     map.centerAndZoom("练市", 16);
     map.enableScrollWheelZoom();
     var top_left_control = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_TOP_LEFT });// 左上角，添加比例尺

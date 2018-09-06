@@ -4,13 +4,9 @@
     ViewBag.Title = "FormLayout/LayoutNetAreaLonAndLat";
     var F = Html.F();
 }
-
 @model CCSIM.Web.Models.LonAndLatModel
-
 @F.PageManager.AutoSizePanelID("Panel_NetLonAndLatAdd")
-
 @section body {
-
     @(F.Panel().ID("Panel_NetLonAndLatAdd").ShowBorder(false).ShowHeader(false).Layout(LayoutType.Fit)
             .Toolbars(
                     F.Toolbar().ID("Toolbar1")
@@ -21,13 +17,12 @@
                 )
             .Items(
                 F.TextBox().ID("operatorType").Text(Model.operatorType.ToString()).Hidden(true),
-                F.TextBox().ID("lonAndLat").Text(Model.lonAndLat).Hidden(true),
+                F.TextBox().ID("id").Text(Model.id.ToString()).Hidden(true),
                 F.Form().ID("Form_NetLonAndLatAdd").ShowHeader(true).ShowBorder(false)
             )
     )
     )
 }
-
 
 @section script {
     <script src="~/res/js/grid.js"></script>
@@ -62,7 +57,7 @@
 
         F.ready(function () {
             // 百度地图API功能
-            map = new BMap.Map("Form_NetLonAndLatAdd");
+            map = new BMap.Map("Form_NetLonAndLatAdd", { enableMapClick: false });
             //map.centerAndZoom("练市", 16);
             //map.enableScrollWheelZoom();
 
@@ -71,6 +66,7 @@
 
             var overlaycomplete = function (e) {
                 overlays.push(e.overlay);
+                e.overlay.enableEditing();
             };
             var styleOptions = {
                 strokeColor: "red",    //边线颜色。
@@ -100,20 +96,41 @@
             //添加网格区域
             var pointArray = new Array();
             if (F.ui.operatorType.value == "2") {
-                var lonAndLat = JSON.parse(F.ui.lonAndLat.value);
+                //根据网格id获取经纬度信息
+                var lonAndLat = [];
+                $.ajax({
+                    url: "./GetLonAndLat",
+                    data: {
+                        id: F.ui.id.value
+                    },
+                    type: "post",
+                    async: false,
+                    success: function (data) {
+                        if (data != "") {
+                            lonAndLat = JSON.parse(data);
+                        }
+                    }
+                });
 
-                $.each(lonAndLat, function (index, item) {
-                    pointArray.push(new BMap.Point(item.lng, item.lat));
-                })
-                var polygon = new BMap.Polygon(pointArray, styleOptions);  //创建多边形
-                map.addOverlay(polygon);   //增加多边形
+                if (lonAndLat.length == 0) {
+                    map.centerAndZoom("练市", 16);
+                    map.enableScrollWheelZoom();
+                }
+                else {
+                    $.each(lonAndLat, function (index, item) {
+                        pointArray.push(new BMap.Point(item.lng, item.lat));
+                    })
+                    var polygon = new BMap.Polygon(pointArray, styleOptions);  //创建多边形
+                    map.addOverlay(polygon);   //增加多边形
 
-                overlays.push(polygon);
-                var view = map.getViewport(eval(pointArray));
-                var mapZoom = view.zoom;
-                var centerPoint = view.center;
-                map.centerAndZoom(centerPoint, mapZoom);
-                map.enableScrollWheelZoom();
+                    polygon.enableEditing();
+                    overlays.push(polygon);
+                    var view = map.getViewport(eval(pointArray));
+                    var mapZoom = view.zoom;
+                    var centerPoint = view.center;
+                    map.centerAndZoom(centerPoint, mapZoom);
+                    map.enableScrollWheelZoom();
+                }
             }
             else {
                 map.centerAndZoom("练市", 16);
@@ -122,4 +139,3 @@
         });
     </script>
 }
-

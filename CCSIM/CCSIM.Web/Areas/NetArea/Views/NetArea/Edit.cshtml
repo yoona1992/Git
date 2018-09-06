@@ -49,8 +49,9 @@
     <script>
         // 打开窗体
         function onLonAndLatClick(event) {
+            
             var iframeWindowUrl = '@Url.Content("~/NetArea/NetArea/LonAndLat")';
-            var iframeUrl = iframeWindowUrl + '?type=2&lonAndLat=' + F.ui.LonAndLat.value;
+            var iframeUrl = iframeWindowUrl + '?type=2&id=' + F.ui.Id.value;
 
             // 显示窗体
             F.ui.Window1.show(iframeUrl, '编辑 - ' + '经纬度');

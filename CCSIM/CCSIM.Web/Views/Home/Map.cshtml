@@ -71,7 +71,7 @@
     </div>
 
     @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("查看").ID("Window1"))
-    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window2_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("详情").ID("Window2"))
+    @(F.Window().Hidden(true).Height(400).Width(750).IsModal(true).OnClose(Url.Action("Window2_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("详情").ID("Window2"))
 }
 
 @section script {
@@ -140,24 +140,30 @@
 
         //网格信息
         function openNetInfo(netInfo, p) {
-            var tableWidth = ($(document).width() - 300) / 2;
-            var opts = {
-                width: tableWidth,     // 信息窗口宽度
-                height: 210,     // 信息窗口高度
-                title: "", // 信息窗口标题
-                enableMessage: true//设置允许信息窗发送短息
-            };
-            var content = "<h5 style='margin:0 0 5px 0;padding:0.2em 0'>" + netInfo.Name + "</h5>";
-            content += "<table width='100%'  borderColor='#808080' cellSpacing='0'  style='border-collapse:collapse' borderColorDark='#ffffff' cellPadding='3' borderColorLight='#808080' border='1'>";
-            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>网格名称：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + netInfo.Name + "</td></tr>";
-            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>人口信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.PopulationInfo == null ? "" : netInfo.PopulationInfo) + "</td></tr>";
-            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>房屋信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.HouseInfo == null ? "" : netInfo.HouseInfo) + "</td></tr>";
-            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>单位门店信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.UnitStoreInfo == null ? "" : netInfo.UnitStoreInfo) + "</td></tr>";
-            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>所属部门：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + netInfo.BelongDeptName + "</td></tr>";
-            content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>备注：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.Remark == null ? "" : netInfo.Remark) + "</td></tr>";
-            content += "</table>";
-            var infoWindow = new BMap.InfoWindow(content, opts);  // 创建信息窗口对象
-            map.openInfoWindow(infoWindow, p); //开启信息窗口
+            var iframeWindowUrl = '@Url.Content("~/Home/NetDetail")';
+            var iframeUrl = iframeWindowUrl + '?id=' + netInfo.Id;
+
+            // 显示窗体
+            F.ui.Window2.show(iframeUrl, '详情 - ' + '网格');
+
+            //var tableWidth = ($(document).width() - 300) / 2;
+            //var opts = {
+            //    width: tableWidth,     // 信息窗口宽度
+            //    height: 210,     // 信息窗口高度
+            //    title: "", // 信息窗口标题
+            //    enableMessage: true//设置允许信息窗发送短息
+            //};
+            //var content = "<h5 style='margin:0 0 5px 0;padding:0.2em 0'>" + netInfo.Name + "</h5>";
+            //content += "<table width='100%'  borderColor='#808080' cellSpacing='0'  style='border-collapse:collapse' borderColorDark='#ffffff' cellPadding='3' borderColorLight='#808080' border='1'>";
+            //content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>网格名称：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + netInfo.Name + "</td></tr>";
+            //content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>人口信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.PopulationInfo == null ? "" : netInfo.PopulationInfo) + "</td></tr>";
+            //content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>房屋信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.HouseInfo == null ? "" : netInfo.HouseInfo) + "</td></tr>";
+            //content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>单位门店信息：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.UnitStoreInfo == null ? "" : netInfo.UnitStoreInfo) + "</td></tr>";
+            //content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>所属部门：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + netInfo.BelongDeptName + "</td></tr>";
+            //content += "<tr><td style='width:120px;text-align:center;' bgcolor='#bbe1e1'>备注：</td><td style='width:" + (tableWidth - 100) + "px;text-align:center;'>" + (netInfo.Remark == null ? "" : netInfo.Remark) + "</td></tr>";
+            //content += "</table>";
+            //var infoWindow = new BMap.InfoWindow(content, opts);  // 创建信息窗口对象
+            //map.openInfoWindow(infoWindow, p); //开启信息窗口
         }
         function addClickHandler(content, marker, p) {
             marker.addEventListener("click", function (e) {
@@ -238,10 +244,10 @@
                                 var icon = myIcon_Person;
                                 if (item.Type != "1") {
                                     if (item.ObjectType == "19" || item.ObjectType == "11") {
-                                        icon = myIcon_Llmtc;
+                                        icon = myIcon_Mtc;
                                     }
                                     else if (item.ObjectType == "18" || item.ObjectType == "37") {
-                                        icon = myIcon_Llddc;
+                                        icon = myIcon_Mtc;
                                     }
                                     else {
                                         icon = myIcon_Xqc;
@@ -254,8 +260,9 @@
                                 marker.type = 3;
                                 marker.objectId = item.ObjectId;
                                 marker.objectType = item.Type;
-                                var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
-                                marker.setLabel(label);
+                                marker.setTitle(item.ObjectName);
+                                //var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
+                                //marker.setLabel(label);
 
                                 //如果是人员，添加右键查看消息菜单
                                 if (item.Type == "1") {
@@ -275,7 +282,7 @@
                                 });
 
 
-                                //alarm(item, polygon);
+                                alarm(item, polygon);
                             }
                         });
                     } else {
@@ -285,10 +292,10 @@
                                 var icon = myIcon_Person;
                                 if (item.Type != "1") {
                                     if (item.ObjectType == "19" || item.ObjectType == "11") {
-                                        icon = myIcon_Llmtc;
+                                        icon = myIcon_Mtc;
                                     }
                                     else if (item.ObjectType == "18" || item.ObjectType == "37") {
-                                        icon = myIcon_Llddc;
+                                        icon = myIcon_Mtc;
                                     }
                                     else {
                                         icon = myIcon_Xqc;
@@ -301,8 +308,9 @@
                                 marker.type = 3;
                                 marker.objectId = item.ObjectId;
                                 marker.objectType = item.Type;
-                                var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
-                                marker.setLabel(label);
+                                marker.setTitle(item.ObjectName);
+                                //var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
+                                //marker.setLabel(label);
 
                                 //如果是人员，添加右键查看消息菜单
                                 if (item.Type == "1") {
@@ -322,9 +330,20 @@
                                 });
 
                                 if (item.ObjectId == objectId) {
-                                    map.centerAndZoom(new BMap.Point(item.Lon, item.Lat), 18);
+                                    var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
+                                    //label.setStyle({
+                                    //    fontSize: "14px",
+                                    //    backgroundColor: "0.05",
+                                    //    border: "0",
+                                    //    color:"green",
+                                    //    fontWeight: "bold"
+                                    //});
+                                    marker.setLabel(label);
+                                    marker.setTop(true);
+                                    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                                    map.centerAndZoom(new BMap.Point(item.Lon, item.Lat), 19);
                                 }
-                                //alarm(item, polygon);
+                                alarm(item, polygon);
                             }
                         });
                     }
@@ -353,19 +372,21 @@
                 netInfo = data;
 
                 $.each(netInfo, function (index, d) {
-                    var pointArray = [];
-                    var color = d.NetColor;
-                    var lonAndLatArray = $.parseJSON(d.LonAndLat);
-                    $.each(lonAndLatArray, function (index, dd) {
-                        pointArray.push(new BMap.Point(dd.lng, dd.lat));
-                    });
+                    if (d.LonAndLat == "" || d.LonAndLat == null) { }
+                    else {
+                        var pointArray = [];
+                        var color = d.NetColor;
+                        var lonAndLatArray = $.parseJSON(d.LonAndLat);
+                        $.each(lonAndLatArray, function (index, dd) {
+                            pointArray.push(new BMap.Point(dd.lng, dd.lat));
+                        });
 
-                    var polygon = new BMap.Polygon(pointArray, { strokeColor: "#000093", strokeWeight: 1, strokeOpacity: 0.1, fillColor: color, fillOpacity: 0.5 });
-                    polygon.type = 2;
-                    polygon.objectId = d.Id;
-                    polygon.objectName = d.Name;
-                    polygonInfo.push(polygon);
-
+                        var polygon = new BMap.Polygon(pointArray, { strokeColor: "#000093", strokeWeight: 1, strokeOpacity: 0.1, fillColor: color, fillOpacity: 0.6 });
+                        polygon.type = 2;
+                        polygon.objectId = d.Id;
+                        polygon.objectName = d.Name;
+                        polygonInfo.push(polygon);
+                    }
                 });
             }
         });
@@ -382,7 +403,7 @@
                     pointArray.push(new BMap.Point(dd.lng, dd.lat));
                 });
 
-                var polygon = new BMap.Polygon(pointArray, { strokeColor: "#000093", strokeWeight: 1, strokeOpacity: 0.1, fillColor: color, fillOpacity: 0.5 });
+                var polygon = new BMap.Polygon(pointArray, { strokeColor: "#000093", strokeWeight: 1, strokeOpacity: 0.1, fillColor: color, fillOpacity:0.6 });
                 polygon.type = 2;
                 polygon.objectId = d.Id;
                 polygon.objectName = d.Name;
@@ -406,10 +427,11 @@
         ];
 
         var myIcon = new BMap.Icon("/res/images/i/zpcamera16_jk.gif", new BMap.Size(16, 16));
-        var myIcon_Xqc = new BMap.Icon("/res/images/i/xqc.gif", new BMap.Size(25, 25)); //小汽车
+        var myIcon_Xqc = new BMap.Icon("/res/images/i/xqc.gif", new BMap.Size(40, 25)); //小汽车
+        var myIcon_Mtc = new BMap.Icon("/res/images/i/mtc.gif", new BMap.Size(30, 35)); //小汽车
         var myIcon_Llddc = new BMap.Icon("/res/images/i/llddc.gif", new BMap.Size(25, 25)); //小汽车
         var myIcon_Llmtc = new BMap.Icon("/res/images/i/llmtc.gif", new BMap.Size(25, 25)); //小汽车
-        var myIcon_Person = new BMap.Icon("/res/images/i/person.gif", new BMap.Size(17, 26));
+        var myIcon_Person = new BMap.Icon("/res/images/i/person.gif", new BMap.Size(23, 35));
 
         function addSxj() {
             var marker = new BMap.Marker(new BMap.Point(data_info[0][0], data_info[0][1]), { icon: myIcon });  // 创建标注
@@ -499,7 +521,11 @@
         }
 
         //越格报警
+        var iii = 0;
         function alarm(item, polygon) {
+            if (polygon == "" || polygon == null || polygon.getPath().length==0) {
+                return false;
+            }
             var lon = item.Lon;
             var lat = item.Lat;
             var point = new BMap.Point(lon, lat);
@@ -568,8 +594,8 @@
                 addRyCl(data);
             }, 2000);
         };
-        function zTreeBeforeClick(treeId, treeNode, clickFlag) {
 
+        function zTreeBeforeClick(treeId, treeNode, clickFlag) {
             var tree = $.fn.zTree.getZTreeObj(treeId);
             var selectedNodes = tree.getSelectedNodes();
             var isSelected = false;
@@ -584,7 +610,6 @@
                 map.centerAndZoom("练市", 16);
                 return false;
             } else { //不执行
-
             }
         };
         var setting = {
