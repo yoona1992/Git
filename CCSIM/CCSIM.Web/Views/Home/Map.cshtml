@@ -708,7 +708,7 @@
             var circlePath = circle.getPath();
             map.removeOverlay(circle);
             if (isPointInPolygonBidirectional(polygon.getPath(), circlePath) == false) {
-                document.getElementById("alarm").innerHTML = "<embed src='../res/voice/alarm.wav' width=0 height=0 type=audio/wav loop='5' autostart='true' ></embed> ";
+                //document.getElementById("alarm").innerHTML = "<embed src='../res/voice/alarm.wav' width=0 height=0 type=audio/wav loop='1' autostart='true' ></embed> ";
                 $.toast({
                     heading: '越界提醒',
                     text: item.ObjectName + '于' + getNowDate() + '超越' + polygon.objectName + '网格边界',
@@ -733,6 +733,7 @@
                     url: "./AddAlarmInfo",
                     data: info,
                     type: "post",
+                    async:false,
                     success: function (data) {
                     }
                 });
