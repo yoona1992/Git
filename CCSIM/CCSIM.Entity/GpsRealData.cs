@@ -29,5 +29,9 @@ namespace CCSIM.Entity
         public string Type { get; set; }
 
         public bool IsOffline { get; set; }
+
+        public bool IsNeedAlarm { get; set; }
+
+        public bool IsNeedShow { get; set; }
     }
 }

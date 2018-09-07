@@ -236,16 +236,16 @@ namespace CCSIM.BLL
             var now = DateTime.Now;
             StringBuilder pSBQueryText = new StringBuilder();
             pSBQueryText.Append("SELECT A.OBJECTNAME AS OBJECTID,LON,LAT,CASE WHEN B.BELONGNETID IS NULL THEN C.BELONGNETID ELSE B.BELONGNETID END AS BELONGNETID,");
-            pSBQueryText.Append("CASE WHEN B.NAME IS NULL THEN C.VEHICLENO ELSE B.NAME END AS NAME,CASE WHEN B.NAME IS NULL THEN C.OWNER ELSE B.NAME END AS OWNER,TO_CHAR(A.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,A.ADDRESS,CASE WHEN B.NAME IS NULL THEN 2 ELSE 1 END AS TYPE,CASE WHEN B.NAME IS NULL THEN C.VEHICLETYPE ELSE 0 END AS OBJECTTYPE FROM GPS_REAL A ");
+            pSBQueryText.Append("CASE WHEN B.NAME IS NULL THEN C.VEHICLENO ELSE B.NAME END AS NAME,CASE WHEN B.NAME IS NULL THEN C.OWNER ELSE B.NAME END AS OWNER,TO_CHAR(A.PASSTIME, 'yyyy-mm-dd hh24:mi:ss') AS PASSTIME,A.ADDRESS,CASE WHEN B.NAME IS NULL THEN 2 ELSE 1 END AS TYPE,CASE WHEN B.NAME IS NULL THEN C.VEHICLETYPE ELSE 0 END AS OBJECTTYPE,TO_CHAR(A.LASTALARMTIME,'yyyy-mm-dd hh24:mi:ss') AS LASTALARMTIME FROM GPS_REAL A ");
             pSBQueryText.Append("LEFT JOIN CFG_USERINFO B ON A.OBJECTNAME = B.TELEPHONE ");
             pSBQueryText.Append("LEFT JOIN CFG_VEHICLEINFO D ON A.OBJECTNAME = D.ID AND A.OBJECTTYPE = 1 LEFT JOIN CFG_CARINFO C ON D.CLDWZDSBH=C.CLDWZDSBH WHERE A.OBJECTNAME IN('" + string.Join("','", objectNames) + "')");
 
             //获取所有需要提醒的用户手机号码
-            var phone_Alarm = OracleOperateBLL.FillDataTable("SELECT DISTINCT PHONE FROM MESSAGE WHERE ROUND(TO_NUMBER(SYSDATE - CREATE_DATE) * 24 * 60 * 60)<=60 AND ISREAD_PLATFORM=0");
-            List<string> phone_AlarmList = new List<string>();
-            foreach (DataRow dr in phone_Alarm.Rows)
+            var phone_Show = OracleOperateBLL.FillDataTable("SELECT DISTINCT PHONE FROM MESSAGE WHERE ISSHOW_PLATFORM=0");
+            List<string> phone_ShowList = new List<string>();
+            foreach (DataRow dr in phone_Show.Rows)
             {
-                phone_AlarmList.Add(dr["PHONE"].ToString());
+                phone_ShowList.Add(dr["PHONE"].ToString());
             }
             var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
             List<GpsRealData> dataList = new List<GpsRealData>();
@@ -260,21 +260,39 @@ namespace CCSIM.BLL
                 var address = dr["ADDRESS"].ToString();
                 var type = dr["TYPE"].ToString();
                 var owner = dr["OWNER"].ToString();
-                var objectType= dr["OBJECTTYPE"].ToString();
+                var objectType = dr["OBJECTTYPE"].ToString();
+                var lastAlarmTime = dr["LASTALARMTIME"].ToString();
 
                 GpsRealData d = new GpsRealData();
                 d.ObjectId = objectId;
                 d.ObjectType = objectType;
-                if (type == "1")  //人员
+                if (string.IsNullOrWhiteSpace(lastAlarmTime))
                 {
-                    if (phone_AlarmList.Contains(d.ObjectId))
+                    d.IsNeedAlarm = true;
+                }
+                else //看最近一次报警时间与当前时间比较，小于一分钟不报警
+                {
+                    var alarmTime = DateTime.Parse(lastAlarmTime);
+                    if (now.Subtract(alarmTime).TotalSeconds >= 60)
                     {
-                        d.ObjectName = "<span class='box'>" + objectName + "</span>";
+                        d.IsNeedAlarm = true;
                     }
                     else
                     {
-                        d.ObjectName = objectName;
+                        d.IsNeedAlarm = false;
                     }
+                }
+                if (type == "1")  //人员
+                {
+                    if (phone_ShowList.Contains(d.ObjectId))
+                    {
+                        d.IsNeedShow = true;
+                    }
+                    else
+                    {
+                        d.IsNeedShow = false;
+                    }
+                    d.ObjectName = objectName;
                     var lonAndLat = GpsTranslate.gcj2bd(Convert.ToDouble(lat), Convert.ToDouble(lon));
                     d.Lat = lonAndLat[0].ToString();
                     d.Lon = lonAndLat[1].ToString();
@@ -301,6 +319,73 @@ namespace CCSIM.BLL
             }
 
             return dataList;
+        }
+
+        /// <summary>
+        /// 更新定位实时信息
+        /// </summary>
+        /// <param name="objectName"></param>
+        /// <returns></returns>
+        public static void UpdateGpsInfo(string objectName)
+        {
+            StringBuilder pSBQueryText = new StringBuilder();
+            pSBQueryText.Append("UPDATE GPS_REAL SET LASTALARMTIME=TO_DATE('" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss') WHERE OBJECTNAME='" + objectName + "'");
+
+            try
+            {
+                OracleOperateBLL.ExecuteSql(pSBQueryText.ToString());
+            }
+            catch
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// 获取未显示过的消息
+        /// </summary>
+        /// <param name="phone"></param>
+        /// <returns></returns>
+        public static List<MessageInfo> GetMessageList(string phone)
+        {
+            List<MessageInfo> infoList = new List<MessageInfo>();
+            List<int> ids = new List<int>();
+            StringBuilder pSBQueryText = new StringBuilder();
+            pSBQueryText.Append("SELECT ID,TITLE,ADDRESS,REMARKS FROM MESSAGE WHERE ISSHOW_PLATFORM=0 and PHONE='" + phone + "'");
+            var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
+            foreach (DataRow dr in data.Rows)
+            {
+                MessageInfo info = new MessageInfo();
+                info.Id = Convert.ToInt32(dr["ID"]);
+                info.Title = dr["TITLE"].ToString();
+                info.Address = dr["ADDRESS"].ToString();
+                info.Remarks = dr["REMARKS"].ToString();
+
+                ids.Add(info.Id);
+                infoList.Add(info);
+            }
+
+            UpdateMessage(ids);
+            return infoList;
+        }
+
+        /// <summary>
+        /// 更新消息
+        /// </summary>
+        /// <param name="ids"></param>
+        public static void UpdateMessage(List<int> ids)
+        {
+            StringBuilder pSBQueryText = new StringBuilder();
+            pSBQueryText.Append("UPDATE MESSAGE SET ISSHOW_PLATFORM=1 WHERE ID IN(" + string.Join(",", ids) + ")");
+
+            try
+            {
+                OracleOperateBLL.ExecuteSql(pSBQueryText.ToString());
+            }
+            catch
+            {
+
+            }
         }
     }
 }

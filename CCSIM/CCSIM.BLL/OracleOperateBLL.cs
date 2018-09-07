@@ -62,5 +62,15 @@ namespace CCSIM.BLL
             pDataSet.Dispose();
             return pTable;
         }
+        public static void ExecuteSql(string cmdText)
+        {
+            OracleConnection pOleDbConnection = new OracleConnection(ORACLE_CONNECTION_STRING);
+            pOleDbConnection.Open();
+            OracleCommand pComm = new OracleCommand(cmdText, pOleDbConnection);
+            pComm.ExecuteNonQuery();
+            pComm.Dispose();
+            pOleDbConnection.Close();
+            pOleDbConnection.Dispose();
+        }
     }
 }

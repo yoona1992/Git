@@ -356,6 +356,13 @@ namespace CCSIM.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult Window1_Close()
+        {
+            return UIHelper.Result();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Window2_Close()
         {
             return UIHelper.Result();
@@ -445,7 +452,7 @@ namespace CCSIM.Web.Controllers
         /// 新增报警信息
         /// </summary>
         /// <returns></returns>
-        public ActionResult AddAlarmInfo(string info, string alarmAddress, string alarmObjectName, string alarmType, string alarmTime)
+        public ActionResult AddAlarmInfo(string info, string alarmAddress, string alarmObjectName, string alarmType, string alarmTime, string objectName)
         {
             INFO_ALARMINFO alarmInfo = new INFO_ALARMINFO();
             alarmInfo.ALARMINFO = info;
@@ -454,11 +461,21 @@ namespace CCSIM.Web.Controllers
             alarmInfo.ALARMTYPE = Convert.ToInt32(alarmType);
             alarmInfo.ALARMTIME = DateTime.Parse(alarmTime);
             var isSuccess = AlarmBLL.Add(alarmInfo);
+            MapBLL.UpdateGpsInfo(objectName);
             return new JsonResult
             {
                 Data = isSuccess
             };
         }
 
+        public ActionResult GetMessageList(string phone)
+        {
+            var data = MapBLL.GetMessageList(phone);
+
+            return new JsonResult
+            {
+                Data = data
+            };
+        }
     }
 }

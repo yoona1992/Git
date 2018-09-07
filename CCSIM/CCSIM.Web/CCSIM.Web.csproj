@@ -2020,6 +2020,7 @@
     <Content Include="res\themes\pure_orange\theme.css" />
     <Content Include="res\themes\pure_purple\theme.css" />
     <Content Include="res\themes\pure_red\theme.css" />
+    <Content Include="res\voice\alarm.wav" />
     <Content Include="thirdpart\baguetteBox\baguetteBox.css" />
     <Content Include="thirdpart\baguetteBox\baguetteBox.js" />
     <Content Include="thirdpart\baguetteBox\baguetteBox.min.css" />
@@ -3565,6 +3566,7 @@
     <Content Include="thirdpart\jeDate\jedatefont.svg" />
     <Content Include="thirdpart\jqueryui\jquery-ui.min.css" />
     <Content Include="thirdpart\jqueryui\jquery-ui.min.js" />
+    <Content Include="thirdpart\pop\jquery.message.js" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\bootstrapStyle.css" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\img\bootstrap.gif" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\img\bootstrap.png" />
