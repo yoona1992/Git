@@ -1987,6 +1987,7 @@
     <Content Include="res\js\libs\jquery-2.1.0.min.js" />
     <Content Include="res\js\libs\jquery.toast.min.js" />
     <Content Include="res\js\libs\jscharts.js" />
+    <Content Include="res\js\LuShu_min.js" />
     <Content Include="res\js\map.js" />
     <Content Include="res\themes\bootstrap_pure\theme.css" />
     <Content Include="res\themes\custom_default\theme.css" />
