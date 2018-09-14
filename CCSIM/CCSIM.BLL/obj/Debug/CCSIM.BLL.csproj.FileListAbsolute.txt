@@ -132,7 +132,6 @@ F:\Git\Git\CCSIM\CCSIM.BLL\obj\Debug\CCSIM.BLL.csproj.CoreCompileInputs.cache
 F:\Git\Git\CCSIM\CCSIM.BLL\obj\Debug\CCSIM.BLL.csproj.CopyComplete
 F:\Git\Git\CCSIM\CCSIM.BLL\obj\Debug\CCSIM.BLL.dll
 F:\Git\Git\CCSIM\CCSIM.BLL\obj\Debug\CCSIM.BLL.pdb
-D:\Git\CCSIM\CCSIM.BLL\obj\Debug\CCSIM.BLL.csprojResolveAssemblyReference.cache
 D:\Git\CCSIM\CCSIM.BLL\bin\Debug\CCSIM.BLL.dll.config
 D:\Git\CCSIM\CCSIM.BLL\bin\Debug\CCSIM.BLL.dll
 D:\Git\CCSIM\CCSIM.BLL\bin\Debug\CCSIM.BLL.pdb
@@ -146,5 +145,6 @@ D:\Git\CCSIM\CCSIM.BLL\bin\Debug\Oracle.ManagedDataAccess.dll
 D:\Git\CCSIM\CCSIM.BLL\bin\Debug\EntityFramework.xml
 D:\Git\CCSIM\CCSIM.BLL\bin\Debug\EntityFramework.SqlServer.xml
 D:\Git\CCSIM\CCSIM.BLL\bin\Debug\Newtonsoft.Json.xml
+D:\Git\CCSIM\CCSIM.BLL\obj\Debug\CCSIM.BLL.csprojResolveAssemblyReference.cache
 D:\Git\CCSIM\CCSIM.BLL\obj\Debug\CCSIM.BLL.dll
 D:\Git\CCSIM\CCSIM.BLL\obj\Debug\CCSIM.BLL.pdb

@@ -93,6 +93,22 @@
                     )
                 )
                     )
+                    @(F.Button()
+                .EnableDefaultCorner(false)
+                .EnableDefaultState(false)
+                .IconAlign(IconAlign.Top)
+                .IconFont(IconFont.Database)
+                .Text("下载管理")
+                .CssClass("icontopaction themes")
+                .Menu(F.Menu()
+                    .Items(
+                        F.MenuButton()
+                            .IconFont(IconFont.Download)
+                            .Text("移动APP下载")
+                            .Listener("click", "addTap('/AppDownload/AppDownload','appDownload','移动APP下载');")
+                    )
+                )
+                    )
 
                     @(F.Button()
                 .EnableDefaultCorner(false)
@@ -183,6 +199,10 @@
                     break;
                 default:
                     break;
+            }
+            if (id == "appDownload") {
+                window.location.href = '@Url.Action("DownloadApp")';
+                return false;
             }
             F.ui.mainTabStrip.addTab({
                 id: id,

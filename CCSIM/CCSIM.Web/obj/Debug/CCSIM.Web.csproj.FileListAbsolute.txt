@@ -428,7 +428,6 @@ F:\Git\Git\CCSIM\CCSIM.Web\obj\Debug\CCSIM.Web.csproj.CoreCompileInputs.cache
 F:\Git\Git\CCSIM\CCSIM.Web\obj\Debug\CCSIM.Web.csproj.CopyComplete
 F:\Git\Git\CCSIM\CCSIM.Web\obj\Debug\CCSIM.Web.dll
 F:\Git\Git\CCSIM\CCSIM.Web\obj\Debug\CCSIM.Web.pdb
-D:\Git\CCSIM\CCSIM.Web\obj\Debug\CCSIM.Web.csprojResolveAssemblyReference.cache
 D:\Git\CCSIM\CCSIM.Web\bin\CCSIM.Web.dll.config
 D:\Git\CCSIM\CCSIM.Web\bin\CCSIM.Web.dll
 D:\Git\CCSIM\CCSIM.Web\bin\CCSIM.Web.pdb
@@ -473,5 +472,6 @@ D:\Git\CCSIM\CCSIM.Web\bin\System.Web.WebPages.xml
 D:\Git\CCSIM\CCSIM.Web\bin\System.Web.WebPages.Deployment.xml
 D:\Git\CCSIM\CCSIM.Web\bin\System.Web.WebPages.Razor.xml
 D:\Git\CCSIM\CCSIM.Web\bin\Z.EntityFramework.Extensions.xml
+D:\Git\CCSIM\CCSIM.Web\obj\Debug\CCSIM.Web.csprojResolveAssemblyReference.cache
 D:\Git\CCSIM\CCSIM.Web\obj\Debug\CCSIM.Web.dll
 D:\Git\CCSIM\CCSIM.Web\obj\Debug\CCSIM.Web.pdb

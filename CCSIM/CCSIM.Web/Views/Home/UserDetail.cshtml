@@ -6,34 +6,34 @@
 }
 @model CCSIM.Web.Models.UserInfoModel
 @section body {
-    @(F.Form().ID("Form_UserDetail").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).IsViewPort(true)
+    @(F.Form().ID("Form_UserDetail").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).LabelWidth(100).IsViewPort(true)
     .Items(
    F.Panel().Layout(LayoutType.HBox).BoxConfigAlign(BoxLayoutAlign.Stretch).ShowHeader(false).ShowBorder(false)
                                 .Items(
                                     F.TextBox().ID("Id").Text(Model.userInfo.Id.ToString()).Hidden(true),
-                                    F.TextBox().ID("Name").Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>姓名").Text(Model.userInfo.Name).BoxFlex(1).Readonly(true),
-                                    F.DropDownListFor(m => m.sex.DropDownList).ID("Sex").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>性别").AutoSelectFirstItem(false).EmptyText("请选择性别")
+                                    F.TextBox().ID("Name").Required(true).ShowLabel(true).Label("姓名").Text(Model.userInfo.Name).BoxFlex(1).Readonly(true),
+                                    F.DropDownListFor(m => m.sex.DropDownList).ID("Sex").Required(true).ShowLabel(true).ShowRedStar(false).Label("性别").AutoSelectFirstItem(false).EmptyText("请选择性别")
                                         .Items(Model.sex.DropDownListItem.ToArray()).SelectedValue(Model.userInfo.Sex.ToString()).BoxFlex(1).Readonly(true)
                                 ),
    F.Panel().Layout(LayoutType.HBox).BoxConfigAlign(BoxLayoutAlign.Stretch).ShowHeader(false).ShowBorder(false)
                                 .Items(
                                     F.TextBox().ID("Age").ShowLabel(true).Label("年龄").Text(Model.userInfo.Age).BoxFlex(1).Readonly(true),
-                                    F.TextBox().ID("Telephone").Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>联系电话").Text(Model.userInfo.Telephone).BoxFlex(1).Readonly(true)
+                                    F.TextBox().ID("Telephone").Required(true).ShowLabel(true).Label("联系电话").Text(Model.userInfo.Telephone).BoxFlex(1).Readonly(true)
                                 ),
    F.Panel().Layout(LayoutType.HBox).BoxConfigAlign(BoxLayoutAlign.Stretch).ShowHeader(false).ShowBorder(false)
                                 .Items(
-                                    F.DropDownListFor(m => m.certificateType.DropDownList).ID("CertificateType").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>证件类型").AutoSelectFirstItem(false).EmptyText("请选择证件类型")
+                                    F.DropDownListFor(m => m.certificateType.DropDownList).ID("CertificateType").Required(true).ShowLabel(true).ShowRedStar(false).Label("证件类型").AutoSelectFirstItem(false).EmptyText("请选择证件类型")
                                         .Items(Model.certificateType.DropDownListItem.ToArray()).SelectedValue(Model.userInfo.CertificateType.ToString()).BoxFlex(1).Readonly(true),
-                                    F.TextBox().ID("CertificateNum").Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>证件号码").Text(Model.userInfo.CertificateNum).BoxFlex(1).Readonly(true)
+                                    F.TextBox().ID("CertificateNum").Required(true).ShowLabel(true).Label("证件号码").Text(Model.userInfo.CertificateNum).BoxFlex(1).Readonly(true)
                                 ),
    F.Panel().Layout(LayoutType.HBox).BoxConfigAlign(BoxLayoutAlign.Stretch).ShowHeader(false).ShowBorder(false)
                                 .Items(
-                                    F.DropDownListFor(m => m.belongDept.DropDownList).ID("BelongDeptId").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所属部门").AutoSelectFirstItem(false).EmptyText("请选择所属部门")
+                                    F.DropDownListFor(m => m.belongDept.DropDownList).ID("BelongDeptId").Required(true).ShowLabel(true).ShowRedStar(false).Label("所属部门").AutoSelectFirstItem(false).EmptyText("请选择所属部门")
                                         .Items(Model.belongDept.DropDownListItem.ToArray()).SelectedValue(Model.userInfo.BelongDeptId.ToString()).BoxFlex(1).Readonly(true),
                                     F.DropDownListFor(m => m.belongNet.DropDownList).ID("BelongNetId").Required(false).ShowLabel(true).ShowRedStar(false).Label("所属网格").AutoSelectFirstItem(false).EmptyText("请选择所属网格")
                                         .Items(Model.belongNet.DropDownListItem.ToArray()).SelectedValue(Model.userInfo.BelongNetId.ToString()).BoxFlex(1).Readonly(true)
                                 ),
-    F.DropDownListFor(m => m.userType.DropDownList).ID("UserType").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>人员类型").AutoSelectFirstItem(false).EmptyText("请选择人员类型")
+    F.DropDownListFor(m => m.userType.DropDownList).ID("UserType").Required(true).ShowLabel(true).ShowRedStar(false).Label("人员类型").AutoSelectFirstItem(false).EmptyText("请选择人员类型")
         .Items(Model.userType.DropDownListItem.ToArray()).SelectedValue(Model.userInfo.UserType.ToString()).Readonly(true),
     F.TextBox().ID("VirtualTrumpet").Text(Model.userInfo.Direction).Label("虚拟短号").Readonly(true),
     F.TextBox().ID("Direction").Text(Model.userInfo.Direction).Label("去向").Readonly(true),

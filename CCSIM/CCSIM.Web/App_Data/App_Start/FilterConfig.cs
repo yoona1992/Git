@@ -9,7 +9,7 @@ namespace CCSIM.Web
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
-            //filters.Add(new UserAuthAttribute());//注册
+            filters.Add(new UserAuthAttribute());//注册
         }
     }
 }

@@ -2,7 +2,6 @@
     //ViewBag.Title = "登录";
     Layout = null;
 }
-
 <!DOCTYPE html>
 <head>
     <title>指挥中心平台</title>
@@ -10,7 +9,6 @@
     <meta name="description" content="" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link href="~/res/css/Login/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="~/res/css/Login/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="~/res/css/Login/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
@@ -39,23 +37,33 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-12">
-                        <div class="checkbox control-wrapper">
-                            <label>
-                                <input type="checkbox">记住我
-                            </label>
-                        </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-12">
-                        <div class="control-wrapper">
-                            <input type="submit" value="登录" class="btn btn-info">
-                            <a href="forgot-password.html" class="text-right pull-right">忘记密码?</a>
+                        <div class="control-wrapper" align="center">
+                            <input type="button" id="submit" value="登录" class="btn btn-info" style="width:40%">
                         </div>
                     </div>
                 </div>
-                <hr>
             </form>
         </div>
     </div>
+    <script src="~/res/js/libs/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript">
+        $('#submit').click(function () {
+            $.ajax({
+                url: "../Home/UserLogin",
+                data: {
+                    userName: $('#username').val(),
+                    userPwd: $('#password').val()
+                },
+                type: "post",
+                async:false,
+                success: function (data) {
+                    location.href = "../Home/Index";
+                }
+            });
+        });
+    </script>
 </body>

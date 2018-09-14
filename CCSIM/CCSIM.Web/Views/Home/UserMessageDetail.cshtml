@@ -23,25 +23,37 @@
     <script type="text/javascript" src="~/res/js/libs/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="~/thirdpart/baguetteBox/baguetteBox.min.js"></script>
     <script type="text/javascript" src="~/thirdpart/baguetteBox/msgbox.js"></script>
+    <script src="~/res/js/AjaxFunction.js"></script>
     <script>
         var allData = [];
-        $.ajax({
-            url: "../Message/Message/GetFileList",
-            data: {
-                id:$('#Id').val()
-            },
-            type: "post",
-            async: false,
-            success: function (data) {
-                $.each(data, function (index, d) {
-                    allData.push({
-                        FileName: d.FileName,
-                        FileUrl: d.FileUrl,
-                        Id:index
-                    });
+        ajaxFunction("../Message/Message/GetFileList", {
+            id: $('#Id').val()
+        }, "post", false, function (data) {
+            $.each(data, function (index, d) {
+                allData.push({
+                    FileName: d.FileName,
+                    FileUrl: d.FileUrl,
+                    Id: index
                 });
-            }
+            });
         });
+        //$.ajax({
+        //    url: "../Message/Message/GetFileList",
+        //    data: {
+        //        id:$('#Id').val()
+        //    },
+        //    type: "post",
+        //    async: false,
+        //    success: function (data) {
+        //        $.each(data, function (index, d) {
+        //            allData.push({
+        //                FileName: d.FileName,
+        //                FileUrl: d.FileUrl,
+        //                Id:index
+        //            });
+        //        });
+        //    }
+        //});
         $.each(allData, function (index, item) {
             var div = "<div class='col-sm-6 col-md-6'>";
             div += "<div class='thumbnail'>";

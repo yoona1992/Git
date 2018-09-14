@@ -31,8 +31,8 @@ namespace CCSIM.Web.Areas.Message.Controllers
         {
             var recordCount = 0;
             var stTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00");
-            var endTime= DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
-            var data = MessageBLL.GetList("","", stTime, endTime, 1, 20, out recordCount);
+            var endTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59");
+            var data = MessageBLL.GetList("", "", stTime, endTime, 1, 20, out recordCount);
             ViewBag.Grid1RecordCount = recordCount;
             ViewBag.Grid1DataSource = data;
         }
@@ -41,7 +41,7 @@ namespace CCSIM.Web.Areas.Message.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult MessageGrid_PageIndexChanged(JArray MessageGrid_fields, string username,string title,DateTime startTime,DateTime endTime, int MessageGrid_pageIndex, int MessageGrid_pageSize)
+        public ActionResult MessageGrid_PageIndexChanged(JArray MessageGrid_fields, string username, string title, DateTime startTime, DateTime endTime, int MessageGrid_pageIndex, int MessageGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("MessageGrid");
             var recordCount = 0;
@@ -70,18 +70,24 @@ namespace CCSIM.Web.Areas.Message.Controllers
 
             return UIHelper.Result();
         }
-    
+
         public ActionResult GetFileList(int id)
         {
             var data = MessageBLL.Get(id);
-            var files = data.PHOTO.Split('|');
             List<FileInfo> fileList = new List<FileInfo>();
-            foreach(var file in files)
+            if (string.IsNullOrWhiteSpace(data.PHOTO))
             {
-                FileInfo info = new FileInfo();
-                info.FileName = file.Substring(0, file.LastIndexOf("."));
-                info.FileUrl = ConfigurationManager.AppSettings["FileUrl"] + file;
-                fileList.Add(info);
+            }
+            else
+            {
+                var files = data.PHOTO.Split('|');
+                foreach (var file in files)
+                {
+                    FileInfo info = new FileInfo();
+                    info.FileName = file.Substring(0, file.LastIndexOf("."));
+                    info.FileUrl = ConfigurationManager.AppSettings["FileUrl"] + file;
+                    fileList.Add(info);
+                }
             }
 
             //修改消息为已读

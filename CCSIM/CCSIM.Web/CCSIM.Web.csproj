@@ -204,6 +204,7 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="res\js\AjaxFunction.js" />
     <Content Include="res\css\common.css" />
     <Content Include="res\css\custom-themes.css" />
     <Content Include="res\css\custom.css" />

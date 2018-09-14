@@ -89,5 +89,9 @@ namespace CCSIM.Entity
         /// 虚拟短号
         /// </summary>
         public string VirtualTrumpet { get; set; }
+
+        public string UserName { get; set; }
+
+        public string UserPwd { get; set; }
     }
 }

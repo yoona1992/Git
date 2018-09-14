@@ -33,6 +33,7 @@
     <script src="~/res/js/grid.js"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=A6bc8cb4539b007f51e8aa5ef37ed431"></script>
     <script type="text/javascript" src="~/res/js/LuShu_min.js"></script>
+    <script src="~/res/js/AjaxFunction.js"></script>
     <script>
         var map = [];
         var overlays = [];
@@ -66,22 +67,31 @@
                 anchor: BMAP_ANCHOR_TOP_RIGHT
             }); //右上角
             map.addControl(top_right_navigation);
-            $.ajax({
-                url: "./GetList_Car",
-                data: {
-                    cldwzdsbh: F.ui.Cldwzdsbh.getValue(),
-                    passTime: F.ui.PassTime.getValue()
-                },
-                type: "post",
-                async: false,
-                success: function (data) {
-                    allData = data;
-                    $.each(data, function (index, d) {
-                        arrPois.push(new BMap.Point(d.Lon, d.Lat));
-                    });
-                }
+            ajaxFunction("./GetList_Car", {
+                cldwzdsbh: F.ui.Cldwzdsbh.getValue(),
+                passTime: F.ui.PassTime.getValue()
+            }, "post", false, function (data) {
+                allData = data;
+                $.each(data, function (index, d) {
+                    arrPois.push(new BMap.Point(d.Lon, d.Lat));
+                });
             });
-            
+            //$.ajax({
+            //    url: "./GetList_Car",
+            //    data: {
+            //        cldwzdsbh: F.ui.Cldwzdsbh.getValue(),
+            //        passTime: F.ui.PassTime.getValue()
+            //    },
+            //    type: "post",
+            //    async: false,
+            //    success: function (data) {
+            //        allData = data;
+            //        $.each(data, function (index, d) {
+            //            arrPois.push(new BMap.Point(d.Lon, d.Lat));
+            //        });
+            //    }
+            //});
+
             if (arrPois.length != 0) {
                 map.setViewport(arrPois);
                 var icon = [];
@@ -167,7 +177,7 @@
                     defaultContent: F.ui.Cphm.getValue(),//"从天安门到百度大厦"
                     autoView: true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
                     icon: icon,
-                    icon_turn:icon_turn,
+                    icon_turn: icon_turn,
                     speed: speed,
                     enableRotation: true,//是否设置marker随着道路的走向进行旋转
                     landmarkPois: [

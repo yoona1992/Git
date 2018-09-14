@@ -82,7 +82,7 @@ namespace CCSIM.BLL
             int pEndNum = limit * start;
 
             StringBuilder pSBQueryText = new StringBuilder();
-            pSBQueryText.Append("SELECT ALARMINFO,TO_CHAR(ALARMTIME, 'yyyy-mm-dd hh24:mi:ss') AS ALARMTIME,ALARMADDRESS,ALARMTYPE,ALARMOBJECTNAME FROM (SELECT A.*, rownum r FROM(");
+            pSBQueryText.Append("SELECT ID,ALARMINFO,TO_CHAR(ALARMTIME, 'yyyy-mm-dd hh24:mi:ss') AS ALARMTIME,ALARMADDRESS,ALARMTYPE,ALARMOBJECTNAME FROM (SELECT A.*, rownum r FROM(");
             pSBQueryText.Append("SELECT * FROM INFO_ALARMINFO WHERE ALARMTIME BETWEEN TO_DATE('" + stTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss') AND TO_DATE('" + endTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss') ");
             if (string.IsNullOrWhiteSpace(objectName) == false)
             {
@@ -99,6 +99,7 @@ namespace CCSIM.BLL
             foreach (DataRow dr in data.Rows)
             {
                 AlarmInfo a = new AlarmInfo();
+                a.Id = Convert.ToInt32(dr["ID"].ToString());
                 a.Info = dr["ALARMINFO"].ToString();
                 a.AlarmTimeStr = dr["ALARMTIME"].ToString();
                 var type = Convert.ToInt16(dr["ALARMTYPE"].ToString());
