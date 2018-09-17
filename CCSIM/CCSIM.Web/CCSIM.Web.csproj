@@ -175,6 +175,8 @@
     <Compile Include="Areas\Event\EventAreaRegistration.cs" />
     <Compile Include="Areas\Car\Controllers\CarInfoController.cs" />
     <Compile Include="Areas\Car\CarAreaRegistration.cs" />
+    <Compile Include="Areas\FileManage\Controllers\FileManageController.cs" />
+    <Compile Include="Areas\FileManage\FileManageRegistration.cs" />
     <Compile Include="Areas\Message\Controllers\MessageController.cs" />
     <Compile Include="Areas\Message\MessageAreaRegistration.cs" />
     <Compile Include="Areas\NetArea\NetAreaRegistration.cs" />
@@ -3725,6 +3727,9 @@
     <Content Include="Areas\Notification\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Notification\Views\Notification\Add.cshtml" />
     <Content Include="Areas\Trajectory\Views\Trajectory\Map_Car.cshtml" />
+    <Content Include="Areas\FileManage\Views\FileManage\Index.cshtml" />
+    <Content Include="Areas\FileManage\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\FileManage\Views\web.config" />
     <None Include="Dockerfile" />
     <Content Include="thirdpart\bootstrap\.editorconfig" />
     <Content Include="thirdpart\bootstrap\.eslintignore" />

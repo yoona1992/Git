@@ -10,7 +10,7 @@
 
     <style>
         .hideBorder .f-field-textbox {
-            border:0px;
+            border: 0px;
         }
     </style>
 
@@ -44,9 +44,26 @@
     F.TextBox().ID("Wlwkhm").Text(Model.carInfo.Wlwkhm).Label("物联网卡号码").Readonly(true),
     F.TextArea().ID("Remark").Text(Model.carInfo.Remark).Height(140).Label("备注").Readonly(true)
     )
+    .Toolbars(
+    F.Toolbar().ID("Toolbar").ToolbarAlign(ToolbarAlign.Left).Position(ToolbarPosition.Top)
+    .Items(
+    F.Button().ID("btnAdd").Text("轨迹查询").IconFont(IconFont.Database).Listener("click", "onbtnTrajectoryClick")
     )
+    )
+    )
+@(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).Target(Target.Top).EnableIFrame(true).Title("查看").ID("Window1"))
+
 }
 
 @section script {
     <script src="~/res/js/grid.js"></script>
+    <script>
+        function onbtnTrajectoryClick(event) {
+            var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Detail_Car")';
+            var iframeUrl = iframeWindowUrl + '?cldwzdsbh=' + F.ui.Zdsbh.getValue() + "&cphm=" + F.ui.VehicleNo.getValue() + "&cllx=" + F.ui.VehicleType.getValue();
+
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '查看 - ' + '历史轨迹');
+        }
+    </script>
 }

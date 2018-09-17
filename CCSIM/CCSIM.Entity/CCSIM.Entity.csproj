@@ -43,8 +43,10 @@
     <Compile Include="AlarmInfo.cs" />
     <Compile Include="BaiduGeocoderInfo.cs" />
     <Compile Include="FileInfo.cs" />
+    <Compile Include="FileInfos.cs" />
     <Compile Include="GpsData.cs" />
     <Compile Include="GpsRealData.cs" />
+    <Compile Include="LogInfo.cs" />
     <Compile Include="MessageInfo.cs" />
     <Compile Include="NetInfo.cs" />
     <Compile Include="NotificationInfo.cs" />

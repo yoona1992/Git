@@ -38,11 +38,28 @@
     F.TextBox().ID("VirtualTrumpet").Text(Model.userInfo.Direction).Label("虚拟短号").Readonly(true),
     F.TextBox().ID("Direction").Text(Model.userInfo.Direction).Label("去向").Readonly(true),
     F.TextBox().ID("Address").Text(Model.userInfo.Address).Label("家庭地址").Readonly(true),
-    F.TextArea().ID("Remark").Text(Model.userInfo.Remark).Height(160).Label("备注").Readonly(true)
+    F.TextArea().ID("Remark").Text(Model.userInfo.Remark).Height(140).Label("备注").Readonly(true)
+    )
+    .Toolbars(
+    F.Toolbar().ID("Toolbar").ToolbarAlign(ToolbarAlign.Left).Position(ToolbarPosition.Top)
+    .Items(
+    F.Button().ID("btnAdd").Text("轨迹查询").IconFont(IconFont.Database).Listener("click", "onbtnTrajectoryClick")
     )
     )
+    )
+    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).Target(Target.Top).EnableIFrame(true).Title("查看").ID("Window1"))
+
+
 }
 
 @section script {
     <script src="~/res/js/grid.js"></script>
+    <script>
+        function onbtnTrajectoryClick(event) {
+            var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Detail_User")';
+            var iframeUrl = iframeWindowUrl + '?telephone=' + F.ui.Telephone.getValue() + "&username=" + F.ui.Name.getValue();
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '查看 - ' + '历史轨迹');
+        }
+    </script>
 }

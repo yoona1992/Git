@@ -105,7 +105,12 @@
                         F.MenuButton()
                             .IconFont(IconFont.Download)
                             .Text("移动APP下载")
-                            .Listener("click", "addTap('/AppDownload/AppDownload','appDownload','移动APP下载');")
+                            .Listener("click", "addTap('/AppDownload/AppDownload','appDownload','移动APP下载');"),
+                        F.MenuSeparator(),
+                        F.MenuButton()
+                            .IconFont(IconFont.Download)
+                            .Text("文件管理")
+                            .Listener("click", "addTap('/FileManage/FileManage','fileManage','文件管理');")
                     )
                 )
                     )
@@ -196,6 +201,9 @@
                     break;
                 case "notification":
                     tapIcon = '@Url.Content("~/res/icon/information.png")';
+                    break;
+                case "fileManage":
+                    tapIcon = '@Url.Content("~/res/icon/download.png")';
                     break;
                 default:
                     break;

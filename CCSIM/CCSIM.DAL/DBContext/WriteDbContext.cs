@@ -11,7 +11,7 @@ namespace CCSIM.DAL.DBContext
             base("name=connWriteStr")
         {
             this.Database.Log = s => Debug.Print(s);
-            //Database.SetInitializer<WriteDbContext>(null);
+            Database.SetInitializer<WriteDbContext>(null);
             //Configuration.AutoDetectChangesEnabled = true;
         }
 
@@ -24,6 +24,7 @@ namespace CCSIM.DAL.DBContext
         public DbSet<INFO_ALARMINFO> AlarmInfos { get; set; }
         public DbSet<NOTIFICATION> Notifications { get; set; }
         public DbSet<CFG_VEHICLEINFO> VehicleInfos_Two { get; set; }
+        public DbSet<INFO_FILEINFO> FileInfos { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

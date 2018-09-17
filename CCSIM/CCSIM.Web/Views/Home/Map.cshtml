@@ -159,9 +159,9 @@
         <!-- page-content" -->
     </div>
 
-    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("查看").ID("Window1"))
-    @(F.Window().Hidden(true).Height(400).Width(700).IsModal(true).OnClose(Url.Action("Window2_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("详情").ID("Window2"))
-    @(F.Window().Hidden(true).Height(380).Width(700).IsModal(true).OnClose(Url.Action("Window3_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("详情").ID("Window3"))
+    @(F.Window().Hidden(true).Height(480).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("查看").ID("Window1"))
+    @(F.Window().Hidden(true).Height(420).Width(700).IsModal(true).OnClose(Url.Action("Window2_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("详情").ID("Window2"))
+    @(F.Window().Hidden(true).Height(420).Width(700).IsModal(true).OnClose(Url.Action("Window3_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("详情").ID("Window3"))
 }
 
 @section script {
@@ -443,7 +443,8 @@
                                 }
                             });
 
-                            if (item.IsNeedAlarm && $("#cbYjbj").prop('checked')) {
+                            //离线车辆不报警
+                            if (item.IsNeedAlarm && $("#cbYjbj").prop('checked') && !item.IsOffline) {
                                 alarm(item, polygon);
                             }
                         }
@@ -575,7 +576,8 @@
                                 map.centerAndZoom(new BMap.Point(item.Lon, item.Lat), 19);
                             }
 
-                            if (item.IsNeedAlarm && $("#cbYjbj").prop('checked')) {
+                            //离线车辆不报警
+                            if (item.IsNeedAlarm && $("#cbYjbj").prop('checked') && !item.IsOffline) {
                                 alarm(item, polygon);
                             }
                         }
