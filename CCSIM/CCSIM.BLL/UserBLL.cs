@@ -191,7 +191,7 @@ namespace CCSIM.BLL
             userInfo =null;
             int pResult = -1;  //-1:不存在该用户  0：密码不正确  1：登录成功
             StringBuilder pSBQueryText = new StringBuilder();
-            pSBQueryText.Append("SELECT USERNAME,USERPWD FROM CFG_USERINFO WHERE USERNAME='" + userName + "'");
+            pSBQueryText.Append("SELECT ID,USERNAME,USERPWD FROM CFG_USERINFO WHERE USERNAME='" + userName + "'");
 
             try
             {
@@ -204,6 +204,7 @@ namespace CCSIM.BLL
                 {
                     pResult = 1;
                     userInfo = new UserInfo();
+                    userInfo.Id = Convert.ToInt32(data.Rows[0]["ID"]);
                     userInfo.UserName = data.Rows[0]["USERNAME"].ToString();
                     userInfo.UserPwd = data.Rows[0]["USERPWD"].ToString();
                 }

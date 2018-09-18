@@ -1,0 +1,70 @@
+  /// <summary>
+        /// 登录海康存储服务器
+        /// </summary>
+        /// <param name="device"></param>
+        private static bool loginCVR(FrontDevice dvr)
+        {
+            HikAPI.APIInit();
+            HikAPI.NET_DVR_DEVICEINFO_V30 deviceInfo = new HikAPI.NET_DVR_DEVICEINFO_V30();
+            int loginID = HikAPI.NET_DVR_Login_V30(dvr.IP, dvr.Port, dvr.UserName, dvr.Password, ref deviceInfo);
+            if (loginID == -1)
+            {
+                m_CVRLoginTable[dvr.Key] = null;
+                int error = HikAPI.NET_DVR_GetLastError();
+                return false;
+            }
+            //int groupCount = this.cameraList.Max(c => Convert.ToInt32(c.CBD_DVR_CHNNL_IDNTY)) / 64 + 1;
+            int groupCount = 2048 / 64 + 1;
+            for (int i = 0; i < groupCount; i++)
+            {
+                int length = Marshal.SizeOf(typeof(HikAPI.NET_DVR_IPPARACFG_V40));
+                IntPtr p = Marshal.AllocHGlobal(length);
+                int outLength = 0;
+                bool ret = HikAPI.NET_DVR_GetDVRConfig(loginID, 1062, i, p, length, out outLength);
+                if (ret == false)
+                {
+                    continue;
+                }
+                HikAPI.NET_DVR_IPPARACFG_V40 ipConfig = new HikAPI.NET_DVR_IPPARACFG_V40();
+                ipConfig = (HikAPI.NET_DVR_IPPARACFG_V40)Marshal.PtrToStructure(p, typeof(HikAPI.NET_DVR_IPPARACFG_V40));
+                for (int j = 0; j < ipConfig.struIPDevInfo.Length; j++)
+                {
+                    if (ipConfig.struIPDevInfo[j].byEnable == 0)
+                        continue;
+                    int channel = i * 64 + j + 1;
+                    if (deviceInfo.byStartDChan != 0)
+                        channel += deviceInfo.byStartDChan;
+                    FrontDevice d = new FrontDevice()
+                    {
+                        IP = Encoding.ASCII.GetString(ipConfig.struIPDevInfo[j].struIP.sIpV4).Replace("\0", ""),
+                        Port = ipConfig.struIPDevInfo[j].wDVRPort,
+                        UserName = ipConfig.struIPDevInfo[j].sUserName.Replace("\0", ""),
+                        Password = ipConfig.struIPDevInfo[j].sPassword.Replace("\0", ""),
+                        DeviceType = 8,
+                        Channel = ipConfig.struStreamMode[j].uGetStream.byUnion[2]
+                    };
+                    m_FronDeviceTable[dvr.Key + "_" + channel] = d;
+                }
+            }
+            m_CVRLoginTable[dvr.Key] = true;
+            return true;
+        }
+
+        /// <summary>
+        /// 获取cvr指定通道的前端设备信息
+        /// </summary>
+        /// <param name="cvr">cvr</param>
+        /// <param name="channel">通道号</param>
+        /// <returns>获取失败返回null</returns>
+        public static FrontDevice GetFrontDeviceFromCVR(FrontDevice cvr, int channel)
+        {
+            if (m_CVRLoginTable[cvr.Key] == null)
+            {
+                bool ret= loginCVR(cvr);
+                if (ret == false)
+                    return null;
+            }
+            return m_FronDeviceTable[cvr.Key + "_" + channel] as FrontDevice;
+
+
+        }

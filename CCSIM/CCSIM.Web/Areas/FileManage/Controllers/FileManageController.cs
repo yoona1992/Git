@@ -20,6 +20,11 @@ namespace CCSIM.Web.Areas.FileManage.Controllers
             LoadData();
             return View();
         }
+        
+        public ActionResult QrCodeDownload()
+        {
+            return View();
+        }
 
         #region BindGrid
 
@@ -78,6 +83,8 @@ namespace CCSIM.Web.Areas.FileManage.Controllers
                 }
             }
 
+            // 调用父页面定义的函数 reload
+            PageContext.RegisterStartupScript("reload();");
             return UIHelper.Result();
         }
 
@@ -140,5 +147,13 @@ namespace CCSIM.Web.Areas.FileManage.Controllers
             return UIHelper.Result();
         }
 
+        [AllowAnonymous]
+        // GET: FileManage/Download
+        public ActionResult Download(int id)
+        {
+            var data = FileBLL.Get(id);
+            string filePath = Server.MapPath("~/upload/" + data.FILEURL);
+            return File(filePath, "application/vnd.android", data.FILENAME);
+        }
     }
 }

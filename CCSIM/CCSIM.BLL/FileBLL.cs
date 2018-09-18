@@ -98,7 +98,8 @@ namespace CCSIM.BLL
         public static List<FileInfos> GetList(string name, int start, int limit, out int totalCount)
         {
             var q = (from f in SlaveDb.Set<INFO_FILEINFO>()
-                     join u in SlaveDb.Set<CFG_USERINFO>() on f.UPLOADUSER equals u.ID
+                     join u in SlaveDb.Set<CFG_USERINFO>() on f.UPLOADUSER equals u.ID into uu
+                     from uuu in uu.DefaultIfEmpty()
                      where ((name == "" || name == null) ? true : f.FILENAME.Contains(name))
                      select new FileInfos
                      {
@@ -107,7 +108,7 @@ namespace CCSIM.BLL
                          FileUrl = f.FILEURL,
                          UploadTime = f.UPLOADTIME,
                          FileSize = f.FILESIZE,
-                         UploadUser = u.NAME
+                         UploadUser = uuu.NAME
                      });
             totalCount = q.Count();
             var data = q.OrderByDescending(p => p.UploadTime).Skip((start - 1) * limit).Take(limit).ToList();

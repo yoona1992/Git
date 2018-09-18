@@ -3571,6 +3571,7 @@
     <Content Include="thirdpart\jqueryui\jquery-ui.min.css" />
     <Content Include="thirdpart\jqueryui\jquery-ui.min.js" />
     <Content Include="thirdpart\pop\jquery.message.js" />
+    <Content Include="thirdpart\qccode\jquery.qrcode.min.js" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\bootstrapStyle.css" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\img\bootstrap.gif" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\img\bootstrap.png" />
@@ -3730,6 +3731,7 @@
     <Content Include="Areas\FileManage\Views\FileManage\Index.cshtml" />
     <Content Include="Areas\FileManage\Views\_ViewStart.cshtml" />
     <Content Include="Areas\FileManage\Views\web.config" />
+    <Content Include="Areas\FileManage\Views\FileManage\QrCodeDownload.cshtml" />
     <None Include="Dockerfile" />
     <Content Include="thirdpart\bootstrap\.editorconfig" />
     <Content Include="thirdpart\bootstrap\.eslintignore" />
