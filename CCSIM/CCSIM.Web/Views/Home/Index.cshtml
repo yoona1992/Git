@@ -93,6 +93,27 @@
                     )
                 )
                     )
+                    @(F.Button()
+                .EnableDefaultCorner(false)
+                .EnableDefaultState(false)
+                .IconAlign(IconAlign.Top)
+                .IconFont(IconFont.Database)
+                .Text("下载管理")
+                .CssClass("icontopaction themes")
+                .Menu(F.Menu()
+                    .Items(
+                        F.MenuButton()
+                            .IconFont(IconFont.Download)
+                            .Text("移动APP下载")
+                            .Listener("click", "addTap('/AppDownload/AppDownload','appDownload','移动APP下载');"),
+                        F.MenuSeparator(),
+                        F.MenuButton()
+                            .IconFont(IconFont.Download)
+                            .Text("文件管理")
+                            .Listener("click", "addTap('/FileManage/FileManage','fileManage','文件管理');")
+                    )
+                )
+                    )
 
                     @(F.Button()
                 .EnableDefaultCorner(false)
@@ -181,8 +202,15 @@
                 case "notification":
                     tapIcon = '@Url.Content("~/res/icon/information.png")';
                     break;
+                case "fileManage":
+                    tapIcon = '@Url.Content("~/res/icon/download.png")';
+                    break;
                 default:
                     break;
+            }
+            if (id == "appDownload") {
+                window.location.href = '@Url.Action("DownloadApp")';
+                return false;
             }
             F.ui.mainTabStrip.addTab({
                 id: id,

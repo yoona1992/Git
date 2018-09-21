@@ -58,11 +58,14 @@ namespace CCSIM.Web.App_Start
             {
                 if (!IsLogin)
                 {
-                    filterContext.Result = new RedirectResult("~/Home/Login");
+                    filterContext.HttpContext.Response.Write("<html>");
+                    filterContext.HttpContext.Response.Write("<script>");
+                    filterContext.HttpContext.Response.Write("window.open ('" + "../Home/Index','_top')");
+                    filterContext.HttpContext.Response.Write("</script>");
+                    filterContext.HttpContext.Response.Write("</html>");
+                    //filterContext.HttpContext.Response.Redirect("~/Home/Login", true);
                 }
-
             }
         }
-
     }
 }

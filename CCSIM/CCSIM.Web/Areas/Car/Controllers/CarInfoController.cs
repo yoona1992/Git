@@ -75,7 +75,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             var vehicleType = new DropDownListModel();
             vehicleType.DropDownList = "VALUE1";
             vehicleType.DropDownListItem = listItems;
-            
+
             var belongNetList = NetManageBLL.GetAll();
             listItems = new List<ListItem>();
             foreach (var d in belongNetList)
@@ -147,7 +147,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
             var vehicleType = new DropDownListModel();
             vehicleType.DropDownList = "VALUE1";
             vehicleType.DropDownListItem = listItems;
-            
+
             var belongNetList = NetManageBLL.GetAll();
             listItems = new List<ListItem>();
             foreach (var d in belongNetList)
@@ -193,6 +193,8 @@ namespace CCSIM.Web.Areas.Car.Controllers
             model.carInfo.Owner = data.OWNER;
             model.carInfo.OwnerType = data.OWNERTYPE;
             model.carInfo.Remark = data.REMARK;
+            model.carInfo.Cldwzdsbh = data.CLDWZDSBH;
+            model.carInfo.Wlwkhm = data.WLWKHM;
             return View(model);
         }
 
@@ -202,7 +204,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
         private void LoadData()
         {
             var recordCount = 0;
-            var data = CarBLL.GetList("",-1, 1, 20, out recordCount);
+            var data = CarBLL.GetList("", -1, 1, 20, out recordCount);
             ViewBag.Grid1RecordCount = recordCount;
             ViewBag.Grid1DataSource = data;
         }
@@ -211,7 +213,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CarGrid_PageIndexChanged(JArray CarGrid_fields, string vehicleNo,int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
+        public ActionResult CarGrid_PageIndexChanged(JArray CarGrid_fields, string vehicleNo, int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("CarGrid");
             var recordCount = 0;
@@ -225,7 +227,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteRows(JArray selectedRows, JArray CarGrid_fields, string vehicleNo,int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
+        public ActionResult DeleteRows(JArray selectedRows, JArray CarGrid_fields, string vehicleNo, int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var ids = new List<int>();
             foreach (var id in selectedRows)
@@ -255,7 +257,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult btnSearch_Click(JArray CarGrid_fields, string vehicleNo,int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
+        public ActionResult btnSearch_Click(JArray CarGrid_fields, string vehicleNo, int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("CarGrid");
             var recordCount = 0;
@@ -280,6 +282,8 @@ namespace CCSIM.Web.Areas.Car.Controllers
             info.REMARK = values["Remark"];
             info.OWNER = values["Owner"];
             info.OWNERTYPE = Convert.ToInt32(values["OwnerType"]);
+            info.CLDWZDSBH = values["Cldwzdsbh"];
+            info.WLWKHM = values["Wlwkhm"];
             info.ISDELETED = 0;
             var isSuccess = CarBLL.Add(info);
             ActiveWindow.HidePostBack();
@@ -309,6 +313,8 @@ namespace CCSIM.Web.Areas.Car.Controllers
             info.OWNERTYPE = Convert.ToInt32(values["OwnerType"]);
             info.REMARK = values["Remark"];
             info.OWNER = values["Owner"];
+            info.CLDWZDSBH = values["Cldwzdsbh"];
+            info.WLWKHM = values["Wlwkhm"];
             var isSuccess = CarBLL.Update(info);
             ActiveWindow.HidePostBack();
 

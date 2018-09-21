@@ -29,6 +29,7 @@
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=A6bc8cb4539b007f51e8aa5ef37ed431"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
     <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+    <script src="~/res/js/AjaxFunction.js"></script>
     <script>
         var map = [];
         var overlays = [];
@@ -98,19 +99,26 @@
             if (F.ui.operatorType.value == "2") {
                 //根据网格id获取经纬度信息
                 var lonAndLat = [];
-                $.ajax({
-                    url: "./GetLonAndLat",
-                    data: {
-                        id: F.ui.id.value
-                    },
-                    type: "post",
-                    async: false,
-                    success: function (data) {
-                        if (data != "") {
-                            lonAndLat = JSON.parse(data);
-                        }
+                ajaxFunction("./GetLonAndLat", {
+                    id: F.ui.id.value
+                }, "post", false, function (data) {
+                    if (data != "") {
+                        lonAndLat = JSON.parse(data);
                     }
                 });
+                //$.ajax({
+                //    url: "./GetLonAndLat",
+                //    data: {
+                //        id: F.ui.id.value
+                //    },
+                //    type: "post",
+                //    async: false,
+                //    success: function (data) {
+                //        if (data != "") {
+                //            lonAndLat = JSON.parse(data);
+                //        }
+                //    }
+                //});
 
                 if (lonAndLat.length == 0) {
                     map.centerAndZoom("练市", 16);

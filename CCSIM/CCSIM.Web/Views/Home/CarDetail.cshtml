@@ -5,28 +5,65 @@
     var F = Html.F();
 }
 @model CCSIM.Web.Models.CarInfoModel
+
+@section head {
+
+    <style>
+        .hideBorder .f-field-textbox {
+            border: 0px;
+        }
+    </style>
+
+}
+
 @section body {
-    @(F.Form().ID("Form_CarEdit").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).LabelWidth(140).IsViewPort(true)
+    @(F.Form().ID("Form_CarEdit").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).IsViewPort(true)
     .Items(
    F.TextBox().ID("Id").Text(Model.carInfo.Id.ToString()).Hidden(true),
-    F.TextBox().ID("VehicleNo").Text(Model.carInfo.VehicleNo).Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>车牌号码").Readonly(true),
-    F.DropDownListFor(m => m.vehicleType.DropDownList).ID("VehicleType").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>车辆类型").AutoSelectFirstItem(false).EmptyText("请选择车辆类型")
-        .Items(Model.vehicleType.DropDownListItem.ToArray()).SelectedValue(Model.carInfo.VehicleType.ToString()).Readonly(true),
-    F.TextBox().ID("VehicleBrand").Text(Model.carInfo.VehicleBrand).Label("车辆品牌").Readonly(true),
-    F.DropDownListFor(m => m.belongDept.DropDownList).ID("BelongDeptId").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所属部门").AutoSelectFirstItem(false).EmptyText("请选择所属部门")
-        .Items(Model.belongDept.DropDownListItem.ToArray()).SelectedValue(Model.carInfo.BelongDeptId.ToString()).Readonly(true),
-    F.DropDownListFor(m => m.belongNet.DropDownList).ID("BelongNetId").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所属网格").AutoSelectFirstItem(false).EmptyText("请选择所属网格")
-        .Items(Model.belongNet.DropDownListItem.ToArray()).SelectedValue(Model.carInfo.BelongNetId.ToString()).Readonly(true),
-    F.TextBox().ID("Owner").Text(Model.carInfo.Owner).Label("所有人").Readonly(true),
-    F.DropDownListFor(m => m.ownerType.DropDownList).ID("OwnerType").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>用车部门").AutoSelectFirstItem(false).EmptyText("请选择用车部门")
+   F.Panel().Layout(LayoutType.HBox).BoxConfigAlign(BoxLayoutAlign.Stretch).ShowHeader(false).ShowBorder(false)
+                                .Items(
+    F.TextBox().ID("VehicleNo").Text(Model.carInfo.VehicleNo).Required(true).ShowLabel(true).Label("车牌号码").BoxFlex(1).Readonly(true),
+    F.DropDownListFor(m => m.vehicleType.DropDownList).ID("VehicleType").Required(true).ShowLabel(true).ShowRedStar(false).Label("车辆类型").AutoSelectFirstItem(false).EmptyText("请选择车辆类型")
+        .Items(Model.vehicleType.DropDownListItem.ToArray()).SelectedValue(Model.carInfo.VehicleType.ToString()).BoxFlex(1).Readonly(true)
+        ),
+   F.Panel().Layout(LayoutType.HBox).BoxConfigAlign(BoxLayoutAlign.Stretch).ShowHeader(false).ShowBorder(false)
+                                .Items(
+    F.TextBox().ID("VehicleBrand").Text(Model.carInfo.VehicleBrand).Label("车辆品牌").BoxFlex(1).Readonly(true),
+    F.TextBox().ID("Owner").Text(Model.carInfo.Owner).Label("所有人").BoxFlex(1).Readonly(true)
+    ),
+   F.Panel().Layout(LayoutType.HBox).BoxConfigAlign(BoxLayoutAlign.Stretch).ShowHeader(false).ShowBorder(false)
+                                .Items(
+    F.DropDownListFor(m => m.belongDept.DropDownList).ID("BelongDeptId").Required(true).ShowLabel(true).ShowRedStar(false).Label("所属部门").AutoSelectFirstItem(false).EmptyText("请选择所属部门")
+        .Items(Model.belongDept.DropDownListItem.ToArray()).SelectedValue(Model.carInfo.BelongDeptId.ToString()).BoxFlex(1).Readonly(true),
+    F.DropDownListFor(m => m.belongNet.DropDownList).ID("BelongNetId").Required(true).ShowLabel(true).ShowRedStar(false).Label("所属网格").AutoSelectFirstItem(false).EmptyText("请选择所属网格")
+        .Items(Model.belongNet.DropDownListItem.ToArray()).SelectedValue(Model.carInfo.BelongNetId.ToString()).BoxFlex(1).Readonly(true)
+        ),
+    F.DropDownListFor(m => m.ownerType.DropDownList).ID("OwnerType").Required(true).ShowLabel(true).ShowRedStar(false).Label("用车部门").AutoSelectFirstItem(false).EmptyText("请选择用车部门")
         .Items(Model.ownerType.DropDownListItem.ToArray()).SelectedValue(Model.carInfo.OwnerType.ToString()).Readonly(true),
-    F.TextBox().ID("Owner").Text(Model.carInfo.Cldwzdsbh).Label("车辆定位终端识别号").Readonly(true),
-    F.TextBox().ID("Owner").Text(Model.carInfo.Wlwkhm).Label("物联网卡号码").Readonly(true),
+    F.TextBox().ID("Zdsbh").Text(Model.carInfo.Cldwzdsbh).Label("终端识别号").Readonly(true),
+    F.TextBox().ID("Wlwkhm").Text(Model.carInfo.Wlwkhm).Label("物联网卡号码").Readonly(true),
     F.TextArea().ID("Remark").Text(Model.carInfo.Remark).Height(140).Label("备注").Readonly(true)
     )
+    .Toolbars(
+    F.Toolbar().ID("Toolbar").ToolbarAlign(ToolbarAlign.Left).Position(ToolbarPosition.Top)
+    .Items(
+    F.Button().ID("btnAdd").Text("轨迹查询").IconFont(IconFont.Database).Listener("click", "onbtnTrajectoryClick")
     )
+    )
+    )
+@(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).Target(Target.Top).EnableIFrame(true).Title("查看").ID("Window1"))
+
 }
 
 @section script {
     <script src="~/res/js/grid.js"></script>
+    <script>
+        function onbtnTrajectoryClick(event) {
+            var iframeWindowUrl = '@Url.Content("~/Trajectory/Trajectory/Detail_Car")';
+            var iframeUrl = iframeWindowUrl + '?cldwzdsbh=' + F.ui.Zdsbh.getValue() + "&cphm=" + F.ui.VehicleNo.getValue() + "&cllx=" + F.ui.VehicleType.getValue();
+
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '查看 - ' + '历史轨迹');
+        }
+    </script>
 }

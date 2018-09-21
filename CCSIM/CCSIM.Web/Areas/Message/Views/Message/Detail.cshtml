@@ -11,7 +11,7 @@
 </head>
 <body>
     <form id="form">
-        <input id="Id" type="text" style="display:none" value='@ViewData["Id"]'/>
+        <input id="Id" type="text" style="display:none" value='@ViewData["Id"]' />
         <div class="tz-gallery">
             <div class="row" id="galleryRow">
             </div>
@@ -20,25 +20,38 @@
     <script type="text/javascript" src="~/res/js/libs/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="~/thirdpart/baguetteBox/baguetteBox.min.js"></script>
     <script type="text/javascript" src="~/thirdpart/baguetteBox/msgbox.js"></script>
+    <script src="~/res/js/AjaxFunction.js"></script>
     <script>
         var allData = [];
-        $.ajax({
-            url: "./GetFileList",
-            data: {
-                id:$('#Id').val()
-            },
-            type: "post",
-            async: false,
-            success: function (data) {
+        ajaxFunction("./GetFileList", {
+            id: $('#Id').val()
+        }, "post", false,
+            function (data) {
                 $.each(data, function (index, d) {
                     allData.push({
                         FileName: d.FileName,
                         FileUrl: d.FileUrl,
-                        Id:index
+                        Id: index
                     });
                 });
-            }
-        });
+            });
+        //$.ajax({
+        //    url: "./GetFileList",
+        //    data: {
+        //        id: $('#Id').val()
+        //    },
+        //    type: "post",
+        //    async: false,
+        //    success: function (data) {
+        //        $.each(data, function (index, d) {
+        //            allData.push({
+        //                FileName: d.FileName,
+        //                FileUrl: d.FileUrl,
+        //                Id: index
+        //            });
+        //        });
+        //    }
+        //});
         $.each(allData, function (index, item) {
             var div = "<div class='col-sm-6 col-md-6'>";
             div += "<div class='thumbnail'>";

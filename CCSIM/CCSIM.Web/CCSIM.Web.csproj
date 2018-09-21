@@ -175,6 +175,8 @@
     <Compile Include="Areas\Event\EventAreaRegistration.cs" />
     <Compile Include="Areas\Car\Controllers\CarInfoController.cs" />
     <Compile Include="Areas\Car\CarAreaRegistration.cs" />
+    <Compile Include="Areas\FileManage\Controllers\FileManageController.cs" />
+    <Compile Include="Areas\FileManage\FileManageRegistration.cs" />
     <Compile Include="Areas\Message\Controllers\MessageController.cs" />
     <Compile Include="Areas\Message\MessageAreaRegistration.cs" />
     <Compile Include="Areas\NetArea\NetAreaRegistration.cs" />
@@ -204,6 +206,7 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="res\js\AjaxFunction.js" />
     <Content Include="res\css\common.css" />
     <Content Include="res\css\custom-themes.css" />
     <Content Include="res\css\custom.css" />
@@ -1987,6 +1990,7 @@
     <Content Include="res\js\libs\jquery-2.1.0.min.js" />
     <Content Include="res\js\libs\jquery.toast.min.js" />
     <Content Include="res\js\libs\jscharts.js" />
+    <Content Include="res\js\LuShu_min.js" />
     <Content Include="res\js\map.js" />
     <Content Include="res\themes\bootstrap_pure\theme.css" />
     <Content Include="res\themes\custom_default\theme.css" />
@@ -3723,6 +3727,9 @@
     <Content Include="Areas\Notification\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Notification\Views\Notification\Add.cshtml" />
     <Content Include="Areas\Trajectory\Views\Trajectory\Map_Car.cshtml" />
+    <Content Include="Areas\FileManage\Views\FileManage\Index.cshtml" />
+    <Content Include="Areas\FileManage\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\FileManage\Views\web.config" />
     <None Include="Dockerfile" />
     <Content Include="thirdpart\bootstrap\.editorconfig" />
     <Content Include="thirdpart\bootstrap\.eslintignore" />

@@ -105,7 +105,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             }
 
             var belongNet = new DropDownListModel();
-            belongNet.DropDownList = "VALUE3";
+            belongNet.DropDownList = "";
             belongNet.DropDownListItem = listItems;
 
             var userTypeList = CodeBLL.GetCodeListByParentCode("RYLX");
@@ -193,7 +193,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             }
 
             var belongNet = new DropDownListModel();
-            belongNet.DropDownList = "VALUE3";
+            belongNet.DropDownList = "";
             belongNet.DropDownListItem = listItems;
 
             var userTypeList = CodeBLL.GetCodeListByParentCode("RYLX");

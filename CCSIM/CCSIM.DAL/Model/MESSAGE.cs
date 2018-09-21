@@ -55,7 +55,6 @@ namespace CCSIM.DAL.Model
         /// 照片地址
         /// </summary>
         [MaxLength(2000)]
-        [Required]
         public string PHOTO { get; set; }
 
         /// <summary>

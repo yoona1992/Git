@@ -160,14 +160,14 @@ namespace CCSIM.BLL
                          Address = u.ADDRESS,
                          BelongDeptId = u.BELONGDEPTID,
                          BelongDeptName = d.BMVALUE,
-                         BelongNetId=u.BELONGNETID,
+                         BelongNetId = u.BELONGNETID,
                          BelongNetName = nnn.NAME,
                          UserType = u.USERTYPE,
                          UserTypeName = t.BMVALUE,
-                         VirtualTrumpet=u.VIRTUALTRUMPET
+                         VirtualTrumpet = u.VIRTUALTRUMPET
                      });
             totalCount = q.Count();
-            return q.OrderByDescending(p => p.UserType).ThenByDescending(p=>p.BelongDeptId).ThenByDescending(p => p.BelongNetId).ThenBy(p => p.Name).Skip((start - 1) * limit).Take(limit).ToList();
+            return q.OrderByDescending(p => p.UserType).ThenByDescending(p => p.BelongDeptId).ThenByDescending(p => p.BelongNetId).ThenBy(p => p.Name).Skip((start - 1) * limit).Take(limit).ToList();
         }
 
         /// <summary>
@@ -178,6 +178,46 @@ namespace CCSIM.BLL
         {
             DbBase<CFG_USERINFO> db = new DbBase<CFG_USERINFO>();
             return db.GetAll(p => p.ISDELETED == 0, "NAME");
+        }
+
+        /// <summary>
+        /// 登录系统
+        /// </summary>
+        /// <param name="userName">用户名</param>
+        /// <param name="userPwd">密码</param>
+        /// <returns></returns>
+        public static int Login(string userName, string userPwd, out UserInfo userInfo)
+        {
+            userInfo =null;
+            int pResult = -1;  //-1:不存在该用户  0：密码不正确  1：登录成功
+            StringBuilder pSBQueryText = new StringBuilder();
+            pSBQueryText.Append("SELECT USERNAME,USERPWD FROM CFG_USERINFO WHERE USERNAME='" + userName + "'");
+
+            try
+            {
+                var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
+                if (data.Rows.Count == 0)
+                {
+                    pResult = -1;
+                }
+                else if (data.Rows[0]["USERPWD"].ToString() == userPwd)
+                {
+                    pResult = 1;
+                    userInfo = new UserInfo();
+                    userInfo.UserName = data.Rows[0]["USERNAME"].ToString();
+                    userInfo.UserPwd = data.Rows[0]["USERPWD"].ToString();
+                }
+                else
+                {
+                    pResult = 0;
+                }
+            }
+            catch(Exception error)
+            {
+
+            }
+
+            return pResult;
         }
     }
 }

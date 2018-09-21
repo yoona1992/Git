@@ -31,7 +31,8 @@
 @section script {
     <script src="~/res/js/grid.js"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=A6bc8cb4539b007f51e8aa5ef37ed431"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/library/LuShu/1.2/src/LuShu_min.js"></script>
+    <script type="text/javascript" src="~/res/js/LuShu_min.js"></script>
+    <script src="~/res/js/AjaxFunction.js"></script>
     <script>
         var map = [];
         var overlays = [];
@@ -65,26 +66,35 @@
                 anchor: BMAP_ANCHOR_TOP_RIGHT
             }); //右上角
             map.addControl(top_right_navigation);
-            $.ajax({
-                url: "./GetList_User",
-                data: {
-                    telephone: F.ui.TelePhone.getValue(),
-                    passTime: F.ui.PassTime.getValue()
-                },
-                type: "post",
-                async: false,
-                success: function (data) {
-                    allData = data;
-                    $.each(data, function (index, d) {
-                        arrPois.push(new BMap.Point(d.Lon, d.Lat));
-                    });
-                }
+            ajaxFunction("./GetList_User", {
+                telephone: F.ui.TelePhone.getValue(),
+                passTime: F.ui.PassTime.getValue()
+            }, "post", false, function (data) {
+                allData = data;
+                $.each(data, function (index, d) {
+                    arrPois.push(new BMap.Point(d.Lon, d.Lat));
+                });
             });
+            //$.ajax({
+            //    url: "./GetList_User",
+            //    data: {
+            //        telephone: F.ui.TelePhone.getValue(),
+            //        passTime: F.ui.PassTime.getValue()
+            //    },
+            //    type: "post",
+            //    async: false,
+            //    success: function (data) {
+            //        allData = data;
+            //        $.each(data, function (index, d) {
+            //            arrPois.push(new BMap.Point(d.Lon, d.Lat));
+            //        });
+            //    }
+            //});
 
             if (arrPois.length != 0) {
                 map.setViewport(arrPois);
                 marker = new BMap.Marker(arrPois[0], {
-                    icon: new BMap.Icon('../../res/images/i/person_gj.gif', new BMap.Size(26,40), { anchor: new BMap.Size(13, 20) })
+                    icon: new BMap.Icon('../../res/images/i/person_gj.gif', new BMap.Size(26, 40), { anchor: new BMap.Size(13, 20) })
                 });
                 var label = new BMap.Label(F.ui.UserName.getValue(), { offset: new BMap.Size(0, -30) });
                 label.setStyle({ border: "1px solid rgb(204, 204, 204)", color: "rgb(0, 0, 0)", borderRadius: "10px", padding: "5px", background: "rgb(255, 255, 255)", });
@@ -153,6 +163,7 @@
                     defaultContent: F.ui.UserName.getValue(),//"从天安门到百度大厦"
                     autoView: true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
                     icon: new BMap.Icon('../../res/images/i/person_gj.gif', new BMap.Size(26, 40), { anchor: new BMap.Size(13, 20) }),
+                    icon_turn: new BMap.Icon('../../res/images/i/person_gj_turn.gif', new BMap.Size(26, 40), { anchor: new BMap.Size(13, 20) }),
                     speed: 50,
                     enableRotation: true,//是否设置marker随着道路的走向进行旋转
                     landmarkPois: [

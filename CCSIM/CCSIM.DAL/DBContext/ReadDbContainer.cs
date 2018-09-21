@@ -8,7 +8,7 @@ namespace CCSIM.DAL.DBContext
         public ReadDbContext() : base("connReadStr")
         {
             this.Database.Log = s => Debug.Print(s);
-            //Database.SetInitializer(new NullDatabaseInitializer<ReadDbContext>());
+            Database.SetInitializer<ReadDbContext>(null);
         }
 
     }

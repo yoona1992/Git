@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -14,6 +15,7 @@ namespace CCSIM.Web.Controllers
 {
     public class HomeController : BaseController
     {
+
         public ActionResult Index()
         {
             return View();
@@ -296,6 +298,39 @@ namespace CCSIM.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult UserLogin(string userName, string userPwd)
+        {
+            UserInfo info = new UserInfo();
+            var data = UserBLL.Login(userName, userPwd, out info);
+            if (data == 1)
+            {
+                Session[WebConstants.UserSession] = info;
+                //return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+            }
+            return new JsonResult
+            {
+                Data = data
+            };
+        }
+
+        [AllowAnonymous]
+        public ActionResult IsTimeOut()
+        {
+            bool isTimeOut = false;
+            if (Session[WebConstants.UserSession] == null)
+            {
+                isTimeOut = true;
+            }
+            return new JsonResult
+            {
+                Data = isTimeOut
+            };
+        }
+
         #region BindGrid
 
         private void LoadData_UserMessage(string phone)
@@ -476,6 +511,13 @@ namespace CCSIM.Web.Controllers
             {
                 Data = data
             };
+        }
+
+        // GET: Home/DownloadApp
+        public ActionResult DownloadApp()
+        {
+            string filePath = Server.MapPath("~/File/app-release.apk");
+            return File(filePath, "application/vnd.android", "app-release.apk");
         }
     }
 }

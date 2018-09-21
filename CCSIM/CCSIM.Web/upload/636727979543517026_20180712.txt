@@ -1,0 +1,4 @@
+后台：主要使用.net mvc框架结合使用spring+Nhibernate框架开发
+前台:熟练使用extjs、bootstrap、fineui等
+数据库：会使用sql2008、sql2012、oracle、mysql
+其他：使用Aspose开发excel、word报表，百度地图开发，会写webservice接口和webapi接口，solr搜索引擎的使用，安卓开发等

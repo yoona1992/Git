@@ -70,6 +70,7 @@
     <Compile Include="AlarmBLL.cs" />
     <Compile Include="BaiduGeocoderBLL.cs" />
     <Compile Include="CodeBLL.cs" />
+    <Compile Include="FileBLL.cs" />
     <Compile Include="HttpClientHelperBLL.cs" />
     <Compile Include="MapBLL.cs" />
     <Compile Include="MessageBLL.cs" />

@@ -37,7 +37,7 @@
                                 ),
     F.DropDownListFor(m => m.userType.DropDownList).ID("UserType").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>人员类型").AutoSelectFirstItem(false).EmptyText("请选择人员类型")
         .Items(Model.userType.DropDownListItem.ToArray()),
-    F.TextBox().ID("VirtualTrumpet").Text(Model.userInfo.Direction).Label("虚拟短号"),
+    F.TextBox().ID("VirtualTrumpet").Label("虚拟短号"),
     F.TextBox().ID("Direction").Label("去向"),
     F.TextBox().ID("Address").Label("家庭地址"),
     F.TextArea().ID("Remark").Height(160).Label("备注")
