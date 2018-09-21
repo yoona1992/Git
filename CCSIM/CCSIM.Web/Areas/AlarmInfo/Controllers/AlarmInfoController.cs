@@ -1,4 +1,5 @@
 ﻿using CCSIM.BLL;
+using CCSIM.Web.App_Start;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -50,6 +51,7 @@ namespace CCSIM.Web.Areas.AlarmInfo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "AlarmInfo/btnSearch_Click", Description = "报警信息查询")]
         public ActionResult btnSearch_Click(JArray AlarmInfoGrid_fields, string objectName, int alarmType, DateTime startTime, DateTime endTime, int AlarmInfoGrid_pageIndex, int AlarmInfoGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("AlarmInfoGrid");

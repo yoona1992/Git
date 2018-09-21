@@ -1,6 +1,7 @@
 ﻿using CCSIM.BLL;
 using CCSIM.DAL.Model;
 using CCSIM.Entity;
+using CCSIM.Web.App_Start;
 using CCSIM.Web.Models;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
@@ -305,6 +306,16 @@ namespace CCSIM.Web.Controllers
             var data = UserBLL.Login(userName, userPwd, out info);
             if (data == 1)
             {
+                //添加日志
+
+                LogInfo log = new LogInfo();
+                log.User_Id = info.Id;
+                log.UserName = info.UserName;
+                log.Operation = "用户登录";
+                log.Method = "Home/Login";
+                log.Ip = GetClientIP();
+                log.Params = "userName:" + userName + ";userPwd:" + userPwd;
+                LogBLL.AddLog(log);
                 Session[WebConstants.UserSession] = info;
                 //return RedirectToAction("Index", "Home");
             }
@@ -315,6 +326,29 @@ namespace CCSIM.Web.Controllers
             {
                 Data = data
             };
+        }
+
+        /// <summary>
+        /// 获取客户端IP
+        /// </summary>
+        /// <returns></returns>
+        private string GetClientIP()
+        {
+            string result = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            if (result == null || result == String.Empty)
+            {
+                result = Request.ServerVariables["REMOTE_ADDR"];
+            }
+            if (result == null || result == String.Empty)
+            {
+                result = Request.UserHostAddress;
+            }
+            if (result.StartsWith("::"))
+            {
+                result = "127.0.0.1";
+            }
+
+            return result;
         }
 
         [AllowAnonymous]
@@ -364,6 +398,7 @@ namespace CCSIM.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Home/btnUserMessageSearch_Click", Description = "用户消息查询")]
         public ActionResult btnUserMessageSearch_Click(JArray UserMessageGrid_fields, string phone, int type, DateTime startTime, DateTime endTime, int UserMessageGrid_pageIndex, int UserMessageGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("UserMessageGrid");
@@ -380,6 +415,7 @@ namespace CCSIM.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Home/btnSend_Click", Description = "用户消息发送")]
         public ActionResult btnSend_Click(FormCollection values)
         {
             var msg = NotificationBLL.SendMessage(values["Phone"], values["Title"], values["Content"]);
@@ -387,7 +423,6 @@ namespace CCSIM.Web.Controllers
             ShowNotify(msg);
             return UIHelper.Result();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -400,22 +435,6 @@ namespace CCSIM.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Window2_Close()
         {
-            return UIHelper.Result();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult btnLogin_Click(string tbxUserName, string tbxPassword)
-        {
-            if (tbxUserName == "admin" && tbxPassword == "admin")
-            {
-                ShowNotify("成功登录！", MessageBoxIcon.Success);
-            }
-            else
-            {
-                ShowNotify("用户名或密码错误！", MessageBoxIcon.Error);
-            }
-
             return UIHelper.Result();
         }
 

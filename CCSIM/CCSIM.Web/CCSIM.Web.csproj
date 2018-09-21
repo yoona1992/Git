@@ -168,6 +168,7 @@
   <ItemGroup>
     <Compile Include="App_Data\App_Start\FilterConfig.cs" />
     <Compile Include="App_Data\App_Start\RouteConfig.cs" />
+    <Compile Include="App_Data\App_Start\LoggerFilter.cs" />
     <Compile Include="App_Data\App_Start\UserAuthAttribute.cs" />
     <Compile Include="Areas\AlarmInfo\AlarmInfoRegistration.cs" />
     <Compile Include="Areas\AlarmInfo\Controllers\AlarmInfoController.cs" />
@@ -2025,6 +2026,28 @@
     <Content Include="res\themes\pure_purple\theme.css" />
     <Content Include="res\themes\pure_red\theme.css" />
     <Content Include="res\voice\alarm.wav" />
+    <Content Include="thirdpart\backstrench\bootstrap\css\bootstrap-theme.min.css" />
+    <Content Include="thirdpart\backstrench\bootstrap\css\bootstrap.min.css" />
+    <Content Include="thirdpart\backstrench\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="thirdpart\backstrench\bootstrap\js\bootstrap.js" />
+    <Content Include="thirdpart\backstrench\bootstrap\js\bootstrap.min.js" />
+    <Content Include="thirdpart\backstrench\bootstrap\js\npm.js" />
+    <Content Include="thirdpart\backstrench\css\form-elements.css" />
+    <Content Include="thirdpart\backstrench\css\style.css" />
+    <Content Include="thirdpart\backstrench\font-awesome\css\font-awesome.css" />
+    <Content Include="thirdpart\backstrench\font-awesome\css\font-awesome.min.css" />
+    <Content Include="thirdpart\backstrench\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="thirdpart\backstrench\ico\apple-touch-icon-114-precomposed.png" />
+    <Content Include="thirdpart\backstrench\ico\apple-touch-icon-144-precomposed.png" />
+    <Content Include="thirdpart\backstrench\ico\apple-touch-icon-57-precomposed.png" />
+    <Content Include="thirdpart\backstrench\ico\apple-touch-icon-72-precomposed.png" />
+    <Content Include="thirdpart\backstrench\ico\favicon.png" />
+    <Content Include="thirdpart\backstrench\img\backgrounds\1%402x.jpg" />
+    <Content Include="thirdpart\backstrench\img\backgrounds\1.jpg" />
+    <Content Include="thirdpart\backstrench\js\jquery-1.11.1.min.js" />
+    <Content Include="thirdpart\backstrench\js\jquery.backstretch.min.js" />
+    <Content Include="thirdpart\backstrench\js\placeholder.js" />
+    <Content Include="thirdpart\backstrench\js\scripts.js" />
     <Content Include="thirdpart\baguetteBox\baguetteBox.css" />
     <Content Include="thirdpart\baguetteBox\baguetteBox.js" />
     <Content Include="thirdpart\baguetteBox\baguetteBox.min.css" />
@@ -2064,6 +2087,7 @@
     <Content Include="thirdpart\bootstrap\assets\js\vendor\holder.min.js" />
     <Content Include="thirdpart\bootstrap\assets\js\vendor\jquery-slim.min.js" />
     <Content Include="thirdpart\bootstrap\assets\js\vendor\popper.min.js" />
+    <Content Include="thirdpart\bootstrap\bootstrap.min.css" />
     <Content Include="thirdpart\bootstrap\build\change-version.js" />
     <Content Include="thirdpart\bootstrap\build\generate-sri.js" />
     <Content Include="thirdpart\bootstrap\build\lint-vars.js" />
@@ -3572,6 +3596,8 @@
     <Content Include="thirdpart\jqueryui\jquery-ui.min.js" />
     <Content Include="thirdpart\pop\jquery.message.js" />
     <Content Include="thirdpart\qccode\jquery.qrcode.min.js" />
+    <Content Include="thirdpart\select\bootstrap-select.min.css" />
+    <Content Include="thirdpart\select\bootstrap-select.min.js" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\bootstrapStyle.css" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\img\bootstrap.gif" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\img\bootstrap.png" />
@@ -4041,6 +4067,16 @@
     <Content Include="thirdpart\jeDate\jedatefont.eot" />
     <Content Include="thirdpart\jeDate\jedatefont.ttf" />
     <Content Include="thirdpart\jeDate\jedatefont.woff" />
+    <Content Include="thirdpart\backstrench\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="thirdpart\backstrench\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="thirdpart\backstrench\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="thirdpart\backstrench\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="thirdpart\backstrench\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="thirdpart\backstrench\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="thirdpart\backstrench\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="thirdpart\backstrench\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="thirdpart\backstrench\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="thirdpart\bootstrap\bootstrap.min.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".dockerignore">

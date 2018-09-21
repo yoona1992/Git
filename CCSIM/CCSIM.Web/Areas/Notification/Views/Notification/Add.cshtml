@@ -1,28 +1,78 @@
-﻿
-@{
-    ViewBag.SourceFiles = "~/Models/NotificationModel.cs";
-    ViewBag.Title = "FormLayout/LayoutNotificationInfoAdd";
-    var F = Html.F();
-}
-@model CCSIM.Web.Models.NotificationModel
-@section body {
-    @(F.Form().ID("Form_NotificationAdd").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).IsViewPort(true)
-    .Items(
-    F.DropDownListFor(m => m.userList.DropDownList).ID("Phone").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>人员").AutoSelectFirstItem(false).EmptyText("请选择人员")
-        .Items(Model.userList.DropDownListItem.ToArray()),
-    F.TextBox().ID("Title").Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>标题"),
-    F.TextArea().ID("Content").Height(300).Required(true).Label("<span style='color:red'>*</span>正文")
-    )
-    .Toolbars(
-    F.Toolbar().ID("Toolbar").ToolbarAlign(ToolbarAlign.Right).Position(ToolbarPosition.Bottom)
-    .Items(
-    F.Button().ID("btnAdd").Text("发送").IconFont(IconFont._Save).OnClick(Url.Action("btnAdd_Click"), "Form_NotificationAdd").ValidateForms("Form_NotificationAdd"),
-    F.Button().Type(ButtonType.Reset).ID("btnReset").Text("重置").IconFont(IconFont._Refresh)
-    )
-    )
-    )
+﻿@{
+    Layout = null;
 }
 
-@section script {
-    <script src="~/res/js/grid.js"></script>
-}
+<body>
+    <link href="~/thirdpart/select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="~/thirdpart/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <table id="table1" cellspacing="0" cellPadding="0" border="0" width="100%">
+        <tr align="center">
+            <td vAlign="middle" align="center" style="width:18%">
+                <div class="input-group input-group-sm" style="width:220px">
+                    <span class="input-group-addon">警号：</span>
+                    <input id="jh" type="text" class="form-control" placeholder="输入警号">
+                </div>
+            </td>
+            <td vAlign="middle" align="center" style="width:18%">
+                <div class="input-group input-group-sm" style="width:220px">
+                    <span class="input-group-addon">姓名：</span>
+                    <input id="xm" type="text" class="form-control" placeholder="输入姓名">
+                </div>
+            </td>
+            <td vAlign="middle" align="center" style="width:18%">
+                <div class="input-group input-group-sm" style="width:220px">
+                    <span class="input-group-addon">用户组：</span>
+                    <select id="yhz" class="form-control selectpicker"></select>
+                </div>
+            </td>
+            <td vAlign="middle" align="center" style="width:18%">
+                <div class="input-group input-group-sm" style="width:220px">
+                    <span class="input-group-addon">单位：</span>
+                    <select id="dw" class="form-control selectpicker"></select>
+                </div>
+            </td>
+            <td vAlign="middle" align="center" style="width:18%">
+                <div class="input-group input-group-sm" style="width:220px">
+                    <span class="input-group-addon">状态：</span>
+                    <select id="zt" class="form-control selectpicker">
+                        <option value="-1">全部</option>
+                        <option value="0">账号密码登陆</option>
+                        <option value="1">数字证书登陆</option>
+                        <option value="2">锁定</option>
+                    </select>
+                </div>
+            </td>
+            <td vAlign="middle" align="center" style="width:10%">
+                <div class="btn-group btn-group-sm">
+                    <button id="xgxx" type="button" class="btn btn-default" style=" width:60px">查询</button>
+                    &nbsp;&nbsp;&nbsp;<button id="yhtj" data-toggle="modal" data-target="#myModal1" type="button" class="btn btn-default" style=" width:60px">添加</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <select id="id_select" class="selectpicker bla bla bli" multiple data-live-search="true">
+        <option>cow</option>
+        <option>bull</option>
+        <option>ASD</option>
+        <option selected>Bla</option>
+        <option>Ble</option>
+    </select>
+</body>
+<script src="~/res/js/libs/jquery-2.1.0.min.js"></script>
+<script src="~/thirdpart/select/bootstrap-select.min.js"></script>
+<script src="~/thirdpart/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+
+    $(window).on('load', function () {
+
+
+        $('.selectpicker').selectpicker({
+            'selectedText': 'cat'
+        });
+
+
+        // $('.selectpicker').selectpicker('hide');
+    });
+
+</script>

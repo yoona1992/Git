@@ -1,4 +1,5 @@
 ﻿using CCSIM.BLL;
+using CCSIM.Web.App_Start;
 using CCSIM.Web.Models;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
@@ -74,6 +75,7 @@ namespace CCSIM.Web.Areas.Notification.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Notification/btnSearch_Click", Description = "通知查询")]
         public ActionResult btnSearch_Click(JArray NotificationGrid_fields, string username, string title, DateTime startTime, DateTime endTime, int NotificationGrid_pageIndex, int NotificationGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("NotificationGrid");
@@ -90,6 +92,7 @@ namespace CCSIM.Web.Areas.Notification.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Notification/btnAdd_Click", Description = "通知查询")]
         public ActionResult btnAdd_Click(FormCollection values)
         {
             var msg = NotificationBLL.SendMessage(values["Phone"], values["Title"], values["Content"]);

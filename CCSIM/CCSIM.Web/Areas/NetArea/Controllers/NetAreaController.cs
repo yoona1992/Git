@@ -1,5 +1,6 @@
 ﻿using CCSIM.BLL;
 using CCSIM.DAL.Model;
+using CCSIM.Web.App_Start;
 using CCSIM.Web.Controllers;
 using CCSIM.Web.Models;
 using FineUIMvc;
@@ -117,6 +118,7 @@ namespace CCSIM.Web.Areas.NetArea.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "NetArea/DeleteRows", Description = "网格删除")]
         public ActionResult DeleteRows(JArray selectedRows, JArray NetGrid_fields, string netName, int NetGrid_pageIndex, int NetGrid_pageSize)
         {
             var ids = new List<int>();
@@ -147,6 +149,7 @@ namespace CCSIM.Web.Areas.NetArea.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "NetArea/btnSearch_Click", Description = "网格查询")]
         public ActionResult btnSearch_Click(JArray NetGrid_fields, string netName, int NetGrid_pageIndex, int NetGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("NetGrid");
@@ -161,6 +164,7 @@ namespace CCSIM.Web.Areas.NetArea.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "NetArea/btnAdd_Click", Description = "网格添加")]
         public ActionResult btnAdd_Click(FormCollection values)
         {
             CFG_NETINFO info = new CFG_NETINFO();
@@ -190,6 +194,7 @@ namespace CCSIM.Web.Areas.NetArea.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "NetArea/btnSave_Click", Description = "网格修改")]
         public ActionResult btnSave_Click(FormCollection values)
         {
             CFG_NETINFO info = new CFG_NETINFO();

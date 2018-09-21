@@ -1,57 +1,77 @@
 ﻿@{
     //ViewBag.Title = "登录";
     Layout = null;
-}
+}<!DOCTYPE html>
+<html lang="en">
+
 <!DOCTYPE html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>指挥中心平台</title>
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="~/res/css/Login/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="~/res/css/Login/bootstrap.min.css" rel="stylesheet" type="text/css">
-    <link href="~/res/css/Login/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-    <link href="~/res/css/Login/templatemo_style.css" rel="stylesheet" type="text/css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="~/thirdpart/backstrench/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/thirdpart/backstrench/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/thirdpart/backstrench/css/form-elements.css">
+    <link rel="stylesheet" href="~/thirdpart/backstrench/css/style.css">
+    <!-- Favicon and touch icons -->
+    <link rel="shortcut icon" href="~/thirdpart/backstrench/ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/thirdpart/backstrench/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/thirdpart/backstrench/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/thirdpart/backstrench/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="~/thirdpart/backstrench/ico/apple-touch-icon-57-precomposed.png">
 </head>
-<body class="templatemo-bg-gray">
-    <div class="container">
-        <div class="col-md-12">
-            <h1 class="margin-bottom-15">指挥中心平台</h1>
-            <form class="form-horizontal templatemo-container templatemo-login-form-1 margin-bottom-30" role="form" action="#" method="post">
-                <div class="form-group">
-                    <div class="col-xs-12">
-                        <div class="control-wrapper">
-                            <label for="username" class="control-label fa-label"><i class="fa fa-user fa-medium"></i></label>
-                            <input type="text" class="form-control" id="username" placeholder="用户名">
+<body onkeydown="keyLogin();">
+    <!-- Top content -->
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 form-box">
+                        <div class="form-top">
+                            <div class="form-top-left">
+                                <h3>练市指挥中心平台</h3>
+                                <p>请输入用户名和密码:</p>
+                            </div>
+                            <div class="form-top-right">
+                                <i class="fa fa-key"></i>
+                            </div>
+                        </div>
+                        <div class="form-bottom">
+                            <form role="form" action="" method="post" class="login-form">
+                                <div class="form-group">
+                                    <label class="sr-only" for="form-username">用户名</label>
+                                    <input type="text" name="form-username" placeholder="用户名..." class="form-username form-control" id="username">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="form-password">密码</label>
+                                    <input type="password" name="form-password" placeholder="密码..." class="form-password form-control" id="password">
+                                </div>
+                                <button type="button" id="submit" class="btn">登录</button>
+                            </form>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <div class="control-wrapper">
-                            <label for="password" class="control-label fa-label"><i class="fa fa-lock fa-medium"></i></label>
-                            <input type="password" class="form-control" id="password" placeholder="密码">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <div class="control-wrapper" align="center">
-                            <input type="button" id="submit" value="登录" class="btn btn-info" style="width:40%">
-                        </div>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
+    <!-- Javascript -->
     <script src="~/res/js/libs/jquery-2.1.0.min.js"></script>
+    <script src="~/thirdpart/backstrench/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/thirdpart/backstrench/js/jquery.backstretch.min.js"></script>
+    <script src="~/thirdpart/backstrench/js/scripts.js"></script>
     <script type="text/javascript">
         $('#submit').click(function () {
+            if ($('#username').val() == "") {
+                alert("请输入用户名！");
+                return false;
+            }
+            if ($('#password').val() == "") {
+                alert("请输入密码！");
+                return false;
+            }
             $.ajax({
                 url: "../Home/UserLogin",
                 data: {
@@ -59,11 +79,52 @@
                     userPwd: $('#password').val()
                 },
                 type: "post",
-                async:false,
+                async: false,
                 success: function (data) {
-                    location.href = "../Home/Index";
+                    debugger
+                    if (data == 0) {
+                        alert("密码不正确！");
+                    }
+                    else if (data == -1) {
+                        alert("用户不存在！");
+                    } else {
+                        location.href = "../Home/Index";
+                    }
                 }
             });
         });
+        function keyLogin() {
+            if (event.keyCode != 13) {
+                return false;
+            }
+            if ($('#username').val() == "") {
+                alert("请输入用户名！");
+                return false;
+            }
+            if ($('#password').val() == "") {
+                alert("请输入密码！");
+                return false;
+            }
+            $.ajax({
+                url: "../Home/UserLogin",
+                data: {
+                    userName: $('#username').val(),
+                    userPwd: $('#password').val()
+                },
+                type: "post",
+                async: false,
+                success: function (data) {
+                    if (data == 0) {
+                        alert("密码不正确！");
+                    }
+                    else if (data == -1) {
+                        alert("用户不存在！");
+                    } else {
+                        location.href = "../Home/Index";
+                    }
+                }
+            });
+        }
     </script>
 </body>
+</html>

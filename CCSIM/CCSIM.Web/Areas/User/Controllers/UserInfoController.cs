@@ -1,5 +1,6 @@
 ﻿using CCSIM.BLL;
 using CCSIM.DAL.Model;
+using CCSIM.Web.App_Start;
 using CCSIM.Web.Models;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
@@ -264,6 +265,7 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "UserInfo/DeleteRows", Description = "用户删除")]
         public ActionResult DeleteRows(JArray selectedRows, JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var ids = new List<int>();
@@ -294,6 +296,7 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "UserInfo/btnSearch_Click", Description = "用户查询")]
         public ActionResult btnSearch_Click(JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("UserGrid");
@@ -308,6 +311,7 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "UserInfo/btnAdd_Click", Description = "用户添加")]
         public ActionResult btnAdd_Click(FormCollection values)
         {
             CFG_USERINFO info = new CFG_USERINFO();
@@ -341,6 +345,7 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "UserInfo/btnSave_Click", Description = "用户修改")]
         public ActionResult btnSave_Click(FormCollection values)
         {
             CFG_USERINFO info = new CFG_USERINFO();

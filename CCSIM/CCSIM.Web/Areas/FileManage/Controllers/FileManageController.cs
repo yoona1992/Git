@@ -1,6 +1,7 @@
 ﻿using CCSIM.BLL;
 using CCSIM.DAL.Model;
 using CCSIM.Entity;
+using CCSIM.Web.App_Start;
 using CCSIM.Web.Controllers;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
@@ -41,6 +42,7 @@ namespace CCSIM.Web.Areas.FileManage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "FileManage/btnUpload_Click", Description = "文件上传")]
         public ActionResult btnUpload_Click(HttpPostedFileBase uploadFile, FormCollection values)
         {
             if (uploadFile != null)
@@ -68,7 +70,7 @@ namespace CCSIM.Web.Areas.FileManage.Controllers
                 if (System.IO.File.Exists(Server.MapPath("~/upload/" + truthFileName)))
                 {
                     System.IO.FileInfo fileInfo = new System.IO.FileInfo(Server.MapPath("~/upload/" + truthFileName));
-                    info.FILESIZE = System.Math.Ceiling(fileInfo.Length / 1024.0) + " KB";
+                    info.FILESIZE = System.Math.Ceiling(fileInfo.Length / 1024.0) + "KB";
                 }
 
                 var isSuccess = FileBLL.Add(info);
@@ -105,6 +107,7 @@ namespace CCSIM.Web.Areas.FileManage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "FileManage/DeleteRows", Description = "文件删除")]
         public ActionResult DeleteRows(JArray selectedRows, JArray FileManageGrid_fields, string fileName, int FileManageGrid_pageIndex, int FileManageGrid_pageSize)
         {
             var ids = new List<int>();
@@ -135,6 +138,7 @@ namespace CCSIM.Web.Areas.FileManage.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "FileManage/btnSearch_Click", Description = "文件查询")]
         public ActionResult btnSearch_Click(JArray FileManageGrid_fields, string fileName, int FileManageGrid_pageIndex, int FileManageGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("FileManageGrid");
@@ -149,6 +153,7 @@ namespace CCSIM.Web.Areas.FileManage.Controllers
 
         [AllowAnonymous]
         // GET: FileManage/Download
+        [LoggerFilter(Key = "FileManage/Download", Description = "文件下载")]
         public ActionResult Download(int id)
         {
             var data = FileBLL.Get(id);

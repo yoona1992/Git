@@ -1,5 +1,6 @@
 ﻿using CCSIM.BLL;
 using CCSIM.Entity;
+using CCSIM.Web.App_Start;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -57,6 +58,7 @@ namespace CCSIM.Web.Areas.Message.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Message/btnSearch_Click", Description = "资料数据查询")]
         public ActionResult btnSearch_Click(JArray MessageGrid_fields, string username, string title, DateTime startTime, DateTime endTime, int MessageGrid_pageIndex, int MessageGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("MessageGrid");
@@ -71,6 +73,7 @@ namespace CCSIM.Web.Areas.Message.Controllers
             return UIHelper.Result();
         }
 
+        [LoggerFilter(Key = "Message/GetFileList", Description = "资料附件查看")]
         public ActionResult GetFileList(int id)
         {
             var data = MessageBLL.Get(id);

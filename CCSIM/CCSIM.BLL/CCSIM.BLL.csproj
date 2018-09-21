@@ -72,6 +72,7 @@
     <Compile Include="CodeBLL.cs" />
     <Compile Include="FileBLL.cs" />
     <Compile Include="HttpClientHelperBLL.cs" />
+    <Compile Include="LogBLL.cs" />
     <Compile Include="MapBLL.cs" />
     <Compile Include="MessageBLL.cs" />
     <Compile Include="NetManageBLL.cs" />

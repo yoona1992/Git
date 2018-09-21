@@ -1,4 +1,5 @@
 ﻿using CCSIM.BLL;
+using CCSIM.Web.App_Start;
 using CCSIM.Web.Models;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
@@ -193,6 +194,7 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Trajectory/btnUserSearch_Click", Description = "用户查询")]
         public ActionResult btnUserSearch_Click(JArray UserGrid_fields, string userName, string telephone, int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("UserGrid");
@@ -207,6 +209,7 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Trajectory/btnCarSearch_Click", Description = "车辆查询")]
         public ActionResult btnCarSearch_Click(JArray CarGrid_fields, string vehicleNo, int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("CarGrid");
@@ -221,6 +224,7 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Trajectory/btnDetailUserSearch_Click", Description = "用户轨迹查询")]
         public ActionResult btnDetailUserSearch_Click(JArray TrajectoryDetailUserGrid_fields, string telephone, string passTime, int TrajectoryDetailUserGrid_pageIndex, int TrajectoryDetailUserGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("TrajectoryDetailUserGrid");
@@ -239,6 +243,7 @@ namespace CCSIM.Web.Areas.Trajectory.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Trajectory/btnDetailCarSearch_Click", Description = "车辆轨迹查询")]
         public ActionResult btnDetailCarSearch_Click(JArray TrajectoryDetailCarGrid_fields, string cldwzdsbh, string passTime, int TrajectoryDetailCarGrid_pageIndex, int TrajectoryDetailCarGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("TrajectoryDetailCarGrid");

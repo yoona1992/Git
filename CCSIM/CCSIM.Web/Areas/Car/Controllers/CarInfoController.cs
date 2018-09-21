@@ -1,5 +1,6 @@
 ﻿using CCSIM.BLL;
 using CCSIM.DAL.Model;
+using CCSIM.Web.App_Start;
 using CCSIM.Web.Models;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
@@ -227,6 +228,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "CarInfo/DeleteRows", Description = "车辆信息删除")]
         public ActionResult DeleteRows(JArray selectedRows, JArray CarGrid_fields, string vehicleNo, int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var ids = new List<int>();
@@ -257,6 +259,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "CarInfo/btnSearch_Click", Description = "车辆信息查询")]
         public ActionResult btnSearch_Click(JArray CarGrid_fields, string vehicleNo, int ownerType, int CarGrid_pageIndex, int CarGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("CarGrid");
@@ -271,6 +274,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "CarInfo/btnAdd_Click", Description = "车辆信息新增")]
         public ActionResult btnAdd_Click(FormCollection values)
         {
             CFG_CARINFO info = new CFG_CARINFO();
@@ -301,6 +305,7 @@ namespace CCSIM.Web.Areas.Car.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "CarInfo/btnSave_Click", Description = "车辆信息修改")]
         public ActionResult btnSave_Click(FormCollection values)
         {
             CFG_CARINFO info = new CFG_CARINFO();
