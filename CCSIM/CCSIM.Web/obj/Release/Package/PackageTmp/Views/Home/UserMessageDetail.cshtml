@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head">
+    <!-- Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="~/thirdpart/baguetteBox/bootstrap.min.css" type="text/css" />
+    <!--图片画廊-->
+    <link rel="stylesheet" href="~/thirdpart/baguetteBox/baguetteBox.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/thirdpart/baguetteBox/thumbnail-gallery.css" type="text/css" />
+    <link rel="stylesheet" href="~/thirdpart/baguetteBox/msgbox.css" type="text/css" />
+</head>
+<body>
+    <form id="form">
+        <input id="Id" type="text" style="display:none" value='@ViewData["Id"]' />
+        <div class="tz-gallery">
+            <div class="row" id="galleryRow">
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript" src="~/res/js/libs/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="~/thirdpart/baguetteBox/baguetteBox.min.js"></script>
+    <script type="text/javascript" src="~/thirdpart/baguetteBox/msgbox.js"></script>
+    <script src="~/res/js/AjaxFunction.js"></script>
+    <script>
+        var allData = [];
+        ajaxFunction("../Message/Message/GetFileList", {
+            id: $('#Id').val()
+        }, "post", false, function (data) {
+            $.each(data, function (index, d) {
+                allData.push({
+                    FileName: d.FileName,
+                    FileUrl: d.FileUrl,
+                    Id: index
+                });
+            });
+        });
+        //$.ajax({
+        //    url: "../Message/Message/GetFileList",
+        //    data: {
+        //        id:$('#Id').val()
+        //    },
+        //    type: "post",
+        //    async: false,
+        //    success: function (data) {
+        //        $.each(data, function (index, d) {
+        //            allData.push({
+        //                FileName: d.FileName,
+        //                FileUrl: d.FileUrl,
+        //                Id:index
+        //            });
+        //        });
+        //    }
+        //});
+        $.each(allData, function (index, item) {
+            var div = "<div class='col-sm-6 col-md-6'>";
+            div += "<div class='thumbnail'>";
+            div += "<a class='lightbox' href='" + item.FileUrl + "'>";
+            div += "<img src='" + item.FileUrl + "' alt='" + item.Id + "' style='height:280px'>";
+            div += "</a>";
+            div += "<div class='caption' style='height:50px'>";
+            div += "<h3>";
+            div += item.FileName + "</h3>";
+            div += "</div>";
+            div += "</div>";
+            div += "</div>";
+            $('#galleryRow').append(div);
+        });
+        baguetteBox.run('.tz-gallery', {
+            preload: 10,
+            async: false
+        });
+    </script>
+</body>
+</html>

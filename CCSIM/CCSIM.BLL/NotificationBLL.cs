@@ -47,16 +47,17 @@ namespace CCSIM.BLL
         public static List<NotificationInfo> GetList(string username, string title, DateTime startTime, DateTime endTime, int start, int limit, out int totalCount)
         {
             var q = (from n in SlaveDb.Set<NOTIFICATION>()
-                     join u in SlaveDb.Set<CFG_USERINFO>() on n.PHONE equals u.TELEPHONE
+                     join u in SlaveDb.Set<CFG_USERINFO>() on n.PHONE equals u.TELEPHONE into uu
+                     from uuu in uu.DefaultIfEmpty()
                      where ((title == "" || title == null) ? true : n.TITLE.Contains(title))
-                     && ((username == "" || username == null) ? true : u.NAME.Contains(username))
+                     && ((username == "" || username == null) ? true : uuu.NAME.Contains(username))
                      && n.CREATE_DATE >= startTime && n.CREATE_DATE <= endTime
                      select new NotificationInfo
                      {
                          Id = n.ID,
                          Title = n.TITLE,
-                         Content=n.CONTENT,
-                         UserName=u.NAME,
+                         Content = n.CONTENT,
+                         UserName = uuu.NAME,
                          Create_Date = n.CREATE_DATE
                      });
             totalCount = q.Count();
@@ -78,19 +79,27 @@ namespace CCSIM.BLL
         /// <returns></returns>
         public static string SendMessage(string phone, string title, string content)
         {
-            var url = ConfigurationManager.AppSettings["NotificationUrl"] +"phone=" +phone+"&title="+title+"&content="+content;
+            var url = ConfigurationManager.AppSettings["NotificationUrl"] + "phone=" + phone + "&title=" + title + "&content=" + content;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/json";
 
             var msg = "";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+            try
             {
-                msg=reader.ReadToEnd();
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                using (StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                {
+                    msg = reader.ReadToEnd();
+                }
+                msg = JsonConvert.DeserializeObject<NotificationReturnInfo>(msg).stateMsg;
+            }
+            catch
+            {
+                msg = "发送失败！";
             }
 
-            return JsonConvert.DeserializeObject<NotificationReturnInfo>(msg).stateMsg;
+            return msg;
         }
 
     }

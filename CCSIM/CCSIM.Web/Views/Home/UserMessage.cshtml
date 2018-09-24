@@ -111,8 +111,8 @@
     <script>
         // 打开窗体
         function onbtnSendClick(event) {
-            var iframeWindowUrl = '@Url.Content("~/Home/MessageSend")';
-            var iframeUrl = iframeWindowUrl;
+           var iframeWindowUrl = '@Url.Content("../Notification/Notification/Add")';
+           var iframeUrl = iframeWindowUrl;
 
             // 显示窗体
             F.ui.Window2.show(iframeUrl, '发送 - ' + '通知');

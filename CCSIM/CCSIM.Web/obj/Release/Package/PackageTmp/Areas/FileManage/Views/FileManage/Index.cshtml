@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewBag.Title = "GridPaging/FileManage";
+    var F = Html.F();
+}
+@F.PageManager.AutoSizePanelID("FileManageGrid")
+@section body {
+    @(F.Panel()
+        .Layout(LayoutType.Fit)
+        .ShowHeader(false)
+        .ShowBorder(false)
+        .Items(
+            F.Grid()
+                .EnableCheckBoxSelect(true)
+                .AutoScroll(true)
+                .ShowHeader(false)
+                .ShowBorder(false)
+        //.Title("网格列表")
+        .ID("FileManageGrid")
+        .DataIDField("Id")
+        .DataTextField("FileName")
+        .AllowPaging(true)
+        .PageSize(20)
+        .IsDatabasePaging(true)
+        .OnPageIndexChanged(Url.Action("FileManageGrid_PageIndexChanged"), "FileManageGrid",
+                                new Parameter("fileName", "F.ui.tbxFileName.getValue()"))
+                .BodyPadding(0)
+                .Toolbars(
+                    F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
+                        .Items(
+                            F.TextBox().Width(300).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("文件名称").EmptyText("请输入文件名称").ID("tbxFileName"),
+                            F.ToolbarSeparator(),
+                            F.Button().ID("btnSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnSearch_Click"),
+                                "FileManageGrid",
+                                new Parameter("fileName", "F.ui.tbxFileName.getValue()")),
+                            F.ToolbarFill().ID("ToolbarFill1"),
+                            F.FileUpload().ID("uploadFile").ButtonText("上传").ButtonOnly(true).OnFileSelected(Url.Action("btnUpload_Click"), "uploadFile",
+                                new Parameter("fileName", "F.ui.tbxFileName.getValue()")).ButtonIconFont(IconFont._Upload),
+                            F.Button().ID("btnDelete").Text("删除").Icon(Icon.Delete).Listener("click", "onbtnDeleteClick")
+                         )
+                )
+        .Columns(
+            F.RowNumberField(),
+            F.RenderField()
+                .HeaderText("文件名称")
+                .DataField("FileName")
+                .Width(200),
+            F.RenderField()
+                .HeaderText("文件大小")
+                .DataField("FileSize")
+                .BoxFlex(1),
+            F.RenderField()
+                .HeaderText("上传人")
+                .DataField("UploadUser")
+                .BoxFlex(1),
+            F.RenderField()
+                .HeaderText("上传时间")
+                .DataField("UploadTimeStr")
+                .BoxFlex(1),
+            F.RenderField()
+                .HeaderText("操作")
+                .EnableHeaderMenu(false)
+                .RendererFunction("renderFileManage")
+                .TextAlign(TextAlign.Center)
+                .Width(80)
+        )
+    .RecordCount(ViewBag.Grid1RecordCount)
+    .DataSource(ViewBag.Grid1DataSource)
+    .ShowPagingMessage(true)
+
+    )
+    )
+    @(F.Window().Hidden(true).Height(500).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("新增").ID("Window1"))
+    @(F.Window().Hidden(true).Height(340).Width(280).IsModal(true).Target(Target.Top).EnableIFrame(true).Title("二维码").ID("Window2"))
+
+}
+
+@section script {
+    <script src="~/res/js/grid.js"></script>
+    <script>
+        function renderFileManage(value, params) {
+            return '<a href="javascript:;" class="action download"><img class="f-grid-cell-icon" src="../res/icon/disk_download.png" data-qtip="下载"></a>' +
+                '&nbsp;&nbsp;' +
+                '<a href="javascript:;" class="action qrCodeDownload"><img class="f-grid-cell-icon" src="../res/icon/attach.png" data-qtip="二维码下载"></a>';
+        }
+
+        //重新加载Grid
+        function reload() {
+            $('#btnSearch').click();
+        }
+
+        //删除事件
+        function onbtnDeleteClick(event) {
+            var grid = F.ui.FileManageGrid;
+            if (!grid.hasSelection()) {
+                F.alert('没有选中项!');
+                return;
+            }
+
+            var selectedRows = grid.getSelectedRows();
+            F.confirm({
+                message: '你确定要删除选中的&nbsp;<b>' + selectedRows.length + '</b>&nbsp;行数据吗?',
+                target: '_top',
+                ok: function () {
+                    deletedRows(selectedRows);
+                }
+            })
+        }
+
+        //删除数据
+        function deletedRows(selectedRows) {
+            //触发后台事件
+            F.doPostBack('@Url.Action("DeleteRows")', "FileManageGrid", {
+                selectedRows: selectedRows,
+                fileName: F.ui.tbxFileName.getValue()
+            });
+        }
+
+        // 打开窗体
+        function openWindow(rowData) {
+            var iframeWindowUrl = '@Url.Content("~/NetArea/NetArea/Edit")';
+            var iframeUrl = iframeWindowUrl + '?id=' + rowData.id;
+
+            // 显示窗体
+            F.ui.Window2.show(iframeUrl, '编辑 - ' + '网格');
+        }
+
+        window.downloadFile = function (sUrl) {
+            //iOS devices do not support downloading. We have to inform user about this.
+            if (/(iP)/g.test(navigator.userAgent)) {
+                alert('你的设备不支持文件下载.请重新选择.');
+                return false;
+            }
+
+            //If in Chrome or Safari - download via virtual link click
+            if (window.downloadFile.isChrome || window.downloadFile.isSafari) {
+                //Creating new link node.
+                var link = document.createElement('a');
+                link.href = sUrl;
+
+                if (link.download !== undefined) {
+                    //Set HTML5 download attribute. This will prevent file from opening if supported.
+                    var fileName = sUrl.substring(sUrl.lastIndexOf('/') + 1, sUrl.length);
+                    link.download = fileName;
+                }
+
+                //Dispatching click event.
+                if (document.createEvent) {
+                    var e = document.createEvent('MouseEvents');
+                    e.initEvent('click', true, true);
+                    link.dispatchEvent(e);
+                    return true;
+                }
+            }
+
+            // Force file download (whether supported by server).
+            if (sUrl.indexOf('?') === -1) {
+                sUrl += '?download';
+            }
+            window.open(sUrl, '_self');
+            return true;
+        }
+        window.downloadFile.isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+        window.downloadFile.isSafari = navigator.userAgent.toLowerCase().indexOf('safari') > -1;
+
+        F.ready(function () {
+            var grid = F.ui.FileManageGrid;
+            // 点击表格行中的编辑按钮
+            grid.el.on('click', '.action.download', function (event) {
+                var rowEl = $(this).closest('.f-grid-row');
+                var rowData = grid.getRowData(rowEl);
+
+                window.downloadFile('./FileManage/Download?id=' + rowData.id);
+            });
+            grid.el.on('click', '.action.qrCodeDownload', function (event) {
+                var rowEl = $(this).closest('.f-grid-row');
+                var rowData = grid.getRowData(rowEl);
+
+                var iframeWindowUrl = '@Url.Content("~/FileManage/FileManage/QrCodeDownload")';
+                var iframeUrl = iframeWindowUrl + '?id='+rowData.id;
+
+                // 显示窗体
+                F.ui.Window2.show(iframeUrl, '下载 - ' + '二维码');
+            });
+        });
+    </script>
+}

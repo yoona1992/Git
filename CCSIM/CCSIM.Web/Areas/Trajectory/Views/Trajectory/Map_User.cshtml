@@ -65,7 +65,12 @@
             var top_right_navigation = new BMap.NavigationControl({
                 anchor: BMAP_ANCHOR_TOP_RIGHT
             }); //右上角
+            var mapType = new BMap.MapTypeControl({
+                mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP],
+                anchor: BMAP_ANCHOR_TOP_LEFT
+            });
             map.addControl(top_right_navigation);
+            map.addControl(mapType);
             ajaxFunction("./GetList_User", {
                 telephone: F.ui.TelePhone.getValue(),
                 passTime: F.ui.PassTime.getValue()
@@ -158,7 +163,7 @@
                     }, timer);
                 };
 
-                map.addOverlay(new BMap.Polyline(arrPois, { strokeColor: '#111' }));
+                map.addOverlay(new BMap.Polyline(arrPois, { strokeColor: '#FF0000' }));
                 lushu = new BMapLib.LuShu(map, arrPois, {
                     defaultContent: F.ui.UserName.getValue(),//"从天安门到百度大厦"
                     autoView: true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整

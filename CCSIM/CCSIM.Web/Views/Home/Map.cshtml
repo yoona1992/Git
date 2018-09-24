@@ -8,7 +8,7 @@
 @section head {
     <link rel="stylesheet" href="~/thirdpart/fontawesome/css/all.css">
     <link rel="stylesheet" href="~/thirdpart/customscrollbar/jquery.mCustomScrollbar.min.css">
-    <link rel="stylesheet" href="~/thirdpart/bootstrap/dist/css/bootstrap.min.css">
+    <link href="~/thirdpart/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/res/css/custom.css">
     <link rel="stylesheet" href="~/res/css/custom-themes.css">
     <link rel="stylesheet" href="~/res/css/map.css" />
@@ -148,9 +148,9 @@
                 <div id="wg">
                     显示网格<input id="cbWg" type="checkbox" />
                 </div>
-                <div id="sxj">
-                    显示摄像机<input id="cbSxj" type="checkbox" />
-                </div>
+                @*<div id="sxj">
+                        显示摄像机<input id="cbSxj" type="checkbox" />
+                    </div>*@
                 <div id="yjbj">
                     越界报警<input id="cbYjbj" type="checkbox" checked="checked" />
                 </div>
@@ -369,6 +369,7 @@
                                         phone: item.ObjectId
                                     }, "post", false, function (data) {
                                         $.each(data, function (index, d) {
+                                            $('#notifyAudio')[0].play();
                                             $.messager.anim('fade', 2000);
                                             var content = "地点：" + d.Address;
                                             var remarks = "";
@@ -379,7 +380,7 @@
                                                     .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
 
                                             $("#reply" + d.Id).click(function () {
-                                                var iframeWindowUrl = '@Url.Content("~/Home/MessageSend")';
+                                                var iframeWindowUrl = '@Url.Content("../Notification/Notification/Add")';
                                                 var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
 
                                                 // 显示窗体
@@ -394,42 +395,6 @@
                                             });
                                         });
                                     });
-                                    @*$.ajax({
-                                        url: "./GetMessageList",
-                                        type: "post",
-                                        data: {
-                                            phone: item.ObjectId
-                                        },
-                                        async: false,
-                                        success: function (data) {
-                                            $.each(data, function (index, d) {
-                                                $.messager.anim('fade', 2000);
-                                                var content = "地点：" + d.Address;
-                                                var remarks = "";
-                                                if (!(d.Remarks == "" || d.Remarks == null)) {
-                                                    remarks = "备注：" + d.Remarks;
-                                                }
-                                                $.messager
-                                                        .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
-
-                                                $("#reply" + d.Id).click(function () {
-                                                    var iframeWindowUrl = '@Url.Content("~/Home/MessageSend")';
-                                                    var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
-
-                                                    // 显示窗体
-                                                    F.ui.Window1.show(iframeUrl, '发送 - ' + '通知');
-                                                });
-                                                $("#look" + d.Id).click(function () {
-                                                    var iframeWindowUrl = '@Url.Content("~/Home/UserMessageDetail")';
-                                                    var iframeUrl = iframeWindowUrl + '?id=' + d.Id;
-
-                                                    // 显示窗体
-                                                    F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
-                                                });
-
-                                            });
-                                        }
-                                    });*@
                                 }
                             }
                             addRyClClickHandler(marker);
@@ -487,6 +452,7 @@
                                         phone: item.ObjectId
                                     }, "post", false, function (data) {
                                         $.each(data, function (index, d) {
+                                            $('#notifyAudio')[0].play();
                                             $.messager.anim('fade', 2000);
                                             var content = "地点：" + d.Address;
                                             var remarks = "";
@@ -497,7 +463,7 @@
                                                     .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
 
                                             $("#reply" + d.Id).click(function () {
-                                                var iframeWindowUrl = '@Url.Content("~/Home/MessageSend")';
+                                                var iframeWindowUrl = '@Url.Content("../Notification/Notification/Add")';
                                                 var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
 
                                                 // 显示窗体
@@ -512,42 +478,6 @@
                                             });
                                         });
                                     });
-                                    @*$.ajax({
-                                        url: "./GetMessageList",
-                                        type: "post",
-                                        data: {
-                                            phone: item.ObjectId
-                                        },
-                                        async: false,
-                                        success: function (data) {
-                                            $.each(data, function (index, d) {
-                                                $.messager.anim('fade', 2000);
-                                                var content = "地点：" + d.Address;
-                                                var remarks = "";
-                                                if (!(d.Remarks == "" || d.Remarks == null)) {
-                                                    remarks = "备注：" + d.Remarks;
-                                                }
-                                                $.messager
-                                                        .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
-
-                                                $("#reply" + d.Id).click(function () {
-                                                    var iframeWindowUrl = '@Url.Content("~/Home/MessageSend")';
-                                                    var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
-
-                                                    // 显示窗体
-                                                    F.ui.Window1.show(iframeUrl, '发送 - ' + '通知');
-                                                });
-                                                $("#look" + d.Id).click(function () {
-                                                    var iframeWindowUrl = '@Url.Content("~/Home/UserMessageDetail")';
-                                                    var iframeUrl = iframeWindowUrl + '?id=' + d.Id;
-
-                                                    // 显示窗体
-                                                    F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
-                                                });
-
-                                            });
-                                        }
-                                    });*@
                                 }
                             }
                             addRyClClickHandler(marker);
@@ -584,221 +514,6 @@
                     });
                 }
             });
-            @*$.ajax({
-                url: "./GetNewGpsInfo",
-                data: {
-                    objectNames: objectNames
-                },
-                type: "post",
-                async: false,
-                error:function(a,b,c,d){
-                },
-                success: function (data) {
-                    removeRyCl();
-
-                    var tree = $.fn.zTree.getZTreeObj("treeDemo");
-                    var selectedNodes = tree.getSelectedNodes();
-                    var objectId = "";
-                    if (selectedNodes.length > 0) {
-                        objectId = selectedNodes[0].objectName;
-                    }
-
-                    if (objectId == "") {
-                        $.each(data, function (index, item) {
-
-                            if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
-                            } else {
-                                var icon = myIcon_Person;
-                                if (item.Type != "1") {
-                                    if (item.ObjectType == "19" || item.ObjectType == "11") {
-                                        icon = myIcon_Mtc;
-                                    }
-                                    else if (item.ObjectType == "18" || item.ObjectType == "37") {
-                                        icon = myIcon_Mtc;
-                                    }
-                                    else {
-                                        icon = myIcon_Xqc;
-                                    }
-                                }
-                                var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
-                                    icon: icon
-                                });
-                                // 创建标注
-                                marker.type = 3;
-                                marker.objectId = item.ObjectId;
-                                marker.objectType = item.Type;
-                                marker.setTitle(item.ObjectName);
-                                //var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
-                                //marker.setLabel(label);
-
-                                //如果是人员，添加右键查看消息菜单
-                                if (item.Type == "1") {
-                                    var markerMenu = new BMap.ContextMenu();
-                                    markerMenu.addItem(new BMap.MenuItem('消息查看', messageLook.bind(marker)));
-                                    marker.addContextMenu(markerMenu);
-
-                                    //看是否有新消息
-                                    if (item.IsNeedShow) {
-                                        $.ajax({
-                                            url: "./GetMessageList",
-                                            type: "post",
-                                            data: {
-                                                phone: item.ObjectId
-                                            },
-                                            async: false,
-                                            success: function (data) {
-                                                $.each(data, function (index, d) {
-                                                    $.messager.anim('fade', 2000);
-                                                    var content = "地点：" + d.Address;
-                                                    var remarks = "";
-                                                    if (!(d.Remarks == "" || d.Remarks == null)) {
-                                                        remarks = "备注：" + d.Remarks;
-                                                    }
-                                                    $.messager
-                                                            .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
-
-                                                    $("#reply" + d.Id).click(function () {
-                                                        var iframeWindowUrl = '@Url.Content("~/Home/MessageSend")';
-                                                        var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
-
-                                                        // 显示窗体
-                                                        F.ui.Window1.show(iframeUrl, '发送 - ' + '通知');
-                                                    });
-                                                    $("#look" + d.Id).click(function () {
-                                                        var iframeWindowUrl = '@Url.Content("~/Home/UserMessageDetail")';
-                                                        var iframeUrl = iframeWindowUrl + '?id=' + d.Id;
-
-                                                        // 显示窗体
-                                                        F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
-                                                    });
-
-                                                });
-                                            }
-                                        });
-                                    }
-                                }
-                                addRyClClickHandler(marker);
-                                map.addOverlay(marker);
-
-                                //报警 根据所属区域id获取区域信息
-                                var polygon = '';
-                                $.each(polygonInfo, function (index, d) {
-                                    if (d.objectId == item.BelongNetId) {
-                                        polygon = d;
-                                    }
-                                });
-
-                                if (item.IsNeedAlarm && $("#cbYjbj").prop('checked')) {
-                                    alarm(item, polygon);
-                                }
-                            }
-                        });
-                    } else {
-                        $.each(data, function (index, item) {
-                            if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
-                            } else {
-                                var icon = myIcon_Person;
-                                if (item.Type != "1") {
-                                    if (item.ObjectType == "19" || item.ObjectType == "11") {
-                                        icon = myIcon_Mtc;
-                                    }
-                                    else if (item.ObjectType == "18" || item.ObjectType == "37") {
-                                        icon = myIcon_Mtc;
-                                    }
-                                    else {
-                                        icon = myIcon_Xqc;
-                                    }
-                                }
-                                var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
-                                    icon: icon
-                                });
-                                // 创建标注
-                                marker.type = 3;
-                                marker.objectId = item.ObjectId;
-                                marker.objectType = item.Type;
-                                marker.setTitle(item.ObjectName);
-                                //var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
-                                //marker.setLabel(label);
-
-                                //如果是人员，添加右键查看消息菜单
-                                if (item.Type == "1") {
-                                    var markerMenu = new BMap.ContextMenu();
-                                    markerMenu.addItem(new BMap.MenuItem('消息查看', messageLook.bind(marker)));
-                                    marker.addContextMenu(markerMenu);
-                                    //看是否有新消息
-                                    if (item.IsNeedShow) {
-                                        $.ajax({
-                                            url: "./GetMessageList",
-                                            type: "post",
-                                            data: {
-                                                phone: item.ObjectId
-                                            },
-                                            async: false,
-                                            success: function (data) {
-                                                $.each(data, function (index, d) {
-                                                    $.messager.anim('fade', 2000);
-                                                    var content = "地点：" + d.Address;
-                                                    var remarks = "";
-                                                    if (!(d.Remarks == "" || d.Remarks == null)) {
-                                                        remarks = "备注：" + d.Remarks;
-                                                    }
-                                                    $.messager
-                                                            .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
-
-                                                    $("#reply" + d.Id).click(function () {
-                                                        var iframeWindowUrl = '@Url.Content("~/Home/MessageSend")';
-                                                        var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
-
-                                                        // 显示窗体
-                                                        F.ui.Window1.show(iframeUrl, '发送 - ' + '通知');
-                                                    });
-                                                    $("#look" + d.Id).click(function () {
-                                                        var iframeWindowUrl = '@Url.Content("~/Home/UserMessageDetail")';
-                                                        var iframeUrl = iframeWindowUrl + '?id=' + d.Id;
-
-                                                        // 显示窗体
-                                                        F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
-                                                    });
-
-                                                });
-                                            }
-                                        });
-                                    }
-                                }
-                                addRyClClickHandler(marker);
-                                map.addOverlay(marker);
-
-                                //报警 根据所属区域id获取区域信息
-                                var polygon = '';
-                                $.each(polygonInfo, function (index, d) {
-                                    if (d.objectId == item.BelongNetId) {
-                                        polygon = d;
-                                    }
-                                });
-
-                                if (item.ObjectId == objectId) {
-                                    var label = new BMap.Label("<span class='box'>" + item.ObjectName + "</span>", { offset: new BMap.Size(20, -10) });
-                                    label.setStyle({
-                                        fontSize: "14px",//字体大小
-                                        //backgroundColor: "0.05", //文本标注背景颜色
-                                        border: "1px solid #ffcc00",
-                                        borderRadius: "5px",
-                                        fontWeight: "bold" //字体加粗
-                                    });
-                                    marker.setLabel(label);
-                                    marker.setTop(true);
-                                    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-                                    map.centerAndZoom(new BMap.Point(item.Lon, item.Lat), 19);
-                                }
-
-                                if (item.IsNeedAlarm && $("#cbYjbj").prop('checked')) {
-                                    alarm(item, polygon);
-                                }
-                            }
-                        });
-                    }
-                }
-            });*@
         }
         function removeRyCl() {
             var overlays = map.getOverlays();
@@ -837,31 +552,6 @@
                 }
             });
         });
-        //$.ajax({
-        //    url: "./GetNetInfo",
-        //    type: "post",
-        //    success: function (data) {
-        //        netInfo = data;
-
-        //        $.each(netInfo, function (index, d) {
-        //            if (d.LonAndLat == "" || d.LonAndLat == null) { }
-        //            else {
-        //                var pointArray = [];
-        //                var color = d.NetColor;
-        //                var lonAndLatArray = $.parseJSON(d.LonAndLat);
-        //                $.each(lonAndLatArray, function (index, dd) {
-        //                    pointArray.push(new BMap.Point(dd.lng, dd.lat));
-        //                });
-
-        //                var polygon = new BMap.Polygon(pointArray, { strokeColor: "#000093", strokeWeight: 1, strokeOpacity: 0.1, fillColor: color, fillOpacity: 0.6 });
-        //                polygon.type = 2;
-        //                polygon.objectId = d.Id;
-        //                polygon.objectName = d.Name;
-        //                polygonInfo.push(polygon);
-        //            }
-        //        });
-        //    }
-        //});
         function addWg() {
             polygonInfo = [];
             if (netInfo.length == 0) {
@@ -1007,6 +697,7 @@
             var circlePath = circle.getPath();
             map.removeOverlay(circle);
             if (isPointInPolygonBidirectional(polygon.getPath(), circlePath) == false) {
+                $('#alarmAudio')[0].play();
                 //document.getElementById("alarm").innerHTML = "<embed src='../res/voice/alarm.wav' width=0 height=0 type=audio/wav loop='1' autostart='true' ></embed> ";
                 $.toast({
                     heading: '越界提醒',
@@ -1122,17 +813,10 @@
                     addRyCl(data);
                 }, 2000);
             });
-            //$.ajax({
-            //    url: "./GetAllInfo",
-            //    type: "post",
-            //    async: false,
-            //    success: function (data) {
-            //        timeoutId = setInterval(function () {
-            //            addRyCl(data);
-            //        }, 2000);
-            //    }
-            //});
-            //
+
+            //加载报警声音
+            $('<audio id="alarmAudio"><source src="../res/voice/alarm.wav" type="audio/wav"></audio>').appendTo('body');
+            $('<audio id="notifyAudio"><source src="../res/voice/notify.mp3" type="audio/mpeg"></audio>').appendTo('body');
         });
 
         $(window).resize(function () {

@@ -1,5 +1,6 @@
 ﻿using CCSIM.BLL;
 using CCSIM.DAL.Model;
+using CCSIM.Web.App_Start;
 using CCSIM.Web.Models;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
@@ -122,13 +123,30 @@ namespace CCSIM.Web.Areas.User.Controllers
             var userType = new DropDownListModel();
             userType.DropDownList = "VALUE4";
             userType.DropDownListItem = listItems;
+
+            var loginTypeList = CodeBLL.GetCodeListByParentCode("DLLX");
+            listItems = new List<ListItem>();
+            foreach (var d in loginTypeList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var loginType = new DropDownListModel();
+            loginType.DropDownList = "VALUE5";
+            loginType.DropDownListItem = listItems;
             #endregion
+
             UserInfoModel model = new UserInfoModel();
             model.belongDept = belongDept;
             model.sex = sex;
             model.certificateType = certificateType;
             model.belongNet = belongNet;
             model.userType = userType;
+            model.loginType = loginType;
             return View(model);
         }
 
@@ -210,16 +228,35 @@ namespace CCSIM.Web.Areas.User.Controllers
             var userType = new DropDownListModel();
             userType.DropDownList = "VALUE4";
             userType.DropDownListItem = listItems;
+
+            var loginTypeList = CodeBLL.GetCodeListByParentCode("DLLX");
+            listItems = new List<ListItem>();
+            foreach (var d in loginTypeList)
+            {
+                listItems.Add(new ListItem
+                {
+                    Text = d.BMVALUE,
+                    Value = d.BMKEY.ToString()
+                });
+            }
+
+            var loginType = new DropDownListModel();
+            loginType.DropDownList = "VALUE5";
+            loginType.DropDownListItem = listItems;
             #endregion
+
             UserInfoModel model = new UserInfoModel();
             model.belongDept = belongDept;
             model.sex = sex;
             model.certificateType = certificateType;
             model.belongNet = belongNet;
             model.userType = userType;
+            model.loginType = loginType;
             var data = UserBLL.Get(id);
             model.userInfo.Id = data.ID;
             model.userInfo.Name = data.NAME;
+            model.userInfo.UserName = data.USERNAME;
+            model.userInfo.UserPwd = data.USERPWD;
             model.userInfo.Sex = data.SEX;
             model.userInfo.Age = data.AGE;
             model.userInfo.Telephone = data.TELEPHONE;
@@ -232,6 +269,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             model.userInfo.Remark = data.REMARK;
             model.userInfo.UserType = data.USERTYPE;
             model.userInfo.VirtualTrumpet = data.VIRTUALTRUMPET;
+            model.userInfo.LoginType = data.LOGINTYPE;
             return View(model);
         }
 
@@ -264,6 +302,7 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "UserInfo/DeleteRows", Description = "用户删除")]
         public ActionResult DeleteRows(JArray selectedRows, JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var ids = new List<int>();
@@ -294,6 +333,7 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "UserInfo/btnSearch_Click", Description = "用户查询")]
         public ActionResult btnSearch_Click(JArray UserGrid_fields, string userName, string telephone,int userType, int UserGrid_pageIndex, int UserGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("UserGrid");
@@ -308,11 +348,14 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "UserInfo/btnAdd_Click", Description = "用户添加")]
         public ActionResult btnAdd_Click(FormCollection values)
         {
             CFG_USERINFO info = new CFG_USERINFO();
             info.NAME = values["Name"];
             info.SEX = Convert.ToInt32(values["Sex"]);
+            info.USERNAME= values["UserName"];
+            info.USERPWD = values["UserPwd"];
             info.AGE = values["Age"];
             info.TELEPHONE = values["Telephone"];
             info.CERTIFICATETYPE = Convert.ToInt32(values["CertificateType"]);
@@ -324,6 +367,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             info.USERTYPE = Convert.ToInt32(values["UserType"]);
             info.REMARK = values["Remark"];
             info.VIRTUALTRUMPET = values["VirtualTrumpet"];
+            info.LOGINTYPE = Convert.ToInt32(values["LoginType"]);
             info.ISDELETED = 0;
             var isSuccess = UserBLL.Add(info);
             ActiveWindow.HidePostBack();
@@ -341,12 +385,15 @@ namespace CCSIM.Web.Areas.User.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "UserInfo/btnSave_Click", Description = "用户修改")]
         public ActionResult btnSave_Click(FormCollection values)
         {
             CFG_USERINFO info = new CFG_USERINFO();
             info.ID = Convert.ToInt32(values["Id"]);
             info.NAME = values["Name"];
             info.SEX = Convert.ToInt32(values["Sex"]);
+            info.USERNAME = values["UserName"];
+            info.USERPWD = values["UserPwd"];
             info.AGE = values["Age"];
             info.TELEPHONE = values["Telephone"];
             info.CERTIFICATETYPE = Convert.ToInt32(values["CertificateType"]);
@@ -357,6 +404,7 @@ namespace CCSIM.Web.Areas.User.Controllers
             info.BELONGNETID = string.IsNullOrWhiteSpace(values["BelongNetId"]) ? -1 : Convert.ToInt32(values["BelongNetId"]);
             info.USERTYPE = Convert.ToInt32(values["UserType"]);
             info.REMARK = values["Remark"];
+            info.LOGINTYPE = Convert.ToInt32(values["LoginType"]);
             info.VIRTUALTRUMPET = values["VirtualTrumpet"];
             var isSuccess = UserBLL.Update(info);
             ActiveWindow.HidePostBack();

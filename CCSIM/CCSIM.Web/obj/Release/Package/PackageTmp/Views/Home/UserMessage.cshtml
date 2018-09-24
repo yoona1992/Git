@@ -1,0 +1,144 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "GridPaging/UserMessage";
+    var F = Html.F();
+}
+
+@F.PageManager.AutoSizePanelID("UserMessageGrid")
+
+@section head {
+}
+
+@section body {
+
+    @(F.Panel()
+                .Layout(LayoutType.Fit)
+                .ShowHeader(false)
+                .ShowBorder(false)
+                .Items(
+                    F.Grid()
+                        .IsViewPort(true)
+                        .EnableCheckBoxSelect(true)
+                        .AutoScroll(true)
+                        .ShowHeader(false)
+                        .ShowBorder(false)
+                .ID("UserMessageGrid")
+                .DataIDField("Id")
+                .DataTextField("Title")
+                .AllowPaging(true)
+                .PageSize(20)
+                .IsDatabasePaging(true)
+                .OnPageIndexChanged(Url.Action("UserMessageGrid_PageIndexChanged"), "UserMessageGrid",
+                                        new Parameter("startTime", "F.ui.StartTime.getValue().getFullYear()+'-'+(F.ui.StartTime.getValue().getMonth()+1)+'-'+F.ui.StartTime.getValue().getDate()"),
+                                        new Parameter("endTime", "F.ui.EndTime.getValue().getFullYear()+'-'+(F.ui.EndTime.getValue().getMonth()+1)+'-'+F.ui.EndTime.getValue().getDate()"),
+                                        new Parameter("type", "F.ui.Status.getValue()"),
+                                        new Parameter("phone", Request.QueryString["phone"]))
+                        .BodyPadding(0)
+                        .Toolbars(
+                            F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
+                                .Items(
+                                    F.DatePicker().Width(180).LabelWidth(75).LabelAlign(LabelAlign.Right).Label("开始时间").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now.AddDays(-7)).ID("StartTime"),
+                                    F.DatePicker().Width(180).LabelWidth(75).LabelAlign(LabelAlign.Right).Label("结束时间").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now).ID("EndTime"),
+                                    F.DropDownList().Width(150).LabelWidth(50).ID("Status").LabelAlign(LabelAlign.Right).Label("状态").EnableMultiSelect(false).AutoSelectFirstItem(true).EnableEdit(false)
+                                        .ShowRedStar(false).SelectedValue("0")
+                                        .Items(
+                                            F.ListItem().Text("全部").Value("-1"),
+                                            F.ListItem().Text("未读").Value("0"),
+                                            F.ListItem().Text("已读").Value("1")
+                                    ),
+                                    F.ToolbarSeparator(),
+                                    F.Button().ID("btnUserMessageSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnUserMessageSearch_Click"),
+                                        "UserMessageGrid",
+                                        new Parameter("startTime", "F.ui.StartTime.getValue().getFullYear()+'-'+(F.ui.StartTime.getValue().getMonth()+1)+'-'+F.ui.StartTime.getValue().getDate()"),
+                                        new Parameter("endTime", "F.ui.EndTime.getValue().getFullYear()+'-'+(F.ui.EndTime.getValue().getMonth()+1)+'-'+F.ui.EndTime.getValue().getDate()"),
+                                        new Parameter("type", "F.ui.Status.getValue()"),
+                                        new Parameter("phone", Request.QueryString["phone"])),
+                                        F.ToolbarFill(),
+                                        F.Button().ID("btnSend").Text("发送").Icon(Icon.Mail).Listener("click", "onbtnSendClick")
+                                 )
+                        )
+                .Columns(
+                    F.RowNumberField(),
+                    F.RenderField()
+                        .HeaderText("标题")
+                        .DataField("Title")
+                        .Width(150),
+                    F.RenderField()
+                        .HeaderText("地址")
+                        .DataField("Address")
+                        .RendererFunction("renderTooltip")
+                        .BoxFlex(1),
+                    F.RenderField()
+                        .HeaderText("备注")
+                        .DataField("Remarks")
+                        .RendererFunction("renderTooltip")
+                        .BoxFlex(1),
+                    F.RenderField()
+                        .HeaderText("上传时间")
+                        .DataField("UploadDate")
+                        .Width(150),
+                    F.RenderField()
+                        .HeaderText("状态")
+                        .DataField("IsRead_Platform")
+                        .RendererFunction("renderStatus")
+                        .Width(60),
+                    F.RenderField()
+                        .HeaderText("操作")
+                        .EnableHeaderMenu(false)
+                        .RendererFunction("renderActionField")
+                        .TextAlign(TextAlign.Center)
+                        .Width(80)
+                )
+                .RecordCount(ViewBag.UserMessageRecordCount)
+                .DataSource(ViewBag.UserMessageDataSource)
+                .ShowPagingMessage(true)
+
+            )
+    )
+
+    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("新增").ID("Window1"))
+
+    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("发送").ID("Window2"))
+
+
+}
+
+
+@section script {
+
+    <script src="~/res/js/grid.js"></script>
+    <script>
+        // 打开窗体
+        function onbtnSendClick(event) {
+           var iframeWindowUrl = '@Url.Content("../Notification/Notification/Add")';
+           var iframeUrl = iframeWindowUrl;
+
+            // 显示窗体
+            F.ui.Window2.show(iframeUrl, '发送 - ' + '通知');
+        }
+        // 打开窗体
+        function openWindow(rowData) {
+            var iframeWindowUrl = '@Url.Content("~/Home/UserMessageDetail")';
+            var iframeUrl = iframeWindowUrl + '?id=' + rowData.id;
+
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
+        }
+
+        F.ready(function () {
+
+            var grid = F.ui.UserMessageGrid;
+
+            // 点击表格行中的编辑按钮
+            grid.el.on('click', 'a.editfield', function (event) {
+                var rowEl = $(this).closest('.f-grid-row');
+                var rowData = grid.getRowData(rowEl);
+
+                openWindow(rowData);
+            });
+
+        });
+    </script>
+}
+

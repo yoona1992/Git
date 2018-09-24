@@ -105,5 +105,22 @@ namespace CCSIM.DAL.Model
         /// </summary>
         [MaxLength(50)]
         public string VIRTUALTRUMPET { get; set; }
+
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        [MaxLength(100)]
+        public string USERNAME { get; set; }
+
+        /// <summary>
+        /// 密码
+        /// </summary>
+        [MaxLength(100)]
+        public string USERPWD { get; set; }
+
+        /// <summary>
+        /// 用户类型
+        /// </summary>
+        public int? LOGINTYPE { get; set; }
     }
 }

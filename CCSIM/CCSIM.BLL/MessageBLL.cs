@@ -49,9 +49,10 @@ namespace CCSIM.BLL
         public static List<MessageInfo> GetList(string username, string title, DateTime startTime, DateTime endTime, int start, int limit, out int totalCount)
         {
             var q = (from m in SlaveDb.Set<MESSAGE>()
-                     join u in SlaveDb.Set<CFG_USERINFO>() on m.PHONE equals u.TELEPHONE
+                     join u in SlaveDb.Set<CFG_USERINFO>() on m.PHONE equals u.TELEPHONE into uu
+                     from uuu in uu.DefaultIfEmpty()
                      where ((title == "" || title == null) ? true : m.TITLE.Contains(title))
-                     && ((username == "" || username == null) ? true : u.NAME.Contains(username))
+                     && ((username == "" || username == null) ? true : uuu.NAME.Contains(username))
                      && m.CREATE_DATE >= startTime && m.CREATE_DATE <= endTime
                      select new MessageInfo
                      {
@@ -59,7 +60,7 @@ namespace CCSIM.BLL
                          Title = m.TITLE,
                          Phone = m.PHONE,
                          Address = m.ADDRESS,
-                         Name = u.NAME,
+                         Name = uuu.NAME,
                          Create_Date = m.CREATE_DATE
                      });
             totalCount = q.Count();
@@ -73,9 +74,10 @@ namespace CCSIM.BLL
         public static List<MessageInfo> GetList_Map(string phone, string title, int type, DateTime startTime, DateTime endTime, int start, int limit, out int totalCount)
         {
             var q = (from m in SlaveDb.Set<MESSAGE>()
-                     join u in SlaveDb.Set<CFG_USERINFO>() on m.PHONE equals u.TELEPHONE
+                     join u in SlaveDb.Set<CFG_USERINFO>() on m.PHONE equals u.TELEPHONE into uu
+                     from uuu in uu.DefaultIfEmpty()
                      where ((title == "" || title == null) ? true : m.TITLE.Contains(title))
-                     && ((phone == "" || phone == null) ? true : u.TELEPHONE.Contains(phone))
+                     && ((phone == "" || phone == null) ? true : uuu.TELEPHONE.Contains(phone))
                      && (type == -1 ? true : m.ISREAD_PLATFORM == type)
                      && m.CREATE_DATE >= startTime && m.CREATE_DATE <= endTime
                      select new MessageInfo
@@ -84,7 +86,7 @@ namespace CCSIM.BLL
                          Title = m.TITLE,
                          Phone = m.PHONE,
                          Address = m.ADDRESS,
-                         Name = u.NAME,
+                         Name = uuu.NAME,
                          Create_Date = m.CREATE_DATE,
                          Remarks=m.REMARKS,
                          IsRead_Platform = m.ISREAD_PLATFORM

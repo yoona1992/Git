@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "FormLayout/QrCodeDownload";
+    var F = Html.F();
+}
+
+@F.PageManager.AutoSizePanelID("Panel_QrCodeDownload")
+
+@section body {                
+    @(F.TextBox().ID("Id").Text(Request.QueryString["id"]).Hidden(true))
+    <div id="Form_QrCodeDownload"></div>
+}
+
+
+@section script {
+    <script src="~/thirdpart/qccode/jquery.qrcode.min.js"></script>
+    <script>
+        F.ready(function () {
+            $('#Form_QrCodeDownload').qrcode('http://192.168.163.1:81/FileManage/FileManage/Download?id=' + F.ui.Id.getValue());
+        });
+    </script>
+}
+

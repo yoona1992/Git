@@ -66,6 +66,11 @@
             var top_right_navigation = new BMap.NavigationControl({
                 anchor: BMAP_ANCHOR_TOP_RIGHT
             }); //右上角
+            var mapType = new BMap.MapTypeControl({
+                mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP],
+                anchor: BMAP_ANCHOR_TOP_LEFT
+            });
+            map.addControl(mapType);
             map.addControl(top_right_navigation);
             ajaxFunction("./GetList_Car", {
                 cldwzdsbh: F.ui.Cldwzdsbh.getValue(),
@@ -171,7 +176,7 @@
                     }, timer);
                 };
 
-                map.addOverlay(new BMap.Polyline(arrPois, { strokeColor: '#111' }));
+                map.addOverlay(new BMap.Polyline(arrPois, { strokeColor: '#FF0000' }));
 
                 lushu = new BMapLib.LuShu(map, arrPois, {
                     defaultContent: F.ui.Cphm.getValue(),//"从天安门到百度大厦"

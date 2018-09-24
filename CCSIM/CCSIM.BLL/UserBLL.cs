@@ -4,6 +4,7 @@ using CCSIM.DAL.Model;
 using CCSIM.Entity;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -79,9 +80,10 @@ namespace CCSIM.BLL
         public static bool Delete(int id)
         {
             DbBase<CFG_USERINFO> db = new DbBase<CFG_USERINFO>();
-            var info = Get(id);
-            info.ISDELETED = 1;
-            db.Update(info);
+            //var info = Get(id);
+            //info.ISDELETED = 1;
+            //db.Update(info);
+            db.Delete(p => p.ID == id);
             if (db.SaveChanges() >= 0)
             {
                 return true;
@@ -97,11 +99,12 @@ namespace CCSIM.BLL
             List<CFG_USERINFO> infoList = new List<CFG_USERINFO>();
             foreach (var id in ids)
             {
-                var info = Get(id);
-                info.ISDELETED = 1;
-                infoList.Add(info);
+                db.Delete(p => p.ID == id);
+                //var info = Get(id);
+                //info.ISDELETED = 1;
+                //infoList.Add(info);
             }
-            db.UpdateAll(infoList);
+            //db.UpdateAll(infoList);
             if (db.SaveChanges() >= 0)
             {
                 return true;
@@ -188,10 +191,10 @@ namespace CCSIM.BLL
         /// <returns></returns>
         public static int Login(string userName, string userPwd, out UserInfo userInfo)
         {
-            userInfo =null;
+            userInfo = null;
             int pResult = -1;  //-1:不存在该用户  0：密码不正确  1：登录成功
             StringBuilder pSBQueryText = new StringBuilder();
-            pSBQueryText.Append("SELECT USERNAME,USERPWD FROM CFG_USERINFO WHERE USERNAME='" + userName + "'");
+            pSBQueryText.Append("SELECT ID,USERNAME,USERPWD,NAME,LOGINTYPE FROM CFG_USERINFO WHERE USERNAME='" + userName + "' AND ISDELETED=0");
 
             try
             {
@@ -202,22 +205,153 @@ namespace CCSIM.BLL
                 }
                 else if (data.Rows[0]["USERPWD"].ToString() == userPwd)
                 {
+                    //看是不是平台用户
+                    if (Convert.ToInt32(data.Rows[0]["LOGINTYPE"]) == 39) { 
                     pResult = 1;
                     userInfo = new UserInfo();
+                    userInfo.Id = Convert.ToInt32(data.Rows[0]["ID"]);
                     userInfo.UserName = data.Rows[0]["USERNAME"].ToString();
                     userInfo.UserPwd = data.Rows[0]["USERPWD"].ToString();
+                    userInfo.Name = data.Rows[0]["NAME"].ToString();
+                    }
+                    else
+                    {
+                        pResult = -2;
+                    }
                 }
                 else
                 {
                     pResult = 0;
                 }
             }
-            catch(Exception error)
+            catch (Exception error)
             {
 
             }
 
             return pResult;
+        }
+
+        /// <summary>
+        /// 获取人员列表
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, Dictionary<string, string>> GetUserList()
+        {
+            Dictionary<string, Dictionary<string, string>> m_dic = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<string, bool> m_userDic = new Dictionary<string, bool>();
+            StringBuilder pSBQueryText = new StringBuilder();
+            pSBQueryText.Append("SELECT A.TELEPHONE,A.ID,A.NAME,A.CERTIFICATENUM,B.BMVALUE FROM CFG_USERINFO A LEFT JOIN SYS_BM_CODE B ON A.USERTYPE=B.BMKEY WHERE A.ISDELETED = 0 ORDER BY USERTYPE, NAME");
+            try
+            {
+                var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
+                foreach (DataRow dr in data.Rows)
+                {
+                    var userName = dr["NAME"].ToString();
+                    if (m_userDic.ContainsKey(userName) == false)
+                    {
+                        m_userDic.Add(userName, false);
+                    }
+                    else
+                    {
+                        m_userDic[userName] = true;
+                    }
+
+                }
+                foreach (DataRow dr in data.Rows)
+                {
+                    var userType = dr["BMVALUE"].ToString();
+                    var userId = dr["ID"].ToString();
+                    var userTelephone= dr["TELEPHONE"].ToString();
+                    var userName = dr["NAME"].ToString();
+                    var userCertificateNum = dr["CERTIFICATENUM"].ToString();
+                    if (string.IsNullOrWhiteSpace(userType))
+                    {
+                        userType = "未分类";
+                    }
+
+                    //看是不是已经存在用户类型
+                    if (m_dic.ContainsKey(userType))
+                    {
+                        var value = m_dic[userType];
+                        if (value.ContainsKey(userId+";"+userTelephone) == false)
+                        {
+                            //看是不是同名
+                            if (m_userDic.ContainsKey(userName))
+                            {
+                                var isSame = m_userDic[userName];
+                                if (isSame)
+                                {
+                                    value.Add(userId + ";" + userTelephone, userName + "(" + userCertificateNum + ")");
+                                }
+                                else
+                                {
+                                    value.Add(userId + ";" + userTelephone, userName);
+                                }
+                            }
+                            else
+                            {
+                                value.Add(userId + ";" + userTelephone, userName);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        m_dic.Add(userType,new Dictionary<string, string>());
+
+                        var value = m_dic[userType];
+                        if (value.ContainsKey(userId + ";" + userTelephone) == false)
+                        {
+                            //看是不是同名
+                            if (m_userDic.ContainsKey(userName))
+                            {
+                                var isSame = m_userDic[userName];
+                                if (isSame)
+                                {
+                                    value.Add(userId + ";" + userTelephone, userName + "(" + userCertificateNum + ")");
+                                }
+                                else
+                                {
+                                    value.Add(userId + ";" + userTelephone, userName);
+                                }
+                            }
+                            else
+                            {
+                                value.Add(userId + ";" + userTelephone, userName);
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+
+            return m_dic;
+        }
+
+        /// <summary>
+        /// 修改用户密码
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="password"></param>
+        public static bool UpdateUserPwd(int userId, string password)
+        {
+            bool success = true;
+            StringBuilder pSBQueryText = new StringBuilder();
+            pSBQueryText.Append("UPDATE CFG_USERINFO SET USERPWD='"+password+"' WHERE ID=" + userId + "");
+
+            try
+            {
+                OracleOperateBLL.ExecuteSql(pSBQueryText.ToString());
+            }
+            catch
+            {
+                success = false;
+            }
+
+            return success;
         }
     }
 }

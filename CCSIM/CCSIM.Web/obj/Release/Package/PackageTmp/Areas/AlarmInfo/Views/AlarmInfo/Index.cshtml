@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "GridPaging/AlarmInfo";
+    var F = Html.F();
+}
+
+@F.PageManager.AutoSizePanelID("AlarmInfoGrid")
+
+@section body {
+
+    @(F.Panel()
+        .Layout(LayoutType.Fit)
+        .ShowHeader(false)
+        .ShowBorder(false)
+        .Items(
+            F.Grid()
+                .EnableCheckBoxSelect(true)
+                .AutoScroll(true)
+                .ShowHeader(false)
+                .ShowBorder(false)
+        .ID("AlarmInfoGrid")
+        .DataIDField("Id")
+        .DataTextField("Name")
+        .AllowPaging(true)
+        .PageSize(20)
+        .IsDatabasePaging(true)
+        .OnPageIndexChanged(Url.Action("AlarmInfoGrid_PageIndexChanged"), "AlarmInfoGrid",
+                                new Parameter("startTime", "F.ui.StartTime.getValue().getFullYear()+'-'+(F.ui.StartTime.getValue().getMonth()+1)+'-'+F.ui.StartTime.getValue().getDate()"),
+                                new Parameter("endTime", "F.ui.EndTime.getValue().getFullYear()+'-'+(F.ui.EndTime.getValue().getMonth()+1)+'-'+F.ui.EndTime.getValue().getDate()"),
+                                new Parameter("objectName", "F.ui.tbxObjectName.getValue()"),
+                                new Parameter("alarmType", "F.ui.AlarmType.getValue()"))
+                .BodyPadding(0)
+                .Toolbars(
+                    F.Toolbar().ID("Toolbar1").ToolbarAlign(ToolbarAlign.Left)
+                        .Items(
+                            F.DatePicker().Width(200).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("开始时间").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now).ID("StartTime"),
+                            F.DatePicker().Width(200).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("结束时间").DateFormatString("yyyy-MM-dd").EnableEdit(false).SelectedDate(DateTime.Now).ID("EndTime"),
+                            F.DropDownList().Width(200).ID("AlarmType").Label("报警类型").LabelWidth(80).LabelAlign(LabelAlign.Right).EnableEdit(false)
+                                .Items(
+                                    F.ListItem().Text("全部").Value("-1"),
+                                    F.ListItem().Text("人员报警").Value("1"),
+                                    F.ListItem().Text("车辆报警").Value("2")
+                                ),
+                            F.TextBox().Width(250).LabelWidth(80).LabelAlign(LabelAlign.Right).Label("对象名称").EmptyText("请输入对象名称").ID("tbxObjectName"),
+                            F.ToolbarSeparator(),
+                            F.Button().ID("btnSearch").Text("查询").Icon(Icon.SystemSearch).OnClick(Url.Action("btnSearch_Click"),
+                                "AlarmInfoGrid",
+                                new Parameter("startTime", "F.ui.StartTime.getValue().getFullYear()+'-'+(F.ui.StartTime.getValue().getMonth()+1)+'-'+F.ui.StartTime.getValue().getDate()"),
+                                new Parameter("endTime", "F.ui.EndTime.getValue().getFullYear()+'-'+(F.ui.EndTime.getValue().getMonth()+1)+'-'+F.ui.EndTime.getValue().getDate()"),
+                                new Parameter("objectName", "F.ui.tbxObjectName.getValue()"),
+                                new Parameter("alarmType", "F.ui.AlarmType.getValue()"))
+                         )
+                )
+        .Columns(
+            F.RowNumberField(),
+            F.RenderField()
+                .HeaderText("报警对象")
+                .DataField("AlarmObjectName")
+                .Width(100),
+            F.RenderField()
+                .HeaderText("报警时间")
+                .DataField("AlarmTimeStr")
+                .Width(150),
+            F.RenderField()
+                .HeaderText("报警地点")
+                .DataField("AlarmAddress")
+                .RendererFunction("renderTooltip")
+                .Width(350),
+            F.RenderField()
+                .HeaderText("报警信息")
+                .DataField("Info")
+                .RendererFunction("renderTooltip")
+                .BoxFlex(1),
+            F.RenderField()
+                .HeaderText("报警类型")
+                .DataField("AlarmTypeName")
+                .Width(100)
+        )
+    .RecordCount(ViewBag.Grid1RecordCount)
+    .DataSource(ViewBag.Grid1DataSource)
+    .ShowPagingMessage(true)
+
+    )
+    )
+}
+
+
+@section script {
+
+    <script src="~/res/js/grid.js"></script>
+}
+

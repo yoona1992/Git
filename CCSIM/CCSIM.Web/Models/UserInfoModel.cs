@@ -15,6 +15,7 @@ namespace CCSIM.Web.Models
         public DropDownListModel sex = new DropDownListModel();
         public DropDownListModel certificateType = new DropDownListModel();
         public DropDownListModel userType = new DropDownListModel();
+        public DropDownListModel loginType = new DropDownListModel();
         public Entity.UserInfo userInfo = new Entity.UserInfo();
     }
 }

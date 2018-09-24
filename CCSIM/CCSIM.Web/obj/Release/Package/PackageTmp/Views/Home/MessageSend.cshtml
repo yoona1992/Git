@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.SourceFiles = "~/Models/NotificationModel.cs";
+    ViewBag.Title = "FormLayout/LayoutMessageSend";
+    var F = Html.F();
+}
+@model CCSIM.Web.Models.NotificationModel
+@section body {
+    @(F.Form().ID("Form_MessageSend").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).IsViewPort(true)
+    .Items(
+    F.DropDownListFor(m => m.userList.DropDownList).ID("Phone").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>人员").AutoSelectFirstItem(false).EmptyText("请选择人员")
+        .Items(Model.userList.DropDownListItem.ToArray()).SelectedValue(Request.QueryString["phone"]),
+    F.TextBox().ID("Title").Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>标题"),
+    F.TextArea().ID("Content").Height(300).Required(true).Label("<span style='color:red'>*</span>正文")
+    )
+    .Toolbars(
+    F.Toolbar().ID("Toolbar").ToolbarAlign(ToolbarAlign.Right).Position(ToolbarPosition.Bottom)
+    .Items(
+    F.Button().ID("btnSend").Text("发送").IconFont(IconFont._Save).OnClick(Url.Action("btnSend_Click"), "Form_MessageSend").ValidateForms("Form_MessageSend"),
+    F.Button().Type(ButtonType.Reset).ID("btnReset").Text("重置").IconFont(IconFont._Refresh)
+    )
+    )
+    )
+}
+
+@section script {
+    <script src="~/res/js/grid.js"></script>
+}

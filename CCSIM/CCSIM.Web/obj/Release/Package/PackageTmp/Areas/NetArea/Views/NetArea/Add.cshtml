@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.SourceFiles = "~/Models/DropDownListModel.cs";
+    ViewBag.Title = "FormLayout/LayoutNetAreaAdd";
+    var F = Html.F();
+}
+
+@model CCSIM.Web.Models.DropDownListModel
+
+@section head {
+    <link type="text/css" rel="stylesheet" href="~/thirdpart/colorpicker/css/colpick.css" />
+}
+
+@section body {
+
+    @(F.Form().ID("Form_NetAdd").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).IsViewPort(true)
+    .Items(
+   F.Panel().ID("Panel_NetAdd").Layout(LayoutType.HBox).BoxConfigAlign(BoxLayoutAlign.Stretch).ShowHeader(false).ShowBorder(false)
+                                .Items(
+                                    F.TextBox().ID("Name").Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>名称").BoxFlex(1),
+                                    F.DropDownListFor(m => m.DropDownList).ID("BelongDeptId").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>所属部门").AutoSelectFirstItem(false).EmptyText("请选择所属单位")
+                                        .Items(Model.DropDownListItem.ToArray()).BoxFlex(1)
+                                ),
+    F.TextBox().ID("PopulationInfo").Label("人口信息"),
+    F.TextBox().ID("HouseInfo").Label("房屋信息"),
+    F.TextBox().ID("BelongArea").Label("所属区域"),
+    F.TextBox().ID("UnitStoreInfo").Label("单位门店信息"),
+    F.TextBox().ID("NetColor").Label("网格颜色").Readonly(true),
+    F.TextArea().ID("LonAndLat").Height(100).Required(true).ShowLabel(true).Readonly(true).Label("<span style='color:red'>*</span>经纬度"),
+    F.TextArea().ID("Remark").Height(100).Label("备注")
+    )
+    .Toolbars(
+    F.Toolbar().ID("Toolbar").ToolbarAlign(ToolbarAlign.Right).Position(ToolbarPosition.Bottom)
+    .Items(
+    F.Button().ID("btnAdd").Text("新增").IconFont(IconFont._Save).OnClick(Url.Action("btnAdd_Click"), "Form_NetAdd").ValidateForms("Form_NetAdd"),
+    F.Button().Type(ButtonType.Reset).ID("btnReset").Text("重置").IconFont(IconFont._Refresh)
+    )
+    )
+    )
+    
+    @(F.Window().Hidden(true).Height(470).Width(750).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("新增").ID("Window1").Maximized(true))
+
+}
+
+
+@section script {
+    <script src="~/res/js/grid.js"></script>
+    <script src="~/thirdpart/colorpicker/js/colpick.js"></script>
+    <script>
+        // 打开窗体
+        function onLonAndLatClick(event) {
+            var iframeWindowUrl = '@Url.Content("~/NetArea/NetArea/LonAndLat")';
+            var iframeUrl = iframeWindowUrl + '?type=1';
+
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '新增 - ' + '经纬度');
+        }
+
+        //
+        function updateLonAndLat(value) {
+            F.ui.LonAndLat.setText(value);
+        }
+
+        F.ready(function () {
+
+            var lonAndLat = F.ui.LonAndLat;
+
+            // 点击表格行中的编辑按钮
+            lonAndLat.el.on('click', function (event) {
+                onLonAndLatClick(event);
+            });
+
+            $('#NetColor').colpick({
+                layout: 'hex',
+                submit: 0,
+                colorScheme: 'light',
+                onChange: function (hsb, hex, rgb, el, bySetColor) {
+                    F.ui.NetColor.setText('#' + hex);
+                }
+            });
+            $('#NetColor').colpickSetColor('#ff8c00');
+        });
+    </script>
+}
+

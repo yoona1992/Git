@@ -1,28 +1,107 @@
-﻿
-@{
-    ViewBag.SourceFiles = "~/Models/NotificationModel.cs";
-    ViewBag.Title = "FormLayout/LayoutNotificationInfoAdd";
-    var F = Html.F();
+﻿@{
+    Layout = null;
 }
-@model CCSIM.Web.Models.NotificationModel
-@section body {
-    @(F.Form().ID("Form_NotificationAdd").LabelAlign(LabelAlign.Top).BodyPadding(10).ShowBorder(false).ShowHeader(false).LabelAlign(LabelAlign.Right).IsViewPort(true)
-    .Items(
-    F.DropDownListFor(m => m.userList.DropDownList).ID("Phone").Required(true).ShowLabel(true).ShowRedStar(false).Label("<span style='color:red'>*</span>人员").AutoSelectFirstItem(false).EmptyText("请选择人员")
-        .Items(Model.userList.DropDownListItem.ToArray()),
-    F.TextBox().ID("Title").Required(true).ShowLabel(true).Label("<span style='color:red'>*</span>标题"),
-    F.TextArea().ID("Content").Height(300).Required(true).Label("<span style='color:red'>*</span>正文")
-    )
-    .Toolbars(
-    F.Toolbar().ID("Toolbar").ToolbarAlign(ToolbarAlign.Right).Position(ToolbarPosition.Bottom)
-    .Items(
-    F.Button().ID("btnAdd").Text("发送").IconFont(IconFont._Save).OnClick(Url.Action("btnAdd_Click"), "Form_NotificationAdd").ValidateForms("Form_NotificationAdd"),
-    F.Button().Type(ButtonType.Reset).ID("btnReset").Text("重置").IconFont(IconFont._Refresh)
-    )
-    )
-    )
-}
-
-@section script {
+<body>
+    <link href="~/thirdpart/backstrench/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/thirdpart/select/bootstrap-select.css" rel="stylesheet" />
+    <!--弹出框提示css-->
+    <link rel="stylesheet" href="~/res/css/jquery.toast.min.css" />
+    <table ellspacing="0" cellPadding="0" border="0" width="100%" height="430px">
+        <tr>
+            <td align=center>
+                <div class="input-group input-group-sm" style="width:95%">
+                    <input id="phone" type="text" style="display:none" value='@ViewData["phone"]' />
+                    <span class="input-group-addon" style="background:none;border:0px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif"><span style='color:red'>*</span>人员：</span>
+                    <select id="userId" class="form-control selectpicker" data-live-search="true" style="border-radius:3px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif"></select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align=center>
+                <div class="input-group input-group-sm" style="width:95%">
+                    <span class="input-group-addon" style="background:none;border:0px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif"><span style='color:red'>*</span>标题：</span>
+                    <input id="title" type="text" class="form-control" style="border-radius:3px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align=center>
+                <div class="input-group input-group-sm" style="width:95%">
+                    <span class="input-group-addon" style="background:none;border:0px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif"><span style='color:red'>*</span>正文：</span>
+                    <textarea id="content" type="text" class="form-control" style="border-radius:3px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;height:300px"></textarea>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align=center>
+                <div class="input-group input-group-sm" style="width:95%; text-align:center;">
+                    <div class="btn-group btn-group-sm">
+                        <button id="send" type="button" class="btn btn-default" style=" width:80px">发送</button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <script src="~/res/js/libs/jquery-2.1.0.min.js"></script>
+    <script src="~/thirdpart/backstrench/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/thirdpart/select/bootstrap-select.js"></script>
+    <script src="~/res/js/AjaxFunction.js"></script>
     <script src="~/res/js/grid.js"></script>
-}
+    <!--弹出框提示js-->
+    <script src="~/res/js/libs/jquery.toast.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            ajaxFunction("./GetUserList", '', "post", false, function (data) {
+                var phone = $('#phone').val();
+                $.each(data, function (index, item) {
+                    var appendString = "<optgroup label=\"" + index + "\">";
+                    $.each(item, function (i, d) {
+                        var phone_temp = i.split(';')[1];
+                        if (phone == phone_temp) {
+                            phone = i;
+                        }
+                        appendString += "<option value=\"" + i + "\">" + d + "</option>";
+                    });
+                    appendString += "</optgroup>";
+                    $('#userId').append(appendString);
+                });
+                $('#userId').selectpicker("refresh");
+                $('#userId').selectpicker("val", phone );
+            });
+        });
+
+        $('#send').click(function () {
+            var userId = $('#userId').val();
+            var title = $('#title').val();
+            var content = $('#content').val();
+            if (userId == null || userId == "") {
+                alert("请选择发送人员！");
+                return false;
+            }
+            if (title == null || title == "") {
+                alert("请输入标题！");
+                return false;
+            }
+            if (content == null || content == "") {
+                alert("请输入正文！");
+                return false;
+            }
+            ajaxFunction("./SendNotification", {
+                "phone": userId.split(';')[1],
+                "title": title,
+                "content": content
+            }, "post", false, function (data) {
+                $.toast({
+                    heading: '提醒',
+                    text: data,
+                    icon: 'success',
+                    loader: true,        // Change it to false to disable loader
+                    //loaderBg: '#9EC600',  // To change the background
+                    position: 'top-center',
+                    hideAfter: 5 * 1000   // in milli seconds
+                });
+            });
+        });
+    </script>
+</body>

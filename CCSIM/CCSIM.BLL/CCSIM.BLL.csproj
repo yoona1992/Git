@@ -51,9 +51,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Vendor\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Oracle.ManagedDataAccess.12.2.1100\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>..\packages\Oracle.ManagedDataAccess.18.3.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -72,6 +72,7 @@
     <Compile Include="CodeBLL.cs" />
     <Compile Include="FileBLL.cs" />
     <Compile Include="HttpClientHelperBLL.cs" />
+    <Compile Include="LogBLL.cs" />
     <Compile Include="MapBLL.cs" />
     <Compile Include="MessageBLL.cs" />
     <Compile Include="NetManageBLL.cs" />

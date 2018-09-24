@@ -21,14 +21,14 @@
             <tr>
                 <td>
                     @(F.Button()
-                        //.OnClientClick("window.open('','_blank');")
-                        .EnableDefaultCorner(false)
-                        .EnableDefaultState(false)
-                        .IconFont(IconFont._Home)
-                        .IconAlign(IconAlign.Top)
-                        //.ToolTip("官网首页")
-                        .ID("btnHomePage")
-                        .CssClass("icononlyaction")
+                                                                //.OnClientClick("window.open('','_blank');")
+                                                                .EnableDefaultCorner(false)
+                                                                .EnableDefaultState(false)
+                                                                .IconFont(IconFont._Home)
+                                                                .IconAlign(IconAlign.Top)
+                                                                //.ToolTip("官网首页")
+                                                                .ID("btnHomePage")
+                                                                .CssClass("icononlyaction")
                     )
                     <a class="logo">
                         指挥中心平台
@@ -36,91 +36,102 @@
 
                 </td>
                 <td style="text-align: right;">
+                    @(F.TextBox().ID("name").Text(Request.QueryString["name"]).Hidden(true))
+                    @(F.TextBox().ID("userId").Text(Request.QueryString["userId"]).Hidden(true))
                     @(F.Button()
-                .EnableDefaultCorner(false)
-                .EnableDefaultState(false)
-                .IconAlign(IconAlign.Top)
-                .IconFont(IconFont.Bell)
-                .Text("数据管理")
-                .CssClass("icontopaction themes")
-                .Menu(F.Menu()
-                    .Items(
-                        F.MenuButton()
-                            .IconFont(IconFont.Database)
-                            .Text("轨迹数据查询")
-                            .Listener("click", "addTap('/Trajectory/Trajectory','trajectoryData','轨迹数据查询');"),
-                        F.MenuSeparator(),
-                        F.MenuButton()
-                            .IconFont(IconFont.Bell)
-                            .Text("报警数据管理")
-                            .Listener("click", "addTap('/AlarmInfo/AlarmInfo','alarmInfo','报警数据管理');"),
-                        F.MenuSeparator(),
-                        F.MenuButton()
-                            .IconFont(IconFont._Mail)
-                            .Text("资料数据管理")
-                            .Listener("click", "addTap('/Message/Message','message','资料数据管理');"),
-                        F.MenuSeparator(),
-                        F.MenuButton()
-                            .IconFont(IconFont._Info)
-                            .Text("通知数据管理")
-                            .Listener("click", "addTap('/Notification/Notification','notification','通知数据管理');")
-                    )
-                )
-                    )
-                    @(F.Button()
-                .EnableDefaultCorner(false)
-                .EnableDefaultState(false)
-                .IconAlign(IconAlign.Top)
-                .IconFont(IconFont.Database)
-                .Text("数据配置")
-                .CssClass("icontopaction themes")
-                .Menu(F.Menu()
-                    .Items(
-                        F.MenuButton()
-                            .IconFont(IconFont.Spinner)
-                            .Text("网格管理")
-                            .Listener("click", "addTap('/NetArea/NetArea','netarea','网格管理');"),
-                        F.MenuSeparator(),
-                        F.MenuButton()
-                            .IconFont(IconFont._User)
-                            .Text("人员管理")
-                            .Listener("click", "addTap('/User/UserInfo','userinfo','人员管理');"),
-                        F.MenuSeparator(),
-                        F.MenuButton()
-                            .IconFont(IconFont.Car)
-                            .Text("车辆管理")
-                            .Listener("click", "addTap('/Car/CarInfo','carinfo','车辆管理');")
-                    )
-                )
+                                        .EnableDefaultCorner(false)
+                                        .EnableDefaultState(false)
+                                        .IconAlign(IconAlign.Top)
+                                        .IconFont(IconFont.Bell)
+                                        .Text("数据管理")
+                                        .CssClass("icontopaction themes")
+                                        .Menu(F.Menu()
+                                            .Items(
+                                                F.MenuButton()
+                                                    .IconFont(IconFont.Database)
+                                                    .Text("轨迹数据查询")
+                                                    .Listener("click", "addTap('/Trajectory/Trajectory','trajectoryData','轨迹数据查询');"),
+                                                F.MenuSeparator(),
+                                                F.MenuButton()
+                                                    .IconFont(IconFont.Bell)
+                                                    .Text("报警数据管理")
+                                                    .Listener("click", "addTap('/AlarmInfo/AlarmInfo','alarmInfo','报警数据管理');"),
+                                                F.MenuSeparator(),
+                                                F.MenuButton()
+                                                    .IconFont(IconFont._Mail)
+                                                    .Text("资料数据管理")
+                                                    .Listener("click", "addTap('/Message/Message','message','资料数据管理');"),
+                                                F.MenuSeparator(),
+                                                F.MenuButton()
+                                                    .IconFont(IconFont._Info)
+                                                    .Text("通知数据管理")
+                                                    .Listener("click", "addTap('/Notification/Notification','notification','通知数据管理');")
+                                            )
+                                        )
                     )
                     @(F.Button()
-                .EnableDefaultCorner(false)
-                .EnableDefaultState(false)
-                .IconAlign(IconAlign.Top)
-                .IconFont(IconFont.Database)
-                .Text("下载管理")
-                .CssClass("icontopaction themes")
-                .Menu(F.Menu()
-                    .Items(
-                        F.MenuButton()
-                            .IconFont(IconFont.Download)
-                            .Text("移动APP下载")
-                            .Listener("click", "addTap('/AppDownload/AppDownload','appDownload','移动APP下载');"),
-                        F.MenuSeparator(),
-                        F.MenuButton()
-                            .IconFont(IconFont.Download)
-                            .Text("文件管理")
-                            .Listener("click", "addTap('/FileManage/FileManage','fileManage','文件管理');")
+                                        .EnableDefaultCorner(false)
+                                        .EnableDefaultState(false)
+                                        .IconAlign(IconAlign.Top)
+                                        .IconFont(IconFont.Database)
+                                        .Text("数据配置")
+                                        .CssClass("icontopaction themes")
+                                        .Menu(F.Menu()
+                                            .Items(
+                                                F.MenuButton()
+                                                    .IconFont(IconFont.Spinner)
+                                                    .Text("网格管理")
+                                                    .Listener("click", "addTap('/NetArea/NetArea','netarea','网格管理');"),
+                                                F.MenuSeparator(),
+                                                F.MenuButton()
+                                                    .IconFont(IconFont._User)
+                                                    .Text("人员管理")
+                                                    .Listener("click", "addTap('/User/UserInfo','userinfo','人员管理');"),
+                                                F.MenuSeparator(),
+                                                F.MenuButton()
+                                                    .IconFont(IconFont.Car)
+                                                    .Text("车辆管理")
+                                                    .Listener("click", "addTap('/Car/CarInfo','carinfo','车辆管理');")
+                                            )
+                                        )
                     )
-                )
+                    @(F.Button()
+                                        .EnableDefaultCorner(false)
+                                        .EnableDefaultState(false)
+                                        .IconAlign(IconAlign.Top)
+                                        .IconFont(IconFont.Database)
+                                        .Text("下载管理")
+                                        .CssClass("icontopaction themes")
+                                        .Menu(F.Menu()
+                                            .Items(
+                                                F.MenuButton()
+                                                    .IconFont(IconFont.Download)
+                                                    .Text("文件管理")
+                                                    .Listener("click", "addTap('/FileManage/FileManage','fileManage','文件管理');")
+                                            )
+                                        )
                     )
 
                     @(F.Button()
-                .EnableDefaultCorner(false)
-                .EnableDefaultState(false)
-                .IconAlign(IconAlign.Left)
-                .IconUrl(Url.Content("~/res/images/i/Police.png"))
-                .CssClass("userpicaction")
+                                        .EnableDefaultCorner(false)
+                                        .EnableDefaultState(false)
+                                        .IconAlign(IconAlign.Left)
+                                        .Text(Request.QueryString["name"])
+                                        .IconUrl(Url.Content("~/res/images/i/Police.png"))
+                                        .CssClass("userpicaction")
+                                        .Menu(F.Menu()
+                                            .Items(
+                                                F.MenuButton()
+                                                    .IconFont(IconFont.UserSecret)
+                                                    .Text("密码修改")
+                                                    .Listener("click", "addTap('/PwdUpdate/PwdUpdate','pwdUpdate','密码修改');"),
+                                                F.MenuSeparator(),
+                                                F.MenuButton()
+                                                    .IconFont(IconFont._SignOut)
+                                                    .Text("安全退出")
+                                                    .Listener("click", "addTap('/LogOut/LogOut','logOut','安全退出');")
+                                            )
+                                        )
                     )
                 </td>
             </tr>
@@ -132,43 +143,46 @@
     </div>
 
     @(F.RegionPanel()
-        .ID("RegionPanel1")
-        .ShowBorder(false)
-        .IsViewPort(true)
-        .CssClass("mainpanel")
-        .Regions(
-            F.Region()
-                .ID("Region1")
-                .ShowBorder(false)
-                .ShowHeader(false)
-                .RegionPosition(Position.Top)
-                .CssClass("topregion bgpanel")
-                .Layout(LayoutType.Fit)
-                .ContentEl("#header"),
-            F.Region()
-                .ID("mainRegion")
-                .ShowHeader(false)
-                .Layout(LayoutType.Fit)
-                .RegionPosition(Position.Center)
-                .CssClass("centerregion")
-                .Items(
-                    F.TabStrip()
-                        .ID("mainTabStrip")
-                        .Layout(LayoutType.Fit)
-                        .EnableTabCloseMenu(true)
-                        .ShowBorder(false)
-                        .Tabs(
-                        F.Tab()
-                            .ID("Tab2")
-                            .Title("电子地图")
-                            .Layout(LayoutType.Fit)
-                            .Icon(Icon.Map)
-                            .EnableIFrame(true)
-                            .IFrameUrl("/Home/Map")
-                        )
-                )
-        )
+                                                .ID("RegionPanel1")
+                                                .ShowBorder(false)
+                                                .IsViewPort(true)
+                                                .CssClass("mainpanel")
+                                                .Regions(
+                                                    F.Region()
+                                                        .ID("Region1")
+                                                        .ShowBorder(false)
+                                                        .ShowHeader(false)
+                                                        .RegionPosition(Position.Top)
+                                                        .CssClass("topregion bgpanel")
+                                                        .Layout(LayoutType.Fit)
+                                                        .ContentEl("#header"),
+                                                    F.Region()
+                                                        .ID("mainRegion")
+                                                        .ShowHeader(false)
+                                                        .Layout(LayoutType.Fit)
+                                                        .RegionPosition(Position.Center)
+                                                        .CssClass("centerregion")
+                                                        .Items(
+                                                            F.TabStrip()
+                                                                .ID("mainTabStrip")
+                                                                .Layout(LayoutType.Fit)
+                                                                .EnableTabCloseMenu(true)
+                                                                .ShowBorder(false)
+                                                                .Tabs(
+                                                                F.Tab()
+                                                                    .ID("Tab2")
+                                                                    .Title("电子地图")
+                                                                    .Layout(LayoutType.Fit)
+                                                                    .Icon(Icon.Map)
+                                                                    .EnableIFrame(true)
+                                                                    .IFrameUrl("/Home/Map")
+                                                                )
+                                                        )
+                                                )
     )
+
+    @(F.Window().Hidden(true).Height(120).Width(500).IsModal(true).OnClose(Url.Action("Window1_Close")).Target(Target.Top).EnableResize(true).EnableMaximize(true).EnableIFrame(true).Title("修改").ID("Window1"))
+
 }
 
 @section script {
@@ -179,6 +193,7 @@
             F.ui.windowThemeRoller.show();
         }
         function addTap(url, id, title, icon) {
+            debugger
             var tapIcon = '@Url.Content("~/res/icon/map.png")';
             switch (id) {
                 case "userinfo":
@@ -203,13 +218,25 @@
                     tapIcon = '@Url.Content("~/res/icon/information.png")';
                     break;
                 case "fileManage":
-                    tapIcon = '@Url.Content("~/res/icon/download.png")';
+                    tapIcon = '@Url.Content("~/res/icon/attach.png")';
                     break;
                 default:
                     break;
             }
             if (id == "appDownload") {
                 window.location.href = '@Url.Action("DownloadApp")';
+                return false;
+            }
+            if (id == "logOut") {
+                F.doPostBack('@Url.Action("UserLogout")');
+                return false;
+            }
+            if (id == "pwdUpdate") {
+            var iframeWindowUrl = '@Url.Content("~/Home/PasswordUpdate")';
+                var iframeUrl = iframeWindowUrl + "?userId=" + F.ui.userId.getValue();
+
+            // 显示窗体
+            F.ui.Window1.show(iframeUrl, '修改 - ' + '密码');
                 return false;
             }
             F.ui.mainTabStrip.addTab({

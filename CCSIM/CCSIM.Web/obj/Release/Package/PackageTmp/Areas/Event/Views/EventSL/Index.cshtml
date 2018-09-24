@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "GridPaging/Database";
+    var F = Html.F();
+}
+
+
+@section body {
+
+    @(F.Grid()
+        .EnableCheckBoxSelect(true)
+        .ShowHeader(true)
+        .ShowBorder(true)
+        .EnableCollapse(true)
+        .Title("事件受理")
+        .ID("Grid1")
+        .DataIDField("Id")
+        .DataTextField("Name")
+        .AllowPaging(true)
+        .PageSize(5)
+        .IsDatabasePaging(true)
+        .OnPageIndexChanged(Url.Action("Grid1_PageIndexChanged"), "Grid1")
+        .Columns(
+            F.RowNumberField(),
+            F.RenderField()
+                .HeaderText("事件来源")
+                .DataField("Name")
+                .Width(100),
+            F.RenderField()
+                .HeaderText("上报号码")
+                .DataField("Gender")
+                .FieldType(FieldType.Int)
+                .RendererFunction("renderGender")
+                .Width(80),
+            F.RenderField()
+                .HeaderText("事件类别")
+                .DataField("EntranceYear")
+                .FieldType(FieldType.Int)
+                .Width(100),
+            F.RenderCheckField()
+                .HeaderText("所属区")
+                .DataField("AtSchool")
+                .RenderAsStaticField(true)
+                .Width(100),
+            F.RenderField()
+                .HeaderText("所属街道")
+                .DataField("Major")
+                .RendererFunction("renderMajor")
+                .ExpandUnusedSpace(true),
+            F.RenderField()
+                .HeaderText("所属社区")
+                .DataField("Group")
+                .RendererFunction("renderGroup")
+                .Width(80),
+            F.RenderField()
+                .HeaderText("网络编码")
+                .DataField("LogTime")
+                .FieldType(FieldType.Date)
+                .Renderer(Renderer.Date)
+                .RendererArgument("yyyy-MM-dd")
+                .Width(100),
+            F.RenderField()
+                .HeaderText("事件位置")
+                .DataField("LogTime")
+                .FieldType(FieldType.Date)
+                .Renderer(Renderer.Date)
+                .RendererArgument("yyyy-MM-dd")
+                .Width(100),
+            F.RenderField()
+                .HeaderText("事件描述")
+                .DataField("LogTime")
+                .FieldType(FieldType.Date)
+                .Renderer(Renderer.Date)
+                .RendererArgument("yyyy-MM-dd")
+                .Width(100),
+            F.RenderField()
+                .HeaderText("联系人相关信息")
+                .DataField("LogTime")
+                .FieldType(FieldType.Date)
+                .Renderer(Renderer.Date)
+                .RendererArgument("yyyy-MM-dd")
+                .Width(100),
+            F.RenderField()
+                .HeaderText("网络编码")
+                .DataField("LogTime")
+                .FieldType(FieldType.Date)
+                .Renderer(Renderer.Date)
+                .RendererArgument("yyyy-MM-dd")
+                .Width(100)
+        )
+        .RecordCount(ViewBag.Grid1RecordCount)
+        .DataSource(ViewBag.Grid1DataSource)
+        .ShowPagingMessage(false)
+
+    )
+    <br>
+
+    @(F.Button()
+        .Text("选中了哪些行")
+        .CssClass("marginr")
+        .Listener("click", "notifySelectedRows('Grid1');")
+    )
+    <br>
+    <br>
+
+}
+
+
+@section script {
+
+    <script src="~/res/js/grid.js"></script>
+
+}

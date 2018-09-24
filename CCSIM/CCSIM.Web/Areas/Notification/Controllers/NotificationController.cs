@@ -1,4 +1,5 @@
 ﻿using CCSIM.BLL;
+using CCSIM.Web.App_Start;
 using CCSIM.Web.Models;
 using FineUIMvc;
 using Newtonsoft.Json.Linq;
@@ -21,25 +22,8 @@ namespace CCSIM.Web.Areas.Notification.Controllers
 
         public ActionResult Add()
         {
-            #region 下拉框绑定
-            var userList = UserBLL.GetAll();
-            var listItems = new List<ListItem>();
-            foreach (var d in userList)
-            {
-                listItems.Add(new ListItem
-                {
-                    Text = d.NAME,
-                    Value = d.TELEPHONE.ToString()
-                });
-            }
-
-            var user = new DropDownListModel();
-            user.DropDownList = "VALUE";
-            user.DropDownListItem = listItems;
-            #endregion
-            NotificationModel model = new NotificationModel();
-            model.userList = user;
-            return View(model);
+            ViewData["phone"] = Request.QueryString["phone"];
+            return View();
         }
 
         #region BindGrid
@@ -74,6 +58,7 @@ namespace CCSIM.Web.Areas.Notification.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Notification/btnSearch_Click", Description = "通知查询")]
         public ActionResult btnSearch_Click(JArray NotificationGrid_fields, string username, string title, DateTime startTime, DateTime endTime, int NotificationGrid_pageIndex, int NotificationGrid_pageSize)
         {
             var grid1 = UIHelper.Grid("NotificationGrid");
@@ -90,6 +75,7 @@ namespace CCSIM.Web.Areas.Notification.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LoggerFilter(Key = "Notification/btnAdd_Click", Description = "通知添加")]
         public ActionResult btnAdd_Click(FormCollection values)
         {
             var msg = NotificationBLL.SendMessage(values["Phone"], values["Title"], values["Content"]);
@@ -97,7 +83,6 @@ namespace CCSIM.Web.Areas.Notification.Controllers
             ShowNotify(msg);
             return UIHelper.Result();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -108,5 +93,29 @@ namespace CCSIM.Web.Areas.Notification.Controllers
 
             return UIHelper.Result();
         }
+
+        public ActionResult GetUserList()
+        {
+            var data = UserBLL.GetUserList();
+
+            return new JsonResult
+            {
+                Data = data
+            };
+        }
+
+        [HttpPost]
+        [LoggerFilter(Key = "Notification/SendNotification", Description = "通知发送")]
+        public ActionResult SendNotification(string phone, string title, string content)
+        {
+            var msg = NotificationBLL.SendMessage(phone, title, content);
+
+            return new JsonResult
+            {
+                Data = msg
+            };
+        }
+
+
     }
 }
