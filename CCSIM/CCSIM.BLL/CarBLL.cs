@@ -6,6 +6,7 @@ using CCSIM.Entity;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -22,24 +23,7 @@ namespace CCSIM.BLL
         /// 连接字符串
         /// </summary>
         private static string ORACLE_CONNECTION_STRING = "user id=LSGAADMIN;password=lsga110;data source=122.225.122.106/ORCL";
-
-        //是否读写分离(可以配置在配置文件中)
-        private static readonly bool IsReadWriteSeparation = true;
-
-        #region EF上下文对象(主库)
-
-        protected static DbContext MasterDb => _masterDb.Value;
-        private static readonly Lazy<DbContext> _masterDb = new Lazy<DbContext>(() => new DbContextFactory().GetWriteDbContext());
-
-        #endregion EF上下文对象(主库)
-
-        #region EF上下文对象(从库)
-
-        protected static DbContext SlaveDb => IsReadWriteSeparation ? _slaveDb.Value : _masterDb.Value;
-        private static readonly Lazy<DbContext> _slaveDb = new Lazy<DbContext>(() => new DbContextFactory().GetReadDbContext());
-
-        #endregion EF上下文对象(从库)
-
+        
         /// <summary>
         /// 添加车辆信息
         /// </summary>
@@ -204,7 +188,7 @@ namespace CCSIM.BLL
             pReader = pComm.ExecuteReader();
             while (pReader.Read())
             {
-                pCarInfo.ID = Convert.ToInt32(pReader[""]);
+                pCarInfo.ID = Convert.ToInt32(pReader["ID"]);
                 pCarInfo.VEHICLENO = Convert.ToString(pReader["VEHICLENO"]);
                 pCarInfo.VEHICLETYPE = Convert.ToInt32(pReader["VEHICLETYPE"]);
                 pCarInfo.VEHICLEBRAND = Convert.ToString(pReader["VEHICLEBRAND"]);
@@ -308,16 +292,15 @@ namespace CCSIM.BLL
         /// <returns></returns>
         public static List<CarInfo> GetList(string vehicleNo, int ownerType, int start, int limit, out int totalCount)
         {
-
             StringBuilder pSBQueryCount = new StringBuilder();
             pSBQueryCount.Append("SELECT COUNT(*) FROM CFG_CARINFO WHERE ISDELETED=0 ");
             if (string.IsNullOrWhiteSpace(vehicleNo) == false)
             {
-                pSBQueryCount.Append("AND VEHICLENO='" + vehicleNo + "' ");
+                pSBQueryCount.Append("AND VEHICLENO like '%" + vehicleNo + "%' ");
             }
             if (ownerType != -1)
             {
-                pSBQueryCount.Append("AND OWNERTYPE =" +ownerType);
+                pSBQueryCount.Append("AND OWNERTYPE =" + ownerType);
             }
             totalCount = OracleOperateBLL.GetQueryCount(pSBQueryCount.ToString());
 
@@ -325,32 +308,46 @@ namespace CCSIM.BLL
             int pEndNum = limit * start;
 
             StringBuilder pSBQueryText = new StringBuilder();
-            pSBQueryText.Append("SELECT LON,LAT,CREATE_TIME,ADDRESS FROM (SELECT A.*, rownum r FROM(");
-            pSBQueryText.Append("select A.id,A.VEHICLENO,A.VEHICLETYPE,c.bmvalue as VehicleTypeName,A.VEHICLEBRAND,A.BELONGDEPTID,d.bmvalue as BelongDeptName,A.BELONGNETID,b.name as BelongNetName,A.OWNER,A.OWNERTYPE,e.bmvalue as OwnerTypeName,A.CLDWZDSBH,A.WLWKHM from cfg_carinfo a ");
+            pSBQueryText.Append("SELECT ID,VEHICLENO,VEHICLETYPE,VEHICLETYPENAME,VEHICLEBRAND,BELONGDEPTID,BELONGDEPTNAME,BELONGNETID,BELONGNETNAME,OWNER,OWNERTYPE,OWNERTYPENAME,CLDWZDSBH,WLWKHM FROM (SELECT F.*, rownum r FROM(");
+            pSBQueryText.Append("SELECT A.ID,A.VEHICLENO,A.VEHICLETYPE,C.BMVALUE AS VEHICLETYPENAME,A.VEHICLEBRAND,A.BELONGDEPTID,D.BMVALUE AS BELONGDEPTNAME,A.BELONGNETID,B.NAME AS BELONGNETNAME,A.OWNER,A.OWNERTYPE,E.BMVALUE AS OWNERTYPENAME,A.CLDWZDSBH,A.WLWKHM FROM CFG_CARINFO A ");
             pSBQueryText.Append("LEFT JOIN CFG_NETINFO B ON A.BELONGNETID = B.ID ");
             pSBQueryText.Append("LEFT JOIN SYS_BM_CODE C ON A.VEHICLETYPE = C.BMKEY ");
             pSBQueryText.Append("LEFT JOIN SYS_BM_CODE D ON A.BELONGDEPTID = D.BMKEY ");
             pSBQueryText.Append("LEFT JOIN SYS_BM_CODE E ON A.OWNERTYPE = E.BMKEY WHERE A.ISDELETED=0 ");
-            if (string.IsNullOrWhiteSpace(telephone) == false)
+            if (string.IsNullOrWhiteSpace(vehicleNo) == false)
             {
-                pSBQueryText.Append("AND PHONE='" + telephone + "' ");
+                pSBQueryText.Append("AND A.VEHICLENO like '%" + vehicleNo + "%' ");
             }
-            pSBQueryText.Append(" ORDER BY CREATE_TIME DESC) A ");
-            pSBQueryText.Append("WHERE rownum<=" + pEndNum + ") B WHERE r>=" + pStartNum);
+            if (ownerType != -1)
+            {
+                pSBQueryText.Append("AND A.OWNERTYPE =" + ownerType);
+            }
+            pSBQueryText.Append(" ORDER BY A.OWNERTYPE DESC,A.BELONGDEPTID DESC,A.VEHICLENO DESC) F ");
+            pSBQueryText.Append("WHERE rownum<=" + pEndNum + ") G WHERE r>=" + pStartNum);
             var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
-            List<GpsData> gpsDataList = new List<GpsData>();
+            List<CarInfo> carInfoList = new List<CarInfo>();
             foreach (DataRow dr in data.Rows)
             {
-                GpsData d = new GpsData();
-                d.Address = dr["ADDRESS"].ToString();
-                d.Create_Time = DateTime.Parse(dr["CREATE_TIME"].ToString()).ToString("yyyy-MM-dd HH:mm:ss");
-                d.Lat = dr["LAT"].ToString();
-                d.Lon = dr["LON"].ToString();
+                CarInfo d = new CarInfo();
+                d.Id = Convert.ToInt32(dr["ID"].ToString());
+                d.VehicleNo = dr["VEHICLENO"].ToString();
+                d.VehicleType = Convert.ToInt32(dr["VEHICLETYPE"].ToString());
+                d.VehicleTypeName = dr["VEHICLETYPENAME"].ToString();
+                d.VehicleBrand = dr["VEHICLEBRAND"].ToString();
+                d.BelongDeptId = Convert.ToInt32(dr["BELONGDEPTID"].ToString());
+                d.BelongDeptName = dr["BELONGDEPTNAME"].ToString();
+                d.BelongNetId = Convert.ToInt32(dr["BELONGNETID"].ToString());
+                d.BelongNetName = dr["BELONGNETNAME"].ToString();
+                d.Owner = dr["OWNER"].ToString();
+                d.OwnerType = Convert.ToInt32(dr["OWNERTYPE"].ToString());
+                d.OwnerTypeName = dr["OWNERTYPENAME"].ToString();
+                d.Cldwzdsbh = dr["CLDWZDSBH"].ToString();
+                d.Wlwkhm = dr["WLWKHM"].ToString();
 
-                gpsDataList.Add(d);
+                carInfoList.Add(d);
             }
 
-            return gpsDataList;
+            return carInfoList;
             //var q = (from c in SlaveDb.Set<CFG_CARINFO>()
             //         join n in SlaveDb.Set<CFG_NETINFO>() on c.BELONGNETID equals n.ID
             //         join v in SlaveDb.Set<SYS_BM_CODE>() on c.VEHICLETYPE equals v.BMKEY

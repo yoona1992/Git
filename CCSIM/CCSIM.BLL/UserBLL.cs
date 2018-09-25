@@ -17,22 +17,10 @@ namespace CCSIM.BLL
     /// </summary>
     public class UserBLL
     {
-        //是否读写分离(可以配置在配置文件中)
-        private static readonly bool IsReadWriteSeparation = true;
-
-        #region EF上下文对象(主库)
-
-        protected static DbContext MasterDb => _masterDb.Value;
-        private static readonly Lazy<DbContext> _masterDb = new Lazy<DbContext>(() => new DbContextFactory().GetWriteDbContext());
-
-        #endregion EF上下文对象(主库)
-
-        #region EF上下文对象(从库)
-
-        protected static DbContext SlaveDb => IsReadWriteSeparation ? _slaveDb.Value : _masterDb.Value;
-        private static readonly Lazy<DbContext> _slaveDb = new Lazy<DbContext>(() => new DbContextFactory().GetReadDbContext());
-
-        #endregion EF上下文对象(从库)
+        /// <summary>
+        /// 连接字符串
+        /// </summary>
+        private static string ORACLE_CONNECTION_STRING = "user id=LSGAADMIN;password=lsga110;data source=122.225.122.106/ORCL";
 
         /// <summary>
         /// 添加用户信息
@@ -41,16 +29,33 @@ namespace CCSIM.BLL
         /// <returns></returns>
         public static bool Add(CFG_USERINFO info)
         {
-            DbBase<CFG_USERINFO> db = new DbBase<CFG_USERINFO>();
-            db.Insert(info);
-            if (db.SaveChanges() >= 0)
+            bool isSuccess = true;
+            StringBuilder pInsertText = new StringBuilder();
+            pInsertText.Append("INSERT INTO CFG_USERINFO(NAME,SEX,AGE,TELEPHONE,CERTIFICATETYPE,CERTIFICATENUM,DIRECTION,BELONGDEPTID,BELONGNETID,ADDRESS,REMARK,ISDELETED,USERTYPE,VIRTUALTRUMPET,USERPWD,REGISTRATIONID,LOGINTYPE) VALUES('");
+            pInsertText.Append(info.VEHICLENO + "'," + info.VEHICLETYPE + ",'" + info.VEHICLEBRAND + "'," + info.BELONGDEPTID + "," + info.BELONGNETID + ",'" + info.REMARK + "'," + info.ISDELETED + ",'");
+            pInsertText.Append(info.OWNER + "'," + info.OWNERTYPE + ",'" + info.CLDWZDSBH + "','" + info.WLWKHM + "')");
+
+            try
             {
-                return true;
+                OracleOperateBLL.ExecuteSql(pInsertText.ToString());
             }
-            else
+            catch
             {
-                return false;
+                isSuccess = false;
             }
+
+            return isSuccess;
+
+            //DbBase<CFG_USERINFO> db = new DbBase<CFG_USERINFO>();
+            //db.Insert(info);
+            //if (db.SaveChanges() >= 0)
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
         }
 
         /// <summary>

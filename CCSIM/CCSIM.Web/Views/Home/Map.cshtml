@@ -558,24 +558,26 @@
             }
 
             $.each(netInfo, function (index, d) {
-                var pointArray = [];
-                var color = d.NetColor;
-                var lonAndLatArray = $.parseJSON(d.LonAndLat);
-                $.each(lonAndLatArray, function (index, dd) {
-                    pointArray.push(new BMap.Point(dd.lng, dd.lat));
-                });
+                if (d.LonAndLat == "" || d.LonAndLat == null) { }
+                else {
+                    var pointArray = [];
+                    var color = d.NetColor;
+                    var lonAndLatArray = $.parseJSON(d.LonAndLat);
+                    $.each(lonAndLatArray, function (index, dd) {
+                        pointArray.push(new BMap.Point(dd.lng, dd.lat));
+                    });
 
-                var polygon = new BMap.Polygon(pointArray, { strokeColor: "#000093", strokeWeight: 1, strokeOpacity: 0.1, fillColor: color, fillOpacity: 0.6 });
-                polygon.type = 2;
-                polygon.objectId = d.Id;
-                polygon.objectName = d.Name;
-                map.addOverlay(polygon);
-                polygonInfo.push(polygon);
+                    var polygon = new BMap.Polygon(pointArray, { strokeColor: "#000093", strokeWeight: 1, strokeOpacity: 0.1, fillColor: color, fillOpacity: 0.6 });
+                    polygon.type = 2;
+                    polygon.objectId = d.Id;
+                    polygon.objectName = d.Name;
+                    map.addOverlay(polygon);
+                    polygonInfo.push(polygon);
 
-                var bounds = polygon.getBounds();
-                var p = bounds.getCenter();
-                addClickHandler(d, polygon, p);
-
+                    var bounds = polygon.getBounds();
+                    var p = bounds.getCenter();
+                    addClickHandler(d, polygon, p);
+                }
             });
         }
         function removeWg() {

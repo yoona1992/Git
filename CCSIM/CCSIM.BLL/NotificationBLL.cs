@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -16,22 +17,10 @@ namespace CCSIM.BLL
 {
     public class NotificationBLL
     {
-        //是否读写分离(可以配置在配置文件中)
-        private static readonly bool IsReadWriteSeparation = true;
-
-        #region EF上下文对象(主库)
-
-        protected static DbContext MasterDb => _masterDb.Value;
-        private static readonly Lazy<DbContext> _masterDb = new Lazy<DbContext>(() => new DbContextFactory().GetWriteDbContext());
-
-        #endregion EF上下文对象(主库)
-
-        #region EF上下文对象(从库)
-
-        protected static DbContext SlaveDb => IsReadWriteSeparation ? _slaveDb.Value : _masterDb.Value;
-        private static readonly Lazy<DbContext> _slaveDb = new Lazy<DbContext>(() => new DbContextFactory().GetReadDbContext());
-
-        #endregion EF上下文对象(从库)
+        /// <summary>
+        /// 连接字符串
+        /// </summary>
+        private static string ORACLE_CONNECTION_STRING = "user id=LSGAADMIN;password=lsga110;data source=122.225.122.106/ORCL";
 
         /// <summary>
         /// 获取消息列表
@@ -46,27 +35,72 @@ namespace CCSIM.BLL
         /// <returns></returns>
         public static List<NotificationInfo> GetList(string username, string title, DateTime startTime, DateTime endTime, int start, int limit, out int totalCount)
         {
-            var q = (from n in SlaveDb.Set<NOTIFICATION>()
-                     join u in SlaveDb.Set<CFG_USERINFO>() on n.PHONE equals u.TELEPHONE into uu
-                     from uuu in uu.DefaultIfEmpty()
-                     where ((title == "" || title == null) ? true : n.TITLE.Contains(title))
-                     && ((username == "" || username == null) ? true : uuu.NAME.Contains(username))
-                     && n.CREATE_DATE >= startTime && n.CREATE_DATE <= endTime
-                     select new NotificationInfo
-                     {
-                         Id = n.ID,
-                         Title = n.TITLE,
-                         Content = n.CONTENT,
-                         UserName = uuu.NAME,
-                         Create_Date = n.CREATE_DATE
-                     });
-            totalCount = q.Count();
-            var data = q.OrderByDescending(p => p.Create_Date).ThenByDescending(p => p.Title).Skip((start - 1) * limit).Take(limit).ToList();
-            foreach (var d in data)
+            StringBuilder pSBQueryCount = new StringBuilder();
+            pSBQueryCount.Append("SELECT COUNT(*) FROM NOTIFICATION A LEFT JOIN CFG_USERINFO B ON A.PHONE=B.TELEPHONE WHERE TO_CHAR(A.CREATE_DATE,'yyyymmddhh24miss') BETWEEN '" + startTime.ToString("yyyyMMddHHmmss") + "' AND '" + endTime.ToString("yyyyMMddHHmmss") + "' ");
+            if (string.IsNullOrWhiteSpace(title) == false)
             {
-                d.NotificateTime = Convert.ToDateTime(d.Create_Date).ToString("yyyy-MM-dd HH:mm:ss");
+                pSBQueryCount.Append("AND A.TITLE like '%" + title + "%' ");
             }
-            return data;
+            if (string.IsNullOrWhiteSpace(username) == false)
+            {
+                pSBQueryCount.Append("AND B.NAME like '%" + username + "%' ");
+            }
+            totalCount = OracleOperateBLL.GetQueryCount(pSBQueryCount.ToString());
+
+            int pStartNum = limit * (start - 1) + 1;
+            int pEndNum = limit * start;
+
+            StringBuilder pSBQueryText = new StringBuilder();
+            pSBQueryText.Append("SELECT ID,TITLE,CONTENT,CREATE_DATE,NAME FROM (SELECT C.*, rownum r FROM(");
+            pSBQueryText.Append("SELECT A.ID,A.TITLE,A.CONTENT,TO_CHAR(A.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss') AS CREATE_DATE,B.NAME FROM NOTIFICATION A ");
+            pSBQueryText.Append("LEFT JOIN CFG_USERINFO B ON A.PHONE=B.TELEPHONE WHERE TO_CHAR(A.CREATE_DATE,'yyyymmddhh24miss') BETWEEN '" + startTime.ToString("yyyyMMddHHmmss") + "' AND '" + endTime.ToString("yyyyMMddHHmmss") + "' ");
+            if (string.IsNullOrWhiteSpace(title) == false)
+            {
+                pSBQueryText.Append("AND A.TITLE like '%" + title + "%' ");
+            }
+            if (string.IsNullOrWhiteSpace(username) == false)
+            {
+                pSBQueryText.Append("AND B.NAME like '%" + username + "%' ");
+            }
+            pSBQueryText.Append(" ORDER BY A.CREATE_DATE DESC,A.TITLE DESC) C ");
+            pSBQueryText.Append("WHERE rownum<=" + pEndNum + ") D WHERE r>=" + pStartNum);
+            var data = OracleOperateBLL.FillDataTable(pSBQueryText.ToString());
+            List<NotificationInfo> notificationInfoList = new List<NotificationInfo>();
+            foreach (DataRow dr in data.Rows)
+            {
+                NotificationInfo d = new NotificationInfo();
+                d.Id = Convert.ToInt32(dr["ID"].ToString());
+                d.Title = dr["TITLE"].ToString();
+                d.Content = dr["CONTENT"].ToString();
+                d.UserName = dr["NAME"].ToString();
+                d.Create_Date = Convert.ToDateTime(dr["CREATE_DATE"].ToString());
+                d.NotificateTime = dr["CREATE_DATE"].ToString();
+
+                notificationInfoList.Add(d);
+            }
+
+            return notificationInfoList;
+            //var q = (from n in SlaveDb.Set<NOTIFICATION>()
+            //         join u in SlaveDb.Set<CFG_USERINFO>() on n.PHONE equals u.TELEPHONE into uu
+            //         from uuu in uu.DefaultIfEmpty()
+            //         where ((title == "" || title == null) ? true : n.TITLE.Contains(title))
+            //         && ((username == "" || username == null) ? true : uuu.NAME.Contains(username))
+            //         && n.CREATE_DATE >= startTime && n.CREATE_DATE <= endTime
+            //         select new NotificationInfo
+            //         {
+            //             Id = n.ID,
+            //             Title = n.TITLE,
+            //             Content = n.CONTENT,
+            //             UserName = uuu.NAME,
+            //             Create_Date = n.CREATE_DATE
+            //         });
+            //totalCount = q.Count();
+            //var data = q.OrderByDescending(p => p.Create_Date).ThenByDescending(p => p.Title).Skip((start - 1) * limit).Take(limit).ToList();
+            //foreach (var d in data)
+            //{
+            //    d.NotificateTime = Convert.ToDateTime(d.Create_Date).ToString("yyyy-MM-dd HH:mm:ss");
+            //}
+            //return data;
         }
 
 
