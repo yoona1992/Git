@@ -212,3 +212,1312 @@ WHERE (ROWNUM <= (20) )
 -- Completed in 17 ms with result: OracleDataReader
 
 Closed connection at 2018/9/24 16:46:34 +08:00
+Opened connection at 2018/9/25 11:06:57 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 11:06:58 +08:00
+-- Completed in 68 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:06:59 +08:00
+Opened connection at 2018/9/25 11:07:10 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM   (SELECT "Extent1"."ID" AS "ID", "Extent1"."NAME" AS "NAME", "Extent1"."SEX" AS "SEX", "Extent1"."AGE" AS "AGE", "Extent1"."TELEPHONE" AS "TELEPHONE", "Extent1"."CERTIFICATETYPE" AS "CERTIFICATETYPE", "Extent1"."CERTIFICATENUM" AS "CERTIFICATENUM", "Extent1"."DIRECTION" AS "DIRECTION", "Extent1"."ADDRESS" AS "ADDRESS", "Extent1"."BELONGDEPTID" AS "BELONGDEPTID", "Extent1"."BELONGNETID" AS "BELONGNETID", "Extent1"."REMARK" AS "REMARK1", "Extent1"."ISDELETED" AS "ISDELETED1", "Extent1"."USERTYPE" AS "USERTYPE", "Extent1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", "Extent1"."USERNAME" AS "USERNAME", "Extent1"."USERPWD" AS "USERPWD", "Extent1"."LOGINTYPE" AS "LOGINTYPE", "Extent2"."BMKEY" AS "BMKEY1", "Extent2"."BMVALUE" AS "BMVALUE1", "Extent2"."BMCODE" AS "BMCODE1", "Extent2"."BMPARENTKEY" AS "BMPARENTKEY1", "Extent2"."REMARK" AS "REMARK2", "Extent2"."ISDELETED" AS "ISDELETED2", "Extent2"."ORDERNUM" AS "ORDERNUM1", "Extent3"."BMKEY" AS "BMKEY2", "Extent3"."BMVALUE" AS "BMVALUE2", "Extent3"."BMCODE" AS "BMCODE2", "Extent3"."BMPARENTKEY" AS "BMPARENTKEY2", "Extent3"."REMARK" AS "REMARK3", "Extent3"."ISDELETED" AS "ISDELETED3", "Extent3"."ORDERNUM" AS "ORDERNUM2", "Extent4"."BMKEY" AS "BMKEY3", "Extent4"."BMVALUE" AS "BMVALUE3", "Extent4"."BMCODE" AS "BMCODE3", "Extent4"."BMPARENTKEY" AS "BMPARENTKEY3", "Extent4"."REMARK" AS "REMARK4", "Extent4"."ISDELETED" AS "ISDELETED4", "Extent4"."ORDERNUM" AS "ORDERNUM3"
+		FROM    "LSGAADMIN"."CFG_USERINFO" "Extent1"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."SEX" = "Extent2"."BMKEY"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent3" ON "Extent1"."BELONGDEPTID" = "Extent3"."BMKEY"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent4" ON "Extent1"."USERTYPE" = "Extent4"."BMKEY"
+		WHERE (0 = "Extent1"."ISDELETED") ) "Filter1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_NETINFO" "Extent5" ON "Filter1"."BELONGNETID" = "Extent5"."ID"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__6) THEN 1 WHEN ("Filter1"."USERTYPE" = :p__linq__7) THEN 1 WHEN ("Filter1"."USERTYPE" <> :p__linq__7) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__8) THEN 1 WHEN ("Filter1"."BELONGDEPTID" = :p__linq__9) THEN 1 WHEN ("Filter1"."BELONGDEPTID" <> :p__linq__9) THEN 0 END) = 1))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__7: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__8: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__9: '-1' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:10 +08:00
+-- Completed in 152 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:10 +08:00
+Opened connection at 2018/9/25 11:07:10 +08:00
+SELECT * 
+FROM ( 
+SELECT 
+"Project1"."ID" AS "ID", 
+"Project1"."NAME" AS "NAME", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."AGE" AS "AGE", 
+"Project1"."TELEPHONE" AS "TELEPHONE", 
+"Project1"."CERTIFICATENUM" AS "CERTIFICATENUM", 
+"Project1"."ADDRESS" AS "ADDRESS", 
+"Project1"."BELONGDEPTID" AS "BELONGDEPTID", 
+"Project1"."BMVALUE1" AS "BMVALUE1", 
+"Project1"."BELONGNETID" AS "BELONGNETID", 
+"Project1"."NAME1" AS "NAME1", 
+"Project1"."USERTYPE" AS "USERTYPE", 
+"Project1"."BMVALUE2" AS "BMVALUE2", 
+"Project1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET"
+FROM ( SELECT "Project1"."ID" AS "ID", "Project1"."NAME" AS "NAME", "Project1"."AGE" AS "AGE", "Project1"."TELEPHONE" AS "TELEPHONE", "Project1"."CERTIFICATENUM" AS "CERTIFICATENUM", "Project1"."ADDRESS" AS "ADDRESS", "Project1"."BELONGDEPTID" AS "BELONGDEPTID", "Project1"."BELONGNETID" AS "BELONGNETID", "Project1"."USERTYPE" AS "USERTYPE", "Project1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", "Project1"."BMVALUE" AS "BMVALUE", "Project1"."BMVALUE1" AS "BMVALUE1", "Project1"."BMVALUE2" AS "BMVALUE2", "Project1"."NAME1" AS "NAME1", row_number() OVER (ORDER BY "Project1"."USERTYPE" DESC, "Project1"."BELONGDEPTID" DESC, "Project1"."BELONGNETID" DESC, "Project1"."NAME" ASC) AS "row_number"
+	FROM ( SELECT 
+		"Filter1"."ID" AS "ID", 
+		"Filter1"."NAME" AS "NAME", 
+		"Filter1"."AGE" AS "AGE", 
+		"Filter1"."TELEPHONE" AS "TELEPHONE", 
+		"Filter1"."CERTIFICATENUM" AS "CERTIFICATENUM", 
+		"Filter1"."ADDRESS" AS "ADDRESS", 
+		"Filter1"."BELONGDEPTID" AS "BELONGDEPTID", 
+		"Filter1"."BELONGNETID" AS "BELONGNETID", 
+		"Filter1"."USERTYPE" AS "USERTYPE", 
+		"Filter1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", 
+		"Filter1"."BMVALUE3" AS "BMVALUE", 
+		"Filter1"."BMVALUE4" AS "BMVALUE1", 
+		"Filter1"."BMVALUE5" AS "BMVALUE2", 
+		"Extent5"."NAME" AS "NAME1"
+		FROM   (SELECT "Extent1"."ID" AS "ID", "Extent1"."NAME" AS "NAME", "Extent1"."SEX" AS "SEX", "Extent1"."AGE" AS "AGE", "Extent1"."TELEPHONE" AS "TELEPHONE", "Extent1"."CERTIFICATETYPE" AS "CERTIFICATETYPE", "Extent1"."CERTIFICATENUM" AS "CERTIFICATENUM", "Extent1"."DIRECTION" AS "DIRECTION", "Extent1"."ADDRESS" AS "ADDRESS", "Extent1"."BELONGDEPTID" AS "BELONGDEPTID", "Extent1"."BELONGNETID" AS "BELONGNETID", "Extent1"."REMARK" AS "REMARK1", "Extent1"."ISDELETED" AS "ISDELETED1", "Extent1"."USERTYPE" AS "USERTYPE", "Extent1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", "Extent1"."USERNAME" AS "USERNAME", "Extent1"."USERPWD" AS "USERPWD", "Extent1"."LOGINTYPE" AS "LOGINTYPE", "Extent2"."BMKEY" AS "BMKEY1", "Extent2"."BMVALUE" AS "BMVALUE3", "Extent2"."BMCODE" AS "BMCODE1", "Extent2"."BMPARENTKEY" AS "BMPARENTKEY1", "Extent2"."REMARK" AS "REMARK2", "Extent2"."ISDELETED" AS "ISDELETED2", "Extent2"."ORDERNUM" AS "ORDERNUM1", "Extent3"."BMKEY" AS "BMKEY2", "Extent3"."BMVALUE" AS "BMVALUE4", "Extent3"."BMCODE" AS "BMCODE2", "Extent3"."BMPARENTKEY" AS "BMPARENTKEY2", "Extent3"."REMARK" AS "REMARK3", "Extent3"."ISDELETED" AS "ISDELETED3", "Extent3"."ORDERNUM" AS "ORDERNUM2", "Extent4"."BMKEY" AS "BMKEY3", "Extent4"."BMVALUE" AS "BMVALUE5", "Extent4"."BMCODE" AS "BMCODE3", "Extent4"."BMPARENTKEY" AS "BMPARENTKEY3", "Extent4"."REMARK" AS "REMARK4", "Extent4"."ISDELETED" AS "ISDELETED4", "Extent4"."ORDERNUM" AS "ORDERNUM3"
+			FROM    "LSGAADMIN"."CFG_USERINFO" "Extent1"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."SEX" = "Extent2"."BMKEY"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent3" ON "Extent1"."BELONGDEPTID" = "Extent3"."BMKEY"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent4" ON "Extent1"."USERTYPE" = "Extent4"."BMKEY"
+			WHERE (0 = "Extent1"."ISDELETED") ) "Filter1"
+		LEFT OUTER JOIN "LSGAADMIN"."CFG_NETINFO" "Extent5" ON "Filter1"."BELONGNETID" = "Extent5"."ID"
+		WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__6) THEN 1 WHEN ("Filter1"."USERTYPE" = :p__linq__7) THEN 1 WHEN ("Filter1"."USERTYPE" <> :p__linq__7) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__8) THEN 1 WHEN ("Filter1"."BELONGDEPTID" = :p__linq__9) THEN 1 WHEN ("Filter1"."BELONGDEPTID" <> :p__linq__9) THEN 0 END) = 1))
+	)  "Project1"
+)  "Project1"
+WHERE ("Project1"."row_number" > 0)
+ORDER BY "Project1"."USERTYPE" DESC, "Project1"."BELONGDEPTID" DESC, "Project1"."BELONGNETID" DESC, "Project1"."NAME" ASC
+)
+WHERE (ROWNUM <= (20) )
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__7: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__8: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__9: '-1' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:10 +08:00
+-- Completed in 97 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:10 +08:00
+Opened connection at 2018/9/25 11:07:10 +08:00
+SELECT 
+"Extent1"."BMKEY" AS "BMKEY", 
+"Extent1"."BMVALUE" AS "BMVALUE", 
+"Extent1"."BMCODE" AS "BMCODE", 
+"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."ISDELETED" AS "ISDELETED", 
+"Extent1"."ORDERNUM" AS "ORDERNUM"
+FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+WHERE ("Extent1"."BMCODE" = :p__linq__0) AND (ROWNUM <= (1) )
+-- p__linq__0: 'RYLX' (Type = Object)
+-- Executing at 2018/9/25 11:07:10 +08:00
+-- Completed in 72 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:10 +08:00
+Opened connection at 2018/9/25 11:07:10 +08:00
+SELECT 
+"Project1"."BMKEY" AS "BMKEY", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."BMCODE" AS "BMCODE", 
+"Project1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Project1"."REMARK" AS "REMARK", 
+"Project1"."ISDELETED" AS "ISDELETED", 
+"Project1"."ORDERNUM" AS "ORDERNUM"
+FROM ( SELECT 
+	"Extent1"."BMKEY" AS "BMKEY", 
+	"Extent1"."BMVALUE" AS "BMVALUE", 
+	"Extent1"."BMCODE" AS "BMCODE", 
+	"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+	"Extent1"."REMARK" AS "REMARK", 
+	"Extent1"."ISDELETED" AS "ISDELETED", 
+	"Extent1"."ORDERNUM" AS "ORDERNUM"
+	FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+	WHERE (("Extent1"."BMPARENTKEY" = :p__linq__0) AND (0 = "Extent1"."ISDELETED"))
+)  "Project1"
+ORDER BY "Project1"."ORDERNUM" ASC
+-- p__linq__0: '20' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:10 +08:00
+-- Completed in 70 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:11 +08:00
+Opened connection at 2018/9/25 11:07:15 +08:00
+SELECT 
+"Extent1"."BMKEY" AS "BMKEY", 
+"Extent1"."BMVALUE" AS "BMVALUE", 
+"Extent1"."BMCODE" AS "BMCODE", 
+"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."ISDELETED" AS "ISDELETED", 
+"Extent1"."ORDERNUM" AS "ORDERNUM"
+FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+WHERE ("Extent1"."BMCODE" = :p__linq__0) AND (ROWNUM <= (1) )
+-- p__linq__0: 'SSBM_RY' (Type = Object)
+-- Executing at 2018/9/25 11:07:15 +08:00
+-- Completed in 50 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:15 +08:00
+Opened connection at 2018/9/25 11:07:15 +08:00
+SELECT 
+"Project1"."BMKEY" AS "BMKEY", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."BMCODE" AS "BMCODE", 
+"Project1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Project1"."REMARK" AS "REMARK", 
+"Project1"."ISDELETED" AS "ISDELETED", 
+"Project1"."ORDERNUM" AS "ORDERNUM"
+FROM ( SELECT 
+	"Extent1"."BMKEY" AS "BMKEY", 
+	"Extent1"."BMVALUE" AS "BMVALUE", 
+	"Extent1"."BMCODE" AS "BMCODE", 
+	"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+	"Extent1"."REMARK" AS "REMARK", 
+	"Extent1"."ISDELETED" AS "ISDELETED", 
+	"Extent1"."ORDERNUM" AS "ORDERNUM"
+	FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+	WHERE (("Extent1"."BMPARENTKEY" = :p__linq__0) AND (0 = "Extent1"."ISDELETED"))
+)  "Project1"
+ORDER BY "Project1"."ORDERNUM" ASC
+-- p__linq__0: '26' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:15 +08:00
+-- Completed in 57 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:15 +08:00
+Opened connection at 2018/9/25 11:07:15 +08:00
+SELECT 
+"Extent1"."BMKEY" AS "BMKEY", 
+"Extent1"."BMVALUE" AS "BMVALUE", 
+"Extent1"."BMCODE" AS "BMCODE", 
+"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."ISDELETED" AS "ISDELETED", 
+"Extent1"."ORDERNUM" AS "ORDERNUM"
+FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+WHERE ("Extent1"."BMCODE" = :p__linq__0) AND (ROWNUM <= (1) )
+-- p__linq__0: 'XB' (Type = Object)
+-- Executing at 2018/9/25 11:07:15 +08:00
+-- Completed in 58 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:15 +08:00
+Opened connection at 2018/9/25 11:07:15 +08:00
+SELECT 
+"Project1"."BMKEY" AS "BMKEY", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."BMCODE" AS "BMCODE", 
+"Project1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Project1"."REMARK" AS "REMARK", 
+"Project1"."ISDELETED" AS "ISDELETED", 
+"Project1"."ORDERNUM" AS "ORDERNUM"
+FROM ( SELECT 
+	"Extent1"."BMKEY" AS "BMKEY", 
+	"Extent1"."BMVALUE" AS "BMVALUE", 
+	"Extent1"."BMCODE" AS "BMCODE", 
+	"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+	"Extent1"."REMARK" AS "REMARK", 
+	"Extent1"."ISDELETED" AS "ISDELETED", 
+	"Extent1"."ORDERNUM" AS "ORDERNUM"
+	FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+	WHERE (("Extent1"."BMPARENTKEY" = :p__linq__0) AND (0 = "Extent1"."ISDELETED"))
+)  "Project1"
+ORDER BY "Project1"."ORDERNUM" ASC
+-- p__linq__0: '3' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:15 +08:00
+-- Completed in 62 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:16 +08:00
+Opened connection at 2018/9/25 11:07:16 +08:00
+SELECT 
+"Extent1"."BMKEY" AS "BMKEY", 
+"Extent1"."BMVALUE" AS "BMVALUE", 
+"Extent1"."BMCODE" AS "BMCODE", 
+"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."ISDELETED" AS "ISDELETED", 
+"Extent1"."ORDERNUM" AS "ORDERNUM"
+FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+WHERE ("Extent1"."BMCODE" = :p__linq__0) AND (ROWNUM <= (1) )
+-- p__linq__0: 'ZJLX' (Type = Object)
+-- Executing at 2018/9/25 11:07:16 +08:00
+-- Completed in 55 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:16 +08:00
+Opened connection at 2018/9/25 11:07:16 +08:00
+SELECT 
+"Project1"."BMKEY" AS "BMKEY", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."BMCODE" AS "BMCODE", 
+"Project1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Project1"."REMARK" AS "REMARK", 
+"Project1"."ISDELETED" AS "ISDELETED", 
+"Project1"."ORDERNUM" AS "ORDERNUM"
+FROM ( SELECT 
+	"Extent1"."BMKEY" AS "BMKEY", 
+	"Extent1"."BMVALUE" AS "BMVALUE", 
+	"Extent1"."BMCODE" AS "BMCODE", 
+	"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+	"Extent1"."REMARK" AS "REMARK", 
+	"Extent1"."ISDELETED" AS "ISDELETED", 
+	"Extent1"."ORDERNUM" AS "ORDERNUM"
+	FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+	WHERE (("Extent1"."BMPARENTKEY" = :p__linq__0) AND (0 = "Extent1"."ISDELETED"))
+)  "Project1"
+ORDER BY "Project1"."ORDERNUM" ASC
+-- p__linq__0: '6' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:16 +08:00
+-- Completed in 53 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:16 +08:00
+Opened connection at 2018/9/25 11:07:16 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 11:07:16 +08:00
+-- Completed in 58 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:16 +08:00
+Opened connection at 2018/9/25 11:07:16 +08:00
+SELECT 
+"Extent1"."BMKEY" AS "BMKEY", 
+"Extent1"."BMVALUE" AS "BMVALUE", 
+"Extent1"."BMCODE" AS "BMCODE", 
+"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."ISDELETED" AS "ISDELETED", 
+"Extent1"."ORDERNUM" AS "ORDERNUM"
+FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+WHERE ("Extent1"."BMCODE" = :p__linq__0) AND (ROWNUM <= (1) )
+-- p__linq__0: 'RYLX' (Type = Object)
+-- Executing at 2018/9/25 11:07:16 +08:00
+-- Completed in 72 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:16 +08:00
+Opened connection at 2018/9/25 11:07:16 +08:00
+SELECT 
+"Project1"."BMKEY" AS "BMKEY", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."BMCODE" AS "BMCODE", 
+"Project1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Project1"."REMARK" AS "REMARK", 
+"Project1"."ISDELETED" AS "ISDELETED", 
+"Project1"."ORDERNUM" AS "ORDERNUM"
+FROM ( SELECT 
+	"Extent1"."BMKEY" AS "BMKEY", 
+	"Extent1"."BMVALUE" AS "BMVALUE", 
+	"Extent1"."BMCODE" AS "BMCODE", 
+	"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+	"Extent1"."REMARK" AS "REMARK", 
+	"Extent1"."ISDELETED" AS "ISDELETED", 
+	"Extent1"."ORDERNUM" AS "ORDERNUM"
+	FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+	WHERE (("Extent1"."BMPARENTKEY" = :p__linq__0) AND (0 = "Extent1"."ISDELETED"))
+)  "Project1"
+ORDER BY "Project1"."ORDERNUM" ASC
+-- p__linq__0: '20' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:16 +08:00
+-- Completed in 59 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:16 +08:00
+Opened connection at 2018/9/25 11:07:16 +08:00
+SELECT 
+"Extent1"."BMKEY" AS "BMKEY", 
+"Extent1"."BMVALUE" AS "BMVALUE", 
+"Extent1"."BMCODE" AS "BMCODE", 
+"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."ISDELETED" AS "ISDELETED", 
+"Extent1"."ORDERNUM" AS "ORDERNUM"
+FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+WHERE ("Extent1"."BMCODE" = :p__linq__0) AND (ROWNUM <= (1) )
+-- p__linq__0: 'DLLX' (Type = Object)
+-- Executing at 2018/9/25 11:07:16 +08:00
+-- Completed in 77 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:16 +08:00
+Opened connection at 2018/9/25 11:07:16 +08:00
+SELECT 
+"Project1"."BMKEY" AS "BMKEY", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."BMCODE" AS "BMCODE", 
+"Project1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Project1"."REMARK" AS "REMARK", 
+"Project1"."ISDELETED" AS "ISDELETED", 
+"Project1"."ORDERNUM" AS "ORDERNUM"
+FROM ( SELECT 
+	"Extent1"."BMKEY" AS "BMKEY", 
+	"Extent1"."BMVALUE" AS "BMVALUE", 
+	"Extent1"."BMCODE" AS "BMCODE", 
+	"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+	"Extent1"."REMARK" AS "REMARK", 
+	"Extent1"."ISDELETED" AS "ISDELETED", 
+	"Extent1"."ORDERNUM" AS "ORDERNUM"
+	FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+	WHERE (("Extent1"."BMPARENTKEY" = :p__linq__0) AND (0 = "Extent1"."ISDELETED"))
+)  "Project1"
+ORDER BY "Project1"."ORDERNUM" ASC
+-- p__linq__0: '38' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:16 +08:00
+-- Completed in 54 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:16 +08:00
+Opened connection at 2018/9/25 11:07:56 +08:00
+Started transaction at 2018/9/25 11:07:56 +08:00
+declare
+"ID" number(10,0);
+begin
+insert into "LSGAADMIN"."CFG_USERINFO"("NAME", "SEX", "AGE", "TELEPHONE", "CERTIFICATETYPE", "CERTIFICATENUM", "DIRECTION", "ADDRESS", "BELONGDEPTID", "BELONGNETID", "REMARK", "ISDELETED", "USERTYPE", "VIRTUALTRUMPET", "USERNAME", "USERPWD", "LOGINTYPE")
+values (:p0, :p1, :p2, :p3, :p4, :p5, :p6, :p7, :p8, :p9, :p10, :p11, :p12, :p13, :p14, :p15, :p16)
+returning
+"ID" into
+"ID";
+open :p17 for select
+"ID" as "ID" from dual;
+end;
+-- :p0: '平台测试人员' (Type = String, Size = 50)
+-- :p1: '4' (Type = Int32)
+-- :p2: '' (Type = String, Size = 50)
+-- :p3: '15895677895' (Type = String, Size = 20)
+-- :p4: '8' (Type = Int32)
+-- :p5: '15895677895' (Type = String, Size = 50)
+-- :p6: '' (Type = String, Size = 255)
+-- :p7: '' (Type = String, Size = 255)
+-- :p8: '27' (Type = Int32)
+-- :p9: '-1' (Type = Int32)
+-- :p10: '' (Type = String, Size = 2000)
+-- :p11: '0' (Type = Int32)
+-- :p12: '21' (Type = Int32)
+-- :p13: '' (Type = String, Size = 50)
+-- :p14: 'ptcsry' (Type = String, Size = 100)
+-- :p15: '888888' (Type = String, Size = 100)
+-- :p16: '39' (Type = Int32)
+-- :p17: 'null' (Type = Object, Direction = Output, IsNullable = false)
+-- Executing at 2018/9/25 11:07:56 +08:00
+-- Completed in 395 ms with result: OracleDataReader
+
+Committed transaction at 2018/9/25 11:07:57 +08:00
+Closed connection at 2018/9/25 11:07:57 +08:00
+Opened connection at 2018/9/25 11:07:58 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM   (SELECT "Extent1"."ID" AS "ID", "Extent1"."NAME" AS "NAME", "Extent1"."SEX" AS "SEX", "Extent1"."AGE" AS "AGE", "Extent1"."TELEPHONE" AS "TELEPHONE", "Extent1"."CERTIFICATETYPE" AS "CERTIFICATETYPE", "Extent1"."CERTIFICATENUM" AS "CERTIFICATENUM", "Extent1"."DIRECTION" AS "DIRECTION", "Extent1"."ADDRESS" AS "ADDRESS", "Extent1"."BELONGDEPTID" AS "BELONGDEPTID", "Extent1"."BELONGNETID" AS "BELONGNETID", "Extent1"."REMARK" AS "REMARK1", "Extent1"."ISDELETED" AS "ISDELETED1", "Extent1"."USERTYPE" AS "USERTYPE", "Extent1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", "Extent1"."USERNAME" AS "USERNAME", "Extent1"."USERPWD" AS "USERPWD", "Extent1"."LOGINTYPE" AS "LOGINTYPE", "Extent2"."BMKEY" AS "BMKEY1", "Extent2"."BMVALUE" AS "BMVALUE1", "Extent2"."BMCODE" AS "BMCODE1", "Extent2"."BMPARENTKEY" AS "BMPARENTKEY1", "Extent2"."REMARK" AS "REMARK2", "Extent2"."ISDELETED" AS "ISDELETED2", "Extent2"."ORDERNUM" AS "ORDERNUM1", "Extent3"."BMKEY" AS "BMKEY2", "Extent3"."BMVALUE" AS "BMVALUE2", "Extent3"."BMCODE" AS "BMCODE2", "Extent3"."BMPARENTKEY" AS "BMPARENTKEY2", "Extent3"."REMARK" AS "REMARK3", "Extent3"."ISDELETED" AS "ISDELETED3", "Extent3"."ORDERNUM" AS "ORDERNUM2", "Extent4"."BMKEY" AS "BMKEY3", "Extent4"."BMVALUE" AS "BMVALUE3", "Extent4"."BMCODE" AS "BMCODE3", "Extent4"."BMPARENTKEY" AS "BMPARENTKEY3", "Extent4"."REMARK" AS "REMARK4", "Extent4"."ISDELETED" AS "ISDELETED4", "Extent4"."ORDERNUM" AS "ORDERNUM3"
+		FROM    "LSGAADMIN"."CFG_USERINFO" "Extent1"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."SEX" = "Extent2"."BMKEY"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent3" ON "Extent1"."BELONGDEPTID" = "Extent3"."BMKEY"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent4" ON "Extent1"."USERTYPE" = "Extent4"."BMKEY"
+		WHERE (0 = "Extent1"."ISDELETED") ) "Filter1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_NETINFO" "Extent5" ON "Filter1"."BELONGNETID" = "Extent5"."ID"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__6) THEN 1 WHEN ("Filter1"."USERTYPE" = :p__linq__7) THEN 1 WHEN ("Filter1"."USERTYPE" <> :p__linq__7) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__8) THEN 1 WHEN ("Filter1"."BELONGDEPTID" = :p__linq__9) THEN 1 WHEN ("Filter1"."BELONGDEPTID" <> :p__linq__9) THEN 0 END) = 1))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__7: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__8: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__9: '-1' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:58 +08:00
+-- Completed in 65 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:58 +08:00
+Opened connection at 2018/9/25 11:07:58 +08:00
+SELECT * 
+FROM ( 
+SELECT 
+"Project1"."ID" AS "ID", 
+"Project1"."NAME" AS "NAME", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."AGE" AS "AGE", 
+"Project1"."TELEPHONE" AS "TELEPHONE", 
+"Project1"."CERTIFICATENUM" AS "CERTIFICATENUM", 
+"Project1"."ADDRESS" AS "ADDRESS", 
+"Project1"."BELONGDEPTID" AS "BELONGDEPTID", 
+"Project1"."BMVALUE1" AS "BMVALUE1", 
+"Project1"."BELONGNETID" AS "BELONGNETID", 
+"Project1"."NAME1" AS "NAME1", 
+"Project1"."USERTYPE" AS "USERTYPE", 
+"Project1"."BMVALUE2" AS "BMVALUE2", 
+"Project1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET"
+FROM ( SELECT "Project1"."ID" AS "ID", "Project1"."NAME" AS "NAME", "Project1"."AGE" AS "AGE", "Project1"."TELEPHONE" AS "TELEPHONE", "Project1"."CERTIFICATENUM" AS "CERTIFICATENUM", "Project1"."ADDRESS" AS "ADDRESS", "Project1"."BELONGDEPTID" AS "BELONGDEPTID", "Project1"."BELONGNETID" AS "BELONGNETID", "Project1"."USERTYPE" AS "USERTYPE", "Project1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", "Project1"."BMVALUE" AS "BMVALUE", "Project1"."BMVALUE1" AS "BMVALUE1", "Project1"."BMVALUE2" AS "BMVALUE2", "Project1"."NAME1" AS "NAME1", row_number() OVER (ORDER BY "Project1"."USERTYPE" DESC, "Project1"."BELONGDEPTID" DESC, "Project1"."BELONGNETID" DESC, "Project1"."NAME" ASC) AS "row_number"
+	FROM ( SELECT 
+		"Filter1"."ID" AS "ID", 
+		"Filter1"."NAME" AS "NAME", 
+		"Filter1"."AGE" AS "AGE", 
+		"Filter1"."TELEPHONE" AS "TELEPHONE", 
+		"Filter1"."CERTIFICATENUM" AS "CERTIFICATENUM", 
+		"Filter1"."ADDRESS" AS "ADDRESS", 
+		"Filter1"."BELONGDEPTID" AS "BELONGDEPTID", 
+		"Filter1"."BELONGNETID" AS "BELONGNETID", 
+		"Filter1"."USERTYPE" AS "USERTYPE", 
+		"Filter1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", 
+		"Filter1"."BMVALUE3" AS "BMVALUE", 
+		"Filter1"."BMVALUE4" AS "BMVALUE1", 
+		"Filter1"."BMVALUE5" AS "BMVALUE2", 
+		"Extent5"."NAME" AS "NAME1"
+		FROM   (SELECT "Extent1"."ID" AS "ID", "Extent1"."NAME" AS "NAME", "Extent1"."SEX" AS "SEX", "Extent1"."AGE" AS "AGE", "Extent1"."TELEPHONE" AS "TELEPHONE", "Extent1"."CERTIFICATETYPE" AS "CERTIFICATETYPE", "Extent1"."CERTIFICATENUM" AS "CERTIFICATENUM", "Extent1"."DIRECTION" AS "DIRECTION", "Extent1"."ADDRESS" AS "ADDRESS", "Extent1"."BELONGDEPTID" AS "BELONGDEPTID", "Extent1"."BELONGNETID" AS "BELONGNETID", "Extent1"."REMARK" AS "REMARK1", "Extent1"."ISDELETED" AS "ISDELETED1", "Extent1"."USERTYPE" AS "USERTYPE", "Extent1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", "Extent1"."USERNAME" AS "USERNAME", "Extent1"."USERPWD" AS "USERPWD", "Extent1"."LOGINTYPE" AS "LOGINTYPE", "Extent2"."BMKEY" AS "BMKEY1", "Extent2"."BMVALUE" AS "BMVALUE3", "Extent2"."BMCODE" AS "BMCODE1", "Extent2"."BMPARENTKEY" AS "BMPARENTKEY1", "Extent2"."REMARK" AS "REMARK2", "Extent2"."ISDELETED" AS "ISDELETED2", "Extent2"."ORDERNUM" AS "ORDERNUM1", "Extent3"."BMKEY" AS "BMKEY2", "Extent3"."BMVALUE" AS "BMVALUE4", "Extent3"."BMCODE" AS "BMCODE2", "Extent3"."BMPARENTKEY" AS "BMPARENTKEY2", "Extent3"."REMARK" AS "REMARK3", "Extent3"."ISDELETED" AS "ISDELETED3", "Extent3"."ORDERNUM" AS "ORDERNUM2", "Extent4"."BMKEY" AS "BMKEY3", "Extent4"."BMVALUE" AS "BMVALUE5", "Extent4"."BMCODE" AS "BMCODE3", "Extent4"."BMPARENTKEY" AS "BMPARENTKEY3", "Extent4"."REMARK" AS "REMARK4", "Extent4"."ISDELETED" AS "ISDELETED4", "Extent4"."ORDERNUM" AS "ORDERNUM3"
+			FROM    "LSGAADMIN"."CFG_USERINFO" "Extent1"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."SEX" = "Extent2"."BMKEY"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent3" ON "Extent1"."BELONGDEPTID" = "Extent3"."BMKEY"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent4" ON "Extent1"."USERTYPE" = "Extent4"."BMKEY"
+			WHERE (0 = "Extent1"."ISDELETED") ) "Filter1"
+		LEFT OUTER JOIN "LSGAADMIN"."CFG_NETINFO" "Extent5" ON "Filter1"."BELONGNETID" = "Extent5"."ID"
+		WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__6) THEN 1 WHEN ("Filter1"."USERTYPE" = :p__linq__7) THEN 1 WHEN ("Filter1"."USERTYPE" <> :p__linq__7) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__8) THEN 1 WHEN ("Filter1"."BELONGDEPTID" = :p__linq__9) THEN 1 WHEN ("Filter1"."BELONGDEPTID" <> :p__linq__9) THEN 0 END) = 1))
+	)  "Project1"
+)  "Project1"
+WHERE ("Project1"."row_number" > 0)
+ORDER BY "Project1"."USERTYPE" DESC, "Project1"."BELONGDEPTID" DESC, "Project1"."BELONGNETID" DESC, "Project1"."NAME" ASC
+)
+WHERE (ROWNUM <= (20) )
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__7: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__8: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__9: '-1' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 11:07:58 +08:00
+-- Completed in 65 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:07:58 +08:00
+Opened connection at 2018/9/25 11:08:09 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 11:08:09 +08:00
+-- Completed in 73 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:08:09 +08:00
+Opened connection at 2018/9/25 11:08:20 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 11:08:20 +08:00
+-- Completed in 65 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:08:20 +08:00
+Opened connection at 2018/9/25 11:08:20 +08:00
+SELECT * 
+FROM ( 
+SELECT 
+"Project1"."ID" AS "ID", 
+"Project1"."TITLE" AS "TITLE", 
+"Project1"."CONTENT" AS "CONTENT", 
+"Project1"."NAME" AS "NAME", 
+"Project1"."CREATE_DATE" AS "CREATE_DATE"
+FROM ( SELECT "Project1"."ID" AS "ID", "Project1"."TITLE" AS "TITLE", "Project1"."CONTENT" AS "CONTENT", "Project1"."CREATE_DATE" AS "CREATE_DATE", "Project1"."NAME" AS "NAME", row_number() OVER (ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC) AS "row_number"
+	FROM ( SELECT 
+		"Extent1"."ID" AS "ID", 
+		"Extent1"."TITLE" AS "TITLE", 
+		"Extent1"."CONTENT" AS "CONTENT", 
+		"Extent1"."CREATE_DATE" AS "CREATE_DATE", 
+		"Extent2"."NAME" AS "NAME"
+		FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+		LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+		WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+	)  "Project1"
+)  "Project1"
+WHERE ("Project1"."row_number" > 0)
+ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC
+)
+WHERE (ROWNUM <= (20) )
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 11:08:20 +08:00
+-- Completed in 70 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 11:08:20 +08:00
+Opened connection at 2018/9/25 11:22:56 +08:00
+Started transaction at 2018/9/25 11:22:56 +08:00
+declare
+"ID" number(10,0);
+begin
+insert into "LSGAADMIN"."INFO_ALARMINFO"("ALARMINFO", "ALARMTIME", "ALARMADDRESS", "ALARMTYPE", "ALARMOBJECTNAME")
+values (:p0, :p1, :p2, :p3, :p4)
+returning
+"ID" into
+"ID";
+open :p5 for select
+"ID" as "ID" from dual;
+end;
+-- :p0: '派出所7号车于2018-09-25 11:22:56超越荃仁警务区网格边界' (Type = String, Size = 255)
+-- :p1: '2018/9/25 11:22:56' (Type = Date)
+-- :p2: '经度：114.351859100897，纬度：23.0163501319601' (Type = String, Size = 255)
+-- :p3: '2' (Type = Int32)
+-- :p4: '派出所7号车' (Type = String, Size = 50)
+-- :p5: 'null' (Type = Object, Direction = Output, IsNullable = false)
+-- Executing at 2018/9/25 11:22:56 +08:00
+-- Completed in 66 ms with result: OracleDataReader
+
+Committed transaction at 2018/9/25 11:22:56 +08:00
+Closed connection at 2018/9/25 11:22:56 +08:00
+Opened connection at 2018/9/25 12:09:26 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 12:09:26 +08:00
+-- Completed in 88 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:09:27 +08:00
+Opened connection at 2018/9/25 12:09:33 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 12:09:33 +08:00
+-- Completed in 100 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:09:33 +08:00
+Opened connection at 2018/9/25 12:09:33 +08:00
+SELECT * 
+FROM ( 
+SELECT 
+"Project1"."ID" AS "ID", 
+"Project1"."TITLE" AS "TITLE", 
+"Project1"."CONTENT" AS "CONTENT", 
+"Project1"."NAME" AS "NAME", 
+"Project1"."CREATE_DATE" AS "CREATE_DATE"
+FROM ( SELECT "Project1"."ID" AS "ID", "Project1"."TITLE" AS "TITLE", "Project1"."CONTENT" AS "CONTENT", "Project1"."CREATE_DATE" AS "CREATE_DATE", "Project1"."NAME" AS "NAME", row_number() OVER (ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC) AS "row_number"
+	FROM ( SELECT 
+		"Extent1"."ID" AS "ID", 
+		"Extent1"."TITLE" AS "TITLE", 
+		"Extent1"."CONTENT" AS "CONTENT", 
+		"Extent1"."CREATE_DATE" AS "CREATE_DATE", 
+		"Extent2"."NAME" AS "NAME"
+		FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+		LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+		WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+	)  "Project1"
+)  "Project1"
+WHERE ("Project1"."row_number" > 0)
+ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC
+)
+WHERE (ROWNUM <= (20) )
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 12:09:33 +08:00
+-- Completed in 41 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:09:33 +08:00
+Opened connection at 2018/9/25 12:48:33 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/1 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 12:48:33 +08:00
+-- Failed in 30370 ms with error: ORA-12570: 网络会话: 意外的数据包读取错误
+
+Closed connection at 2018/9/25 12:49:03 +08:00
+Opened connection at 2018/9/25 12:50:00 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 12:50:00 +08:00
+-- Completed in 69 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:01 +08:00
+Opened connection at 2018/9/25 12:50:06 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM   (SELECT "Extent1"."ID" AS "ID", "Extent1"."NAME" AS "NAME", "Extent1"."SEX" AS "SEX", "Extent1"."AGE" AS "AGE", "Extent1"."TELEPHONE" AS "TELEPHONE", "Extent1"."CERTIFICATETYPE" AS "CERTIFICATETYPE", "Extent1"."CERTIFICATENUM" AS "CERTIFICATENUM", "Extent1"."DIRECTION" AS "DIRECTION", "Extent1"."ADDRESS" AS "ADDRESS", "Extent1"."BELONGDEPTID" AS "BELONGDEPTID", "Extent1"."BELONGNETID" AS "BELONGNETID", "Extent1"."REMARK" AS "REMARK1", "Extent1"."ISDELETED" AS "ISDELETED1", "Extent1"."USERTYPE" AS "USERTYPE", "Extent1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", "Extent1"."USERNAME" AS "USERNAME", "Extent1"."USERPWD" AS "USERPWD", "Extent1"."LOGINTYPE" AS "LOGINTYPE", "Extent2"."BMKEY" AS "BMKEY1", "Extent2"."BMVALUE" AS "BMVALUE1", "Extent2"."BMCODE" AS "BMCODE1", "Extent2"."BMPARENTKEY" AS "BMPARENTKEY1", "Extent2"."REMARK" AS "REMARK2", "Extent2"."ISDELETED" AS "ISDELETED2", "Extent2"."ORDERNUM" AS "ORDERNUM1", "Extent3"."BMKEY" AS "BMKEY2", "Extent3"."BMVALUE" AS "BMVALUE2", "Extent3"."BMCODE" AS "BMCODE2", "Extent3"."BMPARENTKEY" AS "BMPARENTKEY2", "Extent3"."REMARK" AS "REMARK3", "Extent3"."ISDELETED" AS "ISDELETED3", "Extent3"."ORDERNUM" AS "ORDERNUM2", "Extent4"."BMKEY" AS "BMKEY3", "Extent4"."BMVALUE" AS "BMVALUE3", "Extent4"."BMCODE" AS "BMCODE3", "Extent4"."BMPARENTKEY" AS "BMPARENTKEY3", "Extent4"."REMARK" AS "REMARK4", "Extent4"."ISDELETED" AS "ISDELETED4", "Extent4"."ORDERNUM" AS "ORDERNUM3"
+		FROM    "LSGAADMIN"."CFG_USERINFO" "Extent1"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."SEX" = "Extent2"."BMKEY"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent3" ON "Extent1"."BELONGDEPTID" = "Extent3"."BMKEY"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent4" ON "Extent1"."USERTYPE" = "Extent4"."BMKEY"
+		WHERE (0 = "Extent1"."ISDELETED") ) "Filter1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_NETINFO" "Extent5" ON "Filter1"."BELONGNETID" = "Extent5"."ID"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__6) THEN 1 WHEN ("Filter1"."USERTYPE" = :p__linq__7) THEN 1 WHEN ("Filter1"."USERTYPE" <> :p__linq__7) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__8) THEN 1 WHEN ("Filter1"."BELONGDEPTID" = :p__linq__9) THEN 1 WHEN ("Filter1"."BELONGDEPTID" <> :p__linq__9) THEN 0 END) = 1))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__7: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__8: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__9: '-1' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 12:50:06 +08:00
+-- Completed in 120 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:06 +08:00
+Opened connection at 2018/9/25 12:50:06 +08:00
+SELECT * 
+FROM ( 
+SELECT 
+"Project1"."ID" AS "ID", 
+"Project1"."NAME" AS "NAME", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."AGE" AS "AGE", 
+"Project1"."TELEPHONE" AS "TELEPHONE", 
+"Project1"."CERTIFICATENUM" AS "CERTIFICATENUM", 
+"Project1"."ADDRESS" AS "ADDRESS", 
+"Project1"."BELONGDEPTID" AS "BELONGDEPTID", 
+"Project1"."BMVALUE1" AS "BMVALUE1", 
+"Project1"."BELONGNETID" AS "BELONGNETID", 
+"Project1"."NAME1" AS "NAME1", 
+"Project1"."USERTYPE" AS "USERTYPE", 
+"Project1"."BMVALUE2" AS "BMVALUE2", 
+"Project1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET"
+FROM ( SELECT "Project1"."ID" AS "ID", "Project1"."NAME" AS "NAME", "Project1"."AGE" AS "AGE", "Project1"."TELEPHONE" AS "TELEPHONE", "Project1"."CERTIFICATENUM" AS "CERTIFICATENUM", "Project1"."ADDRESS" AS "ADDRESS", "Project1"."BELONGDEPTID" AS "BELONGDEPTID", "Project1"."BELONGNETID" AS "BELONGNETID", "Project1"."USERTYPE" AS "USERTYPE", "Project1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", "Project1"."BMVALUE" AS "BMVALUE", "Project1"."BMVALUE1" AS "BMVALUE1", "Project1"."BMVALUE2" AS "BMVALUE2", "Project1"."NAME1" AS "NAME1", row_number() OVER (ORDER BY "Project1"."USERTYPE" DESC, "Project1"."BELONGDEPTID" DESC, "Project1"."BELONGNETID" DESC, "Project1"."NAME" ASC) AS "row_number"
+	FROM ( SELECT 
+		"Filter1"."ID" AS "ID", 
+		"Filter1"."NAME" AS "NAME", 
+		"Filter1"."AGE" AS "AGE", 
+		"Filter1"."TELEPHONE" AS "TELEPHONE", 
+		"Filter1"."CERTIFICATENUM" AS "CERTIFICATENUM", 
+		"Filter1"."ADDRESS" AS "ADDRESS", 
+		"Filter1"."BELONGDEPTID" AS "BELONGDEPTID", 
+		"Filter1"."BELONGNETID" AS "BELONGNETID", 
+		"Filter1"."USERTYPE" AS "USERTYPE", 
+		"Filter1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", 
+		"Filter1"."BMVALUE3" AS "BMVALUE", 
+		"Filter1"."BMVALUE4" AS "BMVALUE1", 
+		"Filter1"."BMVALUE5" AS "BMVALUE2", 
+		"Extent5"."NAME" AS "NAME1"
+		FROM   (SELECT "Extent1"."ID" AS "ID", "Extent1"."NAME" AS "NAME", "Extent1"."SEX" AS "SEX", "Extent1"."AGE" AS "AGE", "Extent1"."TELEPHONE" AS "TELEPHONE", "Extent1"."CERTIFICATETYPE" AS "CERTIFICATETYPE", "Extent1"."CERTIFICATENUM" AS "CERTIFICATENUM", "Extent1"."DIRECTION" AS "DIRECTION", "Extent1"."ADDRESS" AS "ADDRESS", "Extent1"."BELONGDEPTID" AS "BELONGDEPTID", "Extent1"."BELONGNETID" AS "BELONGNETID", "Extent1"."REMARK" AS "REMARK1", "Extent1"."ISDELETED" AS "ISDELETED1", "Extent1"."USERTYPE" AS "USERTYPE", "Extent1"."VIRTUALTRUMPET" AS "VIRTUALTRUMPET", "Extent1"."USERNAME" AS "USERNAME", "Extent1"."USERPWD" AS "USERPWD", "Extent1"."LOGINTYPE" AS "LOGINTYPE", "Extent2"."BMKEY" AS "BMKEY1", "Extent2"."BMVALUE" AS "BMVALUE3", "Extent2"."BMCODE" AS "BMCODE1", "Extent2"."BMPARENTKEY" AS "BMPARENTKEY1", "Extent2"."REMARK" AS "REMARK2", "Extent2"."ISDELETED" AS "ISDELETED2", "Extent2"."ORDERNUM" AS "ORDERNUM1", "Extent3"."BMKEY" AS "BMKEY2", "Extent3"."BMVALUE" AS "BMVALUE4", "Extent3"."BMCODE" AS "BMCODE2", "Extent3"."BMPARENTKEY" AS "BMPARENTKEY2", "Extent3"."REMARK" AS "REMARK3", "Extent3"."ISDELETED" AS "ISDELETED3", "Extent3"."ORDERNUM" AS "ORDERNUM2", "Extent4"."BMKEY" AS "BMKEY3", "Extent4"."BMVALUE" AS "BMVALUE5", "Extent4"."BMCODE" AS "BMCODE3", "Extent4"."BMPARENTKEY" AS "BMPARENTKEY3", "Extent4"."REMARK" AS "REMARK4", "Extent4"."ISDELETED" AS "ISDELETED4", "Extent4"."ORDERNUM" AS "ORDERNUM3"
+			FROM    "LSGAADMIN"."CFG_USERINFO" "Extent1"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."SEX" = "Extent2"."BMKEY"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent3" ON "Extent1"."BELONGDEPTID" = "Extent3"."BMKEY"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent4" ON "Extent1"."USERTYPE" = "Extent4"."BMKEY"
+			WHERE (0 = "Extent1"."ISDELETED") ) "Filter1"
+		LEFT OUTER JOIN "LSGAADMIN"."CFG_NETINFO" "Extent5" ON "Filter1"."BELONGNETID" = "Extent5"."ID"
+		WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."NAME" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."TELEPHONE" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__6) THEN 1 WHEN ("Filter1"."USERTYPE" = :p__linq__7) THEN 1 WHEN ("Filter1"."USERTYPE" <> :p__linq__7) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__8) THEN 1 WHEN ("Filter1"."BELONGDEPTID" = :p__linq__9) THEN 1 WHEN ("Filter1"."BELONGDEPTID" <> :p__linq__9) THEN 0 END) = 1))
+	)  "Project1"
+)  "Project1"
+WHERE ("Project1"."row_number" > 0)
+ORDER BY "Project1"."USERTYPE" DESC, "Project1"."BELONGDEPTID" DESC, "Project1"."BELONGNETID" DESC, "Project1"."NAME" ASC
+)
+WHERE (ROWNUM <= (20) )
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__7: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__8: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__9: '-1' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 12:50:06 +08:00
+-- Completed in 74 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:06 +08:00
+Opened connection at 2018/9/25 12:50:06 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM   (SELECT "Extent1"."ID" AS "ID1", "Extent1"."VEHICLENO" AS "VEHICLENO", "Extent1"."VEHICLETYPE" AS "VEHICLETYPE", "Extent1"."VEHICLEBRAND" AS "VEHICLEBRAND", "Extent1"."BELONGDEPTID" AS "BELONGDEPTID1", "Extent1"."BELONGNETID" AS "BELONGNETID", "Extent1"."REMARK" AS "REMARK1", "Extent1"."OWNER" AS "OWNER", "Extent1"."OWNERTYPE" AS "OWNERTYPE", "Extent1"."CLDWZDSBH" AS "CLDWZDSBH", "Extent1"."WLWKHM" AS "WLWKHM", "Extent1"."ISDELETED" AS "ISDELETED1", "Extent2"."ID" AS "ID2", "Extent2"."NAME" AS "NAME", "Extent2"."POPULATIONINFO" AS "POPULATIONINFO", "Extent2"."HOUSEINFO" AS "HOUSEINFO", "Extent2"."UNITSTOREINFO" AS "UNITSTOREINFO", "Extent2"."BELONGAREA" AS "BELONGAREA", "Extent2"."BELONGDEPTID" AS "BELONGDEPTID2", "Extent2"."NETCOLOR" AS "NETCOLOR", "Extent2"."LONANDLAT" AS "LONANDLAT", "Extent2"."REMARK" AS "REMARK2", "Extent2"."ISDELETED" AS "ISDELETED2", "Extent3"."BMKEY" AS "BMKEY1", "Extent3"."BMVALUE" AS "BMVALUE1", "Extent3"."BMCODE" AS "BMCODE1", "Extent3"."BMPARENTKEY" AS "BMPARENTKEY1", "Extent3"."REMARK" AS "REMARK3", "Extent3"."ISDELETED" AS "ISDELETED3", "Extent3"."ORDERNUM" AS "ORDERNUM1", "Extent4"."BMKEY" AS "BMKEY2", "Extent4"."BMVALUE" AS "BMVALUE2", "Extent4"."BMCODE" AS "BMCODE2", "Extent4"."BMPARENTKEY" AS "BMPARENTKEY2", "Extent4"."REMARK" AS "REMARK4", "Extent4"."ISDELETED" AS "ISDELETED4", "Extent4"."ORDERNUM" AS "ORDERNUM2"
+		FROM    "LSGAADMIN"."CFG_CARINFO" "Extent1"
+		INNER JOIN "LSGAADMIN"."CFG_NETINFO" "Extent2" ON "Extent1"."BELONGNETID" = "Extent2"."ID"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent3" ON "Extent1"."VEHICLETYPE" = "Extent3"."BMKEY"
+		INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent4" ON "Extent1"."BELONGDEPTID" = "Extent4"."BMKEY"
+		WHERE (0 = "Extent1"."ISDELETED") ) "Filter1"
+	LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent5" ON "Filter1"."OWNERTYPE" = "Extent5"."BMKEY"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Filter1"."VEHICLENO" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."VEHICLENO" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__3) THEN 1 WHEN ("Filter1"."OWNERTYPE" = :p__linq__4) THEN 1 WHEN ( NOT (("Filter1"."OWNERTYPE" = :p__linq__4) AND ((CASE WHEN ("Filter1"."OWNERTYPE" IS NULL) THEN 1 ELSE 0 END) = 0))) THEN 0 END) = 1))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__4: '-1' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 12:50:06 +08:00
+-- Completed in 64 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:06 +08:00
+Opened connection at 2018/9/25 12:50:06 +08:00
+SELECT * 
+FROM ( 
+SELECT 
+"Project1"."ID" AS "ID", 
+"Project1"."VEHICLENO" AS "VEHICLENO", 
+"Project1"."VEHICLETYPE" AS "VEHICLETYPE", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."VEHICLEBRAND" AS "VEHICLEBRAND", 
+"Project1"."BELONGDEPTID" AS "BELONGDEPTID", 
+"Project1"."BMVALUE1" AS "BMVALUE1", 
+"Project1"."NAME" AS "NAME", 
+"Project1"."OWNER" AS "OWNER", 
+"Project1"."OWNERTYPE" AS "OWNERTYPE", 
+"Project1"."BMVALUE2" AS "BMVALUE2", 
+"Project1"."CLDWZDSBH" AS "CLDWZDSBH", 
+"Project1"."WLWKHM" AS "WLWKHM"
+FROM ( SELECT "Project1"."ID" AS "ID", "Project1"."VEHICLENO" AS "VEHICLENO", "Project1"."VEHICLETYPE" AS "VEHICLETYPE", "Project1"."VEHICLEBRAND" AS "VEHICLEBRAND", "Project1"."BELONGDEPTID" AS "BELONGDEPTID", "Project1"."OWNER" AS "OWNER", "Project1"."OWNERTYPE" AS "OWNERTYPE", "Project1"."CLDWZDSBH" AS "CLDWZDSBH", "Project1"."WLWKHM" AS "WLWKHM", "Project1"."NAME" AS "NAME", "Project1"."BMVALUE" AS "BMVALUE", "Project1"."BMVALUE1" AS "BMVALUE1", "Project1"."BMVALUE2" AS "BMVALUE2", row_number() OVER (ORDER BY "Project1"."OWNERTYPE" DESC, "Project1"."BELONGDEPTID" DESC, "Project1"."VEHICLENO" ASC) AS "row_number"
+	FROM ( SELECT 
+		"Filter1"."ID1" AS "ID", 
+		"Filter1"."VEHICLENO" AS "VEHICLENO", 
+		"Filter1"."VEHICLETYPE" AS "VEHICLETYPE", 
+		"Filter1"."VEHICLEBRAND" AS "VEHICLEBRAND", 
+		"Filter1"."BELONGDEPTID1" AS "BELONGDEPTID", 
+		"Filter1"."OWNER" AS "OWNER", 
+		"Filter1"."OWNERTYPE" AS "OWNERTYPE", 
+		"Filter1"."CLDWZDSBH" AS "CLDWZDSBH", 
+		"Filter1"."WLWKHM" AS "WLWKHM", 
+		"Filter1"."NAME" AS "NAME", 
+		"Filter1"."BMVALUE3" AS "BMVALUE", 
+		"Filter1"."BMVALUE4" AS "BMVALUE1", 
+		"Extent5"."BMVALUE" AS "BMVALUE2"
+		FROM   (SELECT "Extent1"."ID" AS "ID1", "Extent1"."VEHICLENO" AS "VEHICLENO", "Extent1"."VEHICLETYPE" AS "VEHICLETYPE", "Extent1"."VEHICLEBRAND" AS "VEHICLEBRAND", "Extent1"."BELONGDEPTID" AS "BELONGDEPTID1", "Extent1"."BELONGNETID" AS "BELONGNETID", "Extent1"."REMARK" AS "REMARK1", "Extent1"."OWNER" AS "OWNER", "Extent1"."OWNERTYPE" AS "OWNERTYPE", "Extent1"."CLDWZDSBH" AS "CLDWZDSBH", "Extent1"."WLWKHM" AS "WLWKHM", "Extent1"."ISDELETED" AS "ISDELETED1", "Extent2"."ID" AS "ID2", "Extent2"."NAME" AS "NAME", "Extent2"."POPULATIONINFO" AS "POPULATIONINFO", "Extent2"."HOUSEINFO" AS "HOUSEINFO", "Extent2"."UNITSTOREINFO" AS "UNITSTOREINFO", "Extent2"."BELONGAREA" AS "BELONGAREA", "Extent2"."BELONGDEPTID" AS "BELONGDEPTID2", "Extent2"."NETCOLOR" AS "NETCOLOR", "Extent2"."LONANDLAT" AS "LONANDLAT", "Extent2"."REMARK" AS "REMARK2", "Extent2"."ISDELETED" AS "ISDELETED2", "Extent3"."BMKEY" AS "BMKEY1", "Extent3"."BMVALUE" AS "BMVALUE3", "Extent3"."BMCODE" AS "BMCODE1", "Extent3"."BMPARENTKEY" AS "BMPARENTKEY1", "Extent3"."REMARK" AS "REMARK3", "Extent3"."ISDELETED" AS "ISDELETED3", "Extent3"."ORDERNUM" AS "ORDERNUM1", "Extent4"."BMKEY" AS "BMKEY2", "Extent4"."BMVALUE" AS "BMVALUE4", "Extent4"."BMCODE" AS "BMCODE2", "Extent4"."BMPARENTKEY" AS "BMPARENTKEY2", "Extent4"."REMARK" AS "REMARK4", "Extent4"."ISDELETED" AS "ISDELETED4", "Extent4"."ORDERNUM" AS "ORDERNUM2"
+			FROM    "LSGAADMIN"."CFG_CARINFO" "Extent1"
+			INNER JOIN "LSGAADMIN"."CFG_NETINFO" "Extent2" ON "Extent1"."BELONGNETID" = "Extent2"."ID"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent3" ON "Extent1"."VEHICLETYPE" = "Extent3"."BMKEY"
+			INNER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent4" ON "Extent1"."BELONGDEPTID" = "Extent4"."BMKEY"
+			WHERE (0 = "Extent1"."ISDELETED") ) "Filter1"
+		LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent5" ON "Filter1"."OWNERTYPE" = "Extent5"."BMKEY"
+		WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Filter1"."VEHICLENO" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Filter1"."VEHICLENO" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (-1 = :p__linq__3) THEN 1 WHEN ("Filter1"."OWNERTYPE" = :p__linq__4) THEN 1 WHEN ( NOT (("Filter1"."OWNERTYPE" = :p__linq__4) AND ((CASE WHEN ("Filter1"."OWNERTYPE" IS NULL) THEN 1 ELSE 0 END) = 0))) THEN 0 END) = 1))
+	)  "Project1"
+)  "Project1"
+WHERE ("Project1"."row_number" > 0)
+ORDER BY "Project1"."OWNERTYPE" DESC, "Project1"."BELONGDEPTID" DESC, "Project1"."VEHICLENO" ASC
+)
+WHERE (ROWNUM <= (20) )
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '-1' (Type = Int32, IsNullable = false)
+-- p__linq__4: '-1' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 12:50:06 +08:00
+-- Completed in 85 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:06 +08:00
+Opened connection at 2018/9/25 12:50:06 +08:00
+SELECT 
+"Extent1"."BMKEY" AS "BMKEY", 
+"Extent1"."BMVALUE" AS "BMVALUE", 
+"Extent1"."BMCODE" AS "BMCODE", 
+"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."ISDELETED" AS "ISDELETED", 
+"Extent1"."ORDERNUM" AS "ORDERNUM"
+FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+WHERE ("Extent1"."BMCODE" = :p__linq__0) AND (ROWNUM <= (1) )
+-- p__linq__0: 'RYLX' (Type = Object)
+-- Executing at 2018/9/25 12:50:06 +08:00
+-- Completed in 59 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:06 +08:00
+Opened connection at 2018/9/25 12:50:06 +08:00
+SELECT 
+"Project1"."BMKEY" AS "BMKEY", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."BMCODE" AS "BMCODE", 
+"Project1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Project1"."REMARK" AS "REMARK", 
+"Project1"."ISDELETED" AS "ISDELETED", 
+"Project1"."ORDERNUM" AS "ORDERNUM"
+FROM ( SELECT 
+	"Extent1"."BMKEY" AS "BMKEY", 
+	"Extent1"."BMVALUE" AS "BMVALUE", 
+	"Extent1"."BMCODE" AS "BMCODE", 
+	"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+	"Extent1"."REMARK" AS "REMARK", 
+	"Extent1"."ISDELETED" AS "ISDELETED", 
+	"Extent1"."ORDERNUM" AS "ORDERNUM"
+	FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+	WHERE (("Extent1"."BMPARENTKEY" = :p__linq__0) AND (0 = "Extent1"."ISDELETED"))
+)  "Project1"
+ORDER BY "Project1"."ORDERNUM" ASC
+-- p__linq__0: '20' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 12:50:06 +08:00
+-- Completed in 60 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:06 +08:00
+Opened connection at 2018/9/25 12:50:06 +08:00
+SELECT 
+"Extent1"."BMKEY" AS "BMKEY", 
+"Extent1"."BMVALUE" AS "BMVALUE", 
+"Extent1"."BMCODE" AS "BMCODE", 
+"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."ISDELETED" AS "ISDELETED", 
+"Extent1"."ORDERNUM" AS "ORDERNUM"
+FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+WHERE ("Extent1"."BMCODE" = :p__linq__0) AND (ROWNUM <= (1) )
+-- p__linq__0: 'YCBM' (Type = Object)
+-- Executing at 2018/9/25 12:50:06 +08:00
+-- Completed in 74 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:06 +08:00
+Opened connection at 2018/9/25 12:50:06 +08:00
+SELECT 
+"Project1"."BMKEY" AS "BMKEY", 
+"Project1"."BMVALUE" AS "BMVALUE", 
+"Project1"."BMCODE" AS "BMCODE", 
+"Project1"."BMPARENTKEY" AS "BMPARENTKEY", 
+"Project1"."REMARK" AS "REMARK", 
+"Project1"."ISDELETED" AS "ISDELETED", 
+"Project1"."ORDERNUM" AS "ORDERNUM"
+FROM ( SELECT 
+	"Extent1"."BMKEY" AS "BMKEY", 
+	"Extent1"."BMVALUE" AS "BMVALUE", 
+	"Extent1"."BMCODE" AS "BMCODE", 
+	"Extent1"."BMPARENTKEY" AS "BMPARENTKEY", 
+	"Extent1"."REMARK" AS "REMARK", 
+	"Extent1"."ISDELETED" AS "ISDELETED", 
+	"Extent1"."ORDERNUM" AS "ORDERNUM"
+	FROM "LSGAADMIN"."SYS_BM_CODE" "Extent1"
+	WHERE (("Extent1"."BMPARENTKEY" = :p__linq__0) AND (0 = "Extent1"."ISDELETED"))
+)  "Project1"
+ORDER BY "Project1"."ORDERNUM" ASC
+-- p__linq__0: '31' (Type = Int32, IsNullable = false)
+-- Executing at 2018/9/25 12:50:06 +08:00
+-- Completed in 78 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:06 +08:00
+Opened connection at 2018/9/25 12:50:14 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 12:50:14 +08:00
+-- Completed in 67 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:15 +08:00
+Opened connection at 2018/9/25 12:50:15 +08:00
+SELECT * 
+FROM ( 
+SELECT 
+"Project1"."ID" AS "ID", 
+"Project1"."TITLE" AS "TITLE", 
+"Project1"."CONTENT" AS "CONTENT", 
+"Project1"."NAME" AS "NAME", 
+"Project1"."CREATE_DATE" AS "CREATE_DATE"
+FROM ( SELECT "Project1"."ID" AS "ID", "Project1"."TITLE" AS "TITLE", "Project1"."CONTENT" AS "CONTENT", "Project1"."CREATE_DATE" AS "CREATE_DATE", "Project1"."NAME" AS "NAME", row_number() OVER (ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC) AS "row_number"
+	FROM ( SELECT 
+		"Extent1"."ID" AS "ID", 
+		"Extent1"."TITLE" AS "TITLE", 
+		"Extent1"."CONTENT" AS "CONTENT", 
+		"Extent1"."CREATE_DATE" AS "CREATE_DATE", 
+		"Extent2"."NAME" AS "NAME"
+		FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+		LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+		WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+	)  "Project1"
+)  "Project1"
+WHERE ("Project1"."row_number" > 0)
+ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC
+)
+WHERE (ROWNUM <= (20) )
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 12:50:15 +08:00
+-- Completed in 49 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 12:50:15 +08:00
+Opened connection at 2018/9/25 13:06:35 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 13:06:35 +08:00
+-- Failed in 29033 ms with error: ORA-12570: 网络会话: 意外的数据包读取错误
+
+Closed connection at 2018/9/25 13:07:04 +08:00
+Opened connection at 2018/9/25 13:07:17 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 13:07:17 +08:00
+-- Completed in 54 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 13:07:18 +08:00
+Opened connection at 2018/9/25 13:07:24 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 13:07:24 +08:00
+-- Completed in 67 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 13:07:24 +08:00
+Opened connection at 2018/9/25 13:07:29 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 13:07:29 +08:00
+-- Completed in 58 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 13:07:29 +08:00
+Opened connection at 2018/9/25 13:07:29 +08:00
+SELECT * 
+FROM ( 
+SELECT 
+"Project1"."ID" AS "ID", 
+"Project1"."TITLE" AS "TITLE", 
+"Project1"."CONTENT" AS "CONTENT", 
+"Project1"."NAME" AS "NAME", 
+"Project1"."CREATE_DATE" AS "CREATE_DATE"
+FROM ( SELECT "Project1"."ID" AS "ID", "Project1"."TITLE" AS "TITLE", "Project1"."CONTENT" AS "CONTENT", "Project1"."CREATE_DATE" AS "CREATE_DATE", "Project1"."NAME" AS "NAME", row_number() OVER (ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC) AS "row_number"
+	FROM ( SELECT 
+		"Extent1"."ID" AS "ID", 
+		"Extent1"."TITLE" AS "TITLE", 
+		"Extent1"."CONTENT" AS "CONTENT", 
+		"Extent1"."CREATE_DATE" AS "CREATE_DATE", 
+		"Extent2"."NAME" AS "NAME"
+		FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+		LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+		WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+	)  "Project1"
+)  "Project1"
+WHERE ("Project1"."row_number" > 0)
+ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC
+)
+WHERE (ROWNUM <= (20) )
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 13:07:29 +08:00
+-- Completed in 76 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 13:07:29 +08:00
+Opened connection at 2018/9/25 15:11:58 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 15:11:58 +08:00
+-- Completed in 76 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 15:11:59 +08:00
+Opened connection at 2018/9/25 15:12:02 +08:00
+Started transaction at 2018/9/25 15:12:02 +08:00
+declare
+"ID" number(10,0);
+begin
+insert into "LSGAADMIN"."INFO_ALARMINFO"("ALARMINFO", "ALARMTIME", "ALARMADDRESS", "ALARMTYPE", "ALARMOBJECTNAME")
+values (:p0, :p1, :p2, :p3, :p4)
+returning
+"ID" into
+"ID";
+open :p5 for select
+"ID" as "ID" from dual;
+end;
+-- :p0: '派出所4号车于2018-09-25 15:12:02超越镇区警务区网格边界' (Type = String, Size = 255)
+-- :p1: '2018/9/25 15:12:02' (Type = Date)
+-- :p2: '经度：120.418791817378，纬度：30.7065424581585' (Type = String, Size = 255)
+-- :p3: '2' (Type = Int32)
+-- :p4: '派出所4号车' (Type = String, Size = 50)
+-- :p5: 'null' (Type = Object, Direction = Output, IsNullable = false)
+-- Executing at 2018/9/25 15:12:02 +08:00
+-- Completed in 96 ms with result: OracleDataReader
+
+Committed transaction at 2018/9/25 15:12:02 +08:00
+Closed connection at 2018/9/25 15:12:02 +08:00
+Opened connection at 2018/9/25 15:12:08 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 15:12:08 +08:00
+-- Completed in 80 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 15:12:08 +08:00
+Opened connection at 2018/9/25 15:12:08 +08:00
+SELECT * 
+FROM ( 
+SELECT 
+"Project1"."ID" AS "ID", 
+"Project1"."TITLE" AS "TITLE", 
+"Project1"."CONTENT" AS "CONTENT", 
+"Project1"."NAME" AS "NAME", 
+"Project1"."CREATE_DATE" AS "CREATE_DATE"
+FROM ( SELECT "Project1"."ID" AS "ID", "Project1"."TITLE" AS "TITLE", "Project1"."CONTENT" AS "CONTENT", "Project1"."CREATE_DATE" AS "CREATE_DATE", "Project1"."NAME" AS "NAME", row_number() OVER (ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC) AS "row_number"
+	FROM ( SELECT 
+		"Extent1"."ID" AS "ID", 
+		"Extent1"."TITLE" AS "TITLE", 
+		"Extent1"."CONTENT" AS "CONTENT", 
+		"Extent1"."CREATE_DATE" AS "CREATE_DATE", 
+		"Extent2"."NAME" AS "NAME"
+		FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+		LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+		WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+	)  "Project1"
+)  "Project1"
+WHERE ("Project1"."row_number" > 0)
+ORDER BY "Project1"."CREATE_DATE" DESC, "Project1"."TITLE" DESC
+)
+WHERE (ROWNUM <= (20) )
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 15:12:08 +08:00
+-- Completed in 51 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 15:12:08 +08:00
+Opened connection at 2018/9/25 15:26:06 +08:00
+SELECT 
+"GroupBy1"."A1" AS "C1"
+FROM ( SELECT 
+	COUNT(1) AS "A1"
+	FROM  "LSGAADMIN"."NOTIFICATION" "Extent1"
+	LEFT OUTER JOIN "LSGAADMIN"."CFG_USERINFO" "Extent2" ON "Extent1"."PHONE" = "Extent2"."TELEPHONE"
+	WHERE (((CASE WHEN (('' = :p__linq__0) OR (:p__linq__1 IS NULL)) THEN 1 WHEN ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent1"."TITLE" LIKE :p__linq__2 ESCAPE '\')) THEN 0 END) = 1) AND ((CASE WHEN (('' = :p__linq__3) OR (:p__linq__4 IS NULL)) THEN 1 WHEN ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\') THEN 1 WHEN ( NOT ("Extent2"."NAME" LIKE :p__linq__5 ESCAPE '\')) THEN 0 END) = 1) AND ("Extent1"."CREATE_DATE" >= :p__linq__6) AND ("Extent1"."CREATE_DATE" <= :p__linq__7))
+)  "GroupBy1"
+-- p__linq__0: '' (Type = Object)
+-- p__linq__1: '' (Type = Object)
+-- p__linq__2: '%%' (Type = Object)
+-- p__linq__3: '' (Type = Object)
+-- p__linq__4: '' (Type = Object)
+-- p__linq__5: '%%' (Type = Object)
+-- p__linq__6: '2018/9/25 0:00:00' (Type = Date, IsNullable = false)
+-- p__linq__7: '2018/9/25 23:59:59' (Type = Date, IsNullable = false)
+-- Executing at 2018/9/25 15:26:06 +08:00
+-- Failed in 29408 ms with error: ORA-12570: 网络会话: 意外的数据包读取错误
+
+Closed connection at 2018/9/25 15:26:35 +08:00
+Opened connection at 2018/9/25 15:40:49 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 15:40:50 +08:00
+-- Completed in 84 ms with result: OracleDataReader
+
+Closed connection at 2018/9/25 15:40:51 +08:00
+Opened connection at 2018/9/25 16:52:38 +08:00
+SELECT 
+"Extent1"."ID" AS "ID", 
+"Extent1"."BELONGAREA" AS "BELONGAREA", 
+"Extent2"."BMVALUE" AS "BMVALUE", 
+"Extent1"."HOUSEINFO" AS "HOUSEINFO", 
+"Extent1"."LONANDLAT" AS "LONANDLAT", 
+"Extent1"."POPULATIONINFO" AS "POPULATIONINFO", 
+"Extent1"."REMARK" AS "REMARK", 
+"Extent1"."UNITSTOREINFO" AS "UNITSTOREINFO", 
+"Extent1"."NETCOLOR" AS "NETCOLOR", 
+"Extent1"."NAME" AS "NAME"
+FROM  "LSGAADMIN"."CFG_NETINFO" "Extent1"
+LEFT OUTER JOIN "LSGAADMIN"."SYS_BM_CODE" "Extent2" ON "Extent1"."BELONGDEPTID" = "Extent2"."BMKEY"
+WHERE (0 = "Extent1"."ISDELETED")
+-- Executing at 2018/9/25 16:52:38 +08:00
+-- Failed in 23147 ms with error: ORA-12570: 网络会话: 意外的数据包读取错误
+
+Closed connection at 2018/9/25 16:53:01 +08:00

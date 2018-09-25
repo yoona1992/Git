@@ -41,16 +41,31 @@ namespace CCSIM.BLL
         /// <returns></returns>
         public static bool Add(INFO_ALARMINFO info)
         {
-            DbBase<INFO_ALARMINFO> db = new DbBase<INFO_ALARMINFO>();
-            db.Insert(info);
-            if (db.SaveChanges() >= 0)
+            bool isSuccess = true;
+            StringBuilder pInsertText = new StringBuilder();
+            pInsertText.Append("INSERT INTO INFO_ALARMINFO(ALARMINFO,ALARMTIME,ALARMADDRESS,ALARMTYPE,ALARMOBJECTNAME) VALUES('");
+            pInsertText.Append(info.ALARMINFO + "',TO_DATE('" + info.ALARMTIME.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),'" + info.ALARMADDRESS + "','" + info.ALARMTYPE + "','" + info.ALARMOBJECTNAME + "')");
+
+            try
             {
-                return true;
+                OracleOperateBLL.ExecuteSql(pInsertText.ToString());
             }
-            else
+            catch
             {
-                return false;
+                isSuccess = false;
             }
+
+            return isSuccess;
+            //DbBase<INFO_ALARMINFO> db = new DbBase<INFO_ALARMINFO>();
+            //db.Insert(info);
+            //if (db.SaveChanges() >= 0)
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
         }
 
         /// <summary>

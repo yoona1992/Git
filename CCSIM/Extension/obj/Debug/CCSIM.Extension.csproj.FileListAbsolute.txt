@@ -53,13 +53,6 @@ D:\Project\CCSIM\Extension\bin\Debug\AutoMapper.pdb
 D:\Project\CCSIM\Extension\bin\Debug\AutoMapper.xml
 D:\Project\CCSIM\Extension\obj\Debug\CCSIM.Extension.dll
 D:\Project\CCSIM\Extension\obj\Debug\CCSIM.Extension.pdb
-D:\Git\CCSIM\Extension\bin\Debug\CCSIM.Extension.dll
-D:\Git\CCSIM\Extension\bin\Debug\CCSIM.Extension.pdb
-D:\Git\CCSIM\Extension\bin\Debug\AutoMapper.dll
-D:\Git\CCSIM\Extension\bin\Debug\AutoMapper.pdb
-D:\Git\CCSIM\Extension\bin\Debug\AutoMapper.xml
-D:\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.dll
-D:\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.pdb
 F:\Git\Git\CCSIM\Extension\bin\Debug\CCSIM.Extension.dll
 F:\Git\Git\CCSIM\Extension\bin\Debug\CCSIM.Extension.pdb
 F:\Git\Git\CCSIM\Extension\bin\Debug\AutoMapper.dll
@@ -70,3 +63,11 @@ F:\Git\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.csproj.CoreCompileInputs.ca
 F:\Git\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.csproj.CopyComplete
 F:\Git\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.dll
 F:\Git\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.pdb
+D:\Git\CCSIM\Extension\bin\Debug\CCSIM.Extension.dll
+D:\Git\CCSIM\Extension\bin\Debug\CCSIM.Extension.pdb
+D:\Git\CCSIM\Extension\bin\Debug\AutoMapper.dll
+D:\Git\CCSIM\Extension\bin\Debug\AutoMapper.pdb
+D:\Git\CCSIM\Extension\bin\Debug\AutoMapper.xml
+D:\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.csprojResolveAssemblyReference.cache
+D:\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.dll
+D:\Git\CCSIM\Extension\obj\Debug\CCSIM.Extension.pdb

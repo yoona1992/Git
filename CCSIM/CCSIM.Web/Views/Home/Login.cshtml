@@ -118,8 +118,10 @@
                     }
                     else if (data == -1) {
                         alert("用户不存在！");
+                    } else if (data == -2) {
+                        alert("只有平台用户可以登录平台，APP用户不能登录！");
                     } else {
-                        location.href = "../Home/Index";
+                        location.href = "../Home/Index?name=" + data.Name + "&userId=" + data.Id;
                     }
                 }
             });
