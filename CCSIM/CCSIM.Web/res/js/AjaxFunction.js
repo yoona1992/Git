@@ -11,15 +11,23 @@
                 type: "post",
                 async: false,
                 success: function (data) {
-                    if (data == true) {
+                    var returnInfo = data;
+                    if (returnInfo == true) {
                         parent.location.href = "../Home/Index";
                         return false;
                     }
-                }
+                },
+                complete: function (XHR, TS) {
+                    XHR = null
+                } //回收资源
             });
         },
         success: function (data) {
-            callback(data);
-        }
+            var returnInfo = data;
+            callback(returnInfo);
+        },
+        complete: function (XHR, TS) {
+            XHR = null
+        } //回收资源
     });
 }

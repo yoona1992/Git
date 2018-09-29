@@ -3407,8 +3407,14 @@
     <Content Include="thirdpart\jqueryui\jquery-ui.min.js" />
     <Content Include="thirdpart\pop\jquery.message.js" />
     <Content Include="thirdpart\qccode\jquery.qrcode.min.js" />
+    <Content Include="thirdpart\select\bootstrap-select.css" />
+    <Content Include="thirdpart\select\bootstrap-select.js" />
     <Content Include="thirdpart\select\bootstrap-select.min.css" />
-    <Content Include="thirdpart\select\bootstrap-select.min.js" />
+    <Content Include="thirdpart\select\bootstrap.css" />
+    <Content Include="thirdpart\select\bootstrap.js" />
+    <Content Include="thirdpart\select\bootstrap.min.css" />
+    <Content Include="thirdpart\select\bootstrap.min.js" />
+    <Content Include="thirdpart\select\jquery.min.js" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\bootstrapStyle.css" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\img\bootstrap.gif" />
     <Content Include="thirdpart\ztree\css\bootstrapStyle\img\bootstrap.png" />

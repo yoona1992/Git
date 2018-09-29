@@ -35,18 +35,18 @@ namespace CCSIM.Web
             //Database.SetInitializer<ReadDbContext>(null);
             //Database.SetInitializer<WriteDbContext>(null);
 
-            using (var dbcontext = new ReadDbContext())
-            {
-                var objectContext = ((IObjectContextAdapter)dbcontext).ObjectContext;
-                var mappingCollection = (StorageMappingItemCollection)objectContext.MetadataWorkspace.GetItemCollection(DataSpace.CSSpace);
-                mappingCollection.GenerateViews(new List<EdmSchemaError>());
-            }
-            using (var dbcontext = new WriteDbContext())
-            {
-                var objectContext = ((IObjectContextAdapter)dbcontext).ObjectContext;
-                var mappingCollection = (StorageMappingItemCollection)objectContext.MetadataWorkspace.GetItemCollection(DataSpace.CSSpace);
-                mappingCollection.GenerateViews(new List<EdmSchemaError>());
-            }
+            //using (var dbcontext = new ReadDbContext())
+            //{
+            //    var objectContext = ((IObjectContextAdapter)dbcontext).ObjectContext;
+            //    var mappingCollection = (StorageMappingItemCollection)objectContext.MetadataWorkspace.GetItemCollection(DataSpace.CSSpace);
+            //    mappingCollection.GenerateViews(new List<EdmSchemaError>());
+            //}
+            //using (var dbcontext = new WriteDbContext())
+            //{
+            //    var objectContext = ((IObjectContextAdapter)dbcontext).ObjectContext;
+            //    var mappingCollection = (StorageMappingItemCollection)objectContext.MetadataWorkspace.GetItemCollection(DataSpace.CSSpace);
+            //    mappingCollection.GenerateViews(new List<EdmSchemaError>());
+            //}
 
         }
     }

@@ -57,6 +57,11 @@
                         .DataField("Title")
                         .BoxFlex(1),
                     F.RenderField()
+                        .HeaderText("备注")
+                        .DataField("Remarks")
+                        .RendererFunction("renderTooltip")
+                        .BoxFlex(1),
+                    F.RenderField()
                         .HeaderText("地址")
                         .DataField("Address")
                         .RendererFunction("renderTooltip")

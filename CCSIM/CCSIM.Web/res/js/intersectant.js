@@ -34,6 +34,9 @@ function isPolygonsIntersectant(plyA, plyB) {
 /**
  * 判断两多变形是否存在点与区域的包含关系(A的点在B的区域内或B的点在A的区域内)
  */
+
+var polygon_A="";
+var polygon_B="";
 function isPointInPolygonBidirectional(plyA, plyB) {
     const [pA, pB] = [[], []];
     plyA.forEach((item) => {
@@ -44,11 +47,21 @@ function isPointInPolygonBidirectional(plyA, plyB) {
         pB.push(new BMap.Point(item.lng, item.lat));
     });
 
-
+    //看polygon_A，polygon_A是否为空
+    if(polygon_A==""){
+        polygon_A=new BMap.Polygon(pA);
+    }else{
+        polygon_A.setPath(pA);
+    }
+    if(polygon_B==""){
+        polygon_B=new BMap.Polygon(pB);
+    }else{
+        polygon_B.setPath(pB);
+    }
     let [a, b] = [false, false];
-    a = pA.some(item => BMapLib.GeoUtils.isPointInPolygon(item, new BMap.Polygon(pB)));
+    a = pA.some(item => BMapLib.GeoUtils.isPointInPolygon(item,polygon_B ));
     if (!a) {
-        b = pB.some(item => BMapLib.GeoUtils.isPointInPolygon(item, new BMap.Polygon(pA)));
+        b = pB.some(item => BMapLib.GeoUtils.isPointInPolygon(item, polygon_A));
     }
 
     return a || b;

@@ -41,6 +41,7 @@
                 } ());
                 var indexOf = ''.indexOf;
                 var includes = function (search) {
+                    debugger
                     if (this == null) {
                         throw TypeError();
                     }
@@ -1202,6 +1203,9 @@
                 });
 
                 this.$searchbox.on('input propertychange', function () {
+                    if (that.$searchbox.val() == " ") {
+                        return false;
+                    }
                     if (that.$searchbox.val()) {
                         var $searchBase = that.$lis.not('.is-hidden').removeClass('hidden').children('a');
                         if (that.options.liveSearchNormalize) {

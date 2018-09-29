@@ -17,23 +17,6 @@ namespace CCSIM.BLL
     /// </summary>
     public class AlarmBLL
     {
-        //是否读写分离(可以配置在配置文件中)
-        private static readonly bool IsReadWriteSeparation = true;
-
-        #region EF上下文对象(主库)
-
-        protected static DbContext MasterDb => _masterDb.Value;
-        private static readonly Lazy<DbContext> _masterDb = new Lazy<DbContext>(() => new DbContextFactory().GetWriteDbContext());
-
-        #endregion EF上下文对象(主库)
-
-        #region EF上下文对象(从库)
-
-        protected static DbContext SlaveDb => IsReadWriteSeparation ? _slaveDb.Value : _masterDb.Value;
-        private static readonly Lazy<DbContext> _slaveDb = new Lazy<DbContext>(() => new DbContextFactory().GetReadDbContext());
-
-        #endregion EF上下文对象(从库)
-
         /// <summary>
         /// 添加报警信息
         /// </summary>

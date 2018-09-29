@@ -2,7 +2,7 @@
     Layout = null;
 }
 <body>
-    <link href="~/thirdpart/backstrench/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/thirdpart/select/bootstrap.css" rel="stylesheet" />
     <link href="~/thirdpart/select/bootstrap-select.css" rel="stylesheet" />
     <!--弹出框提示css-->
     <link rel="stylesheet" href="~/res/css/jquery.toast.min.css" />
@@ -12,7 +12,7 @@
                 <div class="input-group input-group-sm" style="width:95%">
                     <input id="phone" type="text" style="display:none" value='@ViewData["phone"]' />
                     <span class="input-group-addon" style="background:none;border:0px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif"><span style='color:red'>*</span>人员：</span>
-                    <select id="userId" class="form-control selectpicker" data-live-search="true" style="border-radius:3px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif"></select>
+                    <select id="userId" class="form-control selectpicker" data-live-search="true" data-live-search-placeholder="查找" data-actions-box="true" data-size="10"></select>
                 </div>
             </td>
         </tr>
@@ -42,17 +42,17 @@
             </td>
         </tr>
     </table>
-    <script src="~/res/js/libs/jquery-2.1.0.min.js"></script>
-    <script src="~/thirdpart/backstrench/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/thirdpart/select/jquery.min.js"></script>
+    <script src="~/thirdpart/select/bootstrap.min.js"></script>
     <script src="~/thirdpart/select/bootstrap-select.js"></script>
     <script src="~/res/js/AjaxFunction.js"></script>
-    <script src="~/res/js/grid.js"></script>
     <!--弹出框提示js-->
     <script src="~/res/js/libs/jquery.toast.min.js"></script>
     <script type="text/javascript">
 
         $(document).ready(function () {
             ajaxFunction("./GetUserList", '', "post", false, function (data) {
+                
                 var phone = $('#phone').val();
                 $.each(data, function (index, item) {
                     var appendString = "<optgroup label=\"" + index + "\">";

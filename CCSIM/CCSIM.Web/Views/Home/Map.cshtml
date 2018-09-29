@@ -173,7 +173,7 @@
     <script src="~/thirdpart/ztree/js/jquery.ztree.exedit.js"></script>
     <!--弹出框提示js-->
     <script src="~/res/js/libs/jquery.toast.min.js"></script>
-    <script src="http://api.map.baidu.com/api?v=2.0&ak=A6bc8cb4539b007f51e8aa5ef37ed431"></script>
+    <script src="http://api.map.baidu.com/api?v=3.0&ak=A6bc8cb4539b007f51e8aa5ef37ed431"></script>
     <script src="http://api.map.baidu.com/library/GeoUtils/1.2/src/GeoUtils_min.js"></script>
     <script src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
     <script src="~/res/js/custom.js"></script>
@@ -316,90 +316,116 @@
             }
             );
         }
+        var label = "";
         function addRyCl(objectNames) {
+            debugger
             ajaxFunction("./GetNewGpsInfo", {
                 objectNames: objectNames
             }, "post", false,
             function (data) {
-                removeRyCl();
-
                 var tree = $.fn.zTree.getZTreeObj("treeDemo");
                 var selectedNodes = tree.getSelectedNodes();
                 var objectId = "";
                 if (selectedNodes.length > 0) {
                     objectId = selectedNodes[0].objectName;
                 }
-
                 if (objectId == "") {
+                    //隐藏标签
+                    if (label != "") {
+                        label.hide();
+                    }
                     $.each(data, function (index, item) {
-                        if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
-                        } else {
-                            var icon = myIcon_Person;
-                            if (item.Type != "1") {
-                                if (item.ObjectType == "19" || item.ObjectType == "11") {
-                                    icon = myIcon_Mtc;
+                        var cbRyChecked=$("#cbRy").prop('checked');
+                        if (cbRyChecked == false && item.IsOffline == true) {
+                            var overlays = map.getOverlays();
+                            $.each(overlays, function (index_o, item_o) {
+                                if (item_o.objectId == item.ObjectId && item_o.objectType == item.Type) {
+                                    overlays[index_o].hide();
+                                    overlays[index_o].setTop(false);
+                                    overlays[index_o].setAnimation(null); //取消动画，取消置顶
+                                    return false;
                                 }
-                                else if (item.ObjectType == "18" || item.ObjectType == "37") {
-                                    icon = myIcon_Mtc;
-                                }
-                                else {
-                                    icon = myIcon_Xqc;
-                                }
-                            }
-                            var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
-                                icon: icon
                             });
-                            // 创建标注
-                            marker.type = 3;
-                            marker.objectId = item.ObjectId;
-                            marker.objectType = item.Type;
-                            marker.setTitle(item.ObjectName);
-                            //var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
-                            //marker.setLabel(label);
+                        } else {
+                            //看地图上面是不是存在该点位
+                            var isHave = false;
+                            var marker_Temp = [];
+                            var overlays = map.getOverlays();
+                            $.each(overlays, function (index_o, item_o) {
+                                if (item_o.objectId == item.ObjectId && item_o.objectType == item.Type) {
+                                    isHave = true;
+                                    overlays[index_o].setPosition(new BMap.Point(item.Lon, item.Lat));
+                                    overlays[index_o].setTop(false);
+                                    overlays[index_o].setAnimation(null); //取消动画，取消置顶
+                                    overlays[index_o].show();
+                                    return false;
+                                }
+                            });
+                            if (isHave == false) {
+                                var icon = myIcon_Person;
+                                if (item.Type != "1") {
+                                    if (item.ObjectType == "19" || item.ObjectType == "11") {
+                                        icon = myIcon_Mtc;
+                                    }
+                                    else if (item.ObjectType == "18" || item.ObjectType == "37") {
+                                        icon = myIcon_Mtc;
+                                    }
+                                    else {
+                                        icon = myIcon_Xqc;
+                                    }
+                                }
+                                var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
+                                    icon: icon
+                                });
+                                // 创建标注
+                                marker.type = 3;
+                                marker.objectId = item.ObjectId;
+                                marker.objectType = item.Type;
+                                marker.setTitle(item.ObjectName);
 
-                            //如果是人员，添加右键查看消息菜单
-                            if (item.Type == "1") {
-                                var markerMenu = new BMap.ContextMenu();
-                                markerMenu.addItem(new BMap.MenuItem('消息查看', messageLook.bind(marker)));
-                                marker.addContextMenu(markerMenu);
+                                //如果是人员，添加右键查看消息菜单
+                                if (item.Type == "1") {
+                                    var markerMenu = new BMap.ContextMenu();
+                                    markerMenu.addItem(new BMap.MenuItem('消息查看', messageLook.bind(marker)));
+                                    marker.addContextMenu(markerMenu);
 
-                                //看是否有新消息
-                                if (item.IsNeedShow) {
-                                    ajaxFunction("./GetMessageList", {
-                                        phone: item.ObjectId
-                                    }, "post", false, function (data) {
-                                        $.each(data, function (index, d) {
-                                            $('#notifyAudio')[0].play();
-                                            $.messager.anim('fade', 2000);
-                                            var content = "地点：" + d.Address;
-                                            var remarks = "";
-                                            if (!(d.Remarks == "" || d.Remarks == null)) {
-                                                remarks = "备注：" + d.Remarks;
-                                            }
-                                            $.messager
-                                                    .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
+                                    //看是否有新消息
+                                    if (item.IsNeedShow) {
+                                        ajaxFunction("./GetMessageList", {
+                                            phone: item.ObjectId
+                                        }, "post", false, function (data) {
+                                            $.each(data, function (index, d) {
+                                                $('#notifyAudio')[0].play();
+                                                $.messager.anim('fade', 2000);
+                                                var content = "地点：" + d.Address;
+                                                var remarks = "";
+                                                if (!(d.Remarks == "" || d.Remarks == null)) {
+                                                    remarks = "备注：" + d.Remarks;
+                                                }
+                                                $.messager
+                                                        .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
 
-                                            $("#reply" + d.Id).click(function () {
-                                                var iframeWindowUrl = '@Url.Content("../Notification/Notification/Add")';
-                                                var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
+                                                $("#reply" + d.Id).click(function () {
+                                                    var iframeWindowUrl = '@Url.Content("../Notification/Notification/Add")';
+                                                    var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
 
-                                                // 显示窗体
-                                                F.ui.Window1.show(iframeUrl, '发送 - ' + '通知');
-                                            });
-                                            $("#look" + d.Id).click(function () {
-                                                var iframeWindowUrl = '@Url.Content("~/Home/UserMessageDetail")';
-                                                var iframeUrl = iframeWindowUrl + '?id=' + d.Id;
+                                                    // 显示窗体
+                                                    F.ui.Window1.show(iframeUrl, '发送 - ' + '通知');
+                                                });
+                                                $("#look" + d.Id).click(function () {
+                                                    var iframeWindowUrl = '@Url.Content("~/Home/UserMessageDetail")';
+                                                    var iframeUrl = iframeWindowUrl + '?id=' + d.Id;
 
-                                                // 显示窗体
-                                                F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
+                                                    // 显示窗体
+                                                    F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
+                                                });
                                             });
                                         });
-                                    });
+                                    }
                                 }
+                                addRyClClickHandler(marker);
+                                map.addOverlay(marker);
                             }
-                            addRyClClickHandler(marker);
-                            map.addOverlay(marker);
-
                             //报警 根据所属区域id获取区域信息
                             var polygon = '';
                             $.each(polygonInfo, function (index, d) {
@@ -414,75 +440,142 @@
                             }
                         }
                     });
-                } else {
+                }
+                else {
                     $.each(data, function (index, item) {
                         if ($("#cbRy").prop('checked') == false && item.IsOffline == true) {
-                        } else {
-                            var icon = myIcon_Person;
-                            if (item.Type != "1") {
-                                if (item.ObjectType == "19" || item.ObjectType == "11") {
-                                    icon = myIcon_Mtc;
+                            var overlays = map.getOverlays();
+                            $.each(overlays, function (index_o, item_o) {
+                                if (item_o.objectId == item.ObjectId && item_o.objectType == item.Type) {
+                                    overlays[index_o].hide();
+                                    overlays[index_o].setTop(false);
+                                    overlays[index_o].setAnimation(null); //取消动画，取消置顶
+                                    return false;
                                 }
-                                else if (item.ObjectType == "18" || item.ObjectType == "37") {
-                                    icon = myIcon_Mtc;
-                                }
-                                else {
-                                    icon = myIcon_Xqc;
-                                }
-                            }
-                            var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
-                                icon: icon
                             });
-                            // 创建标注
-                            marker.type = 3;
-                            marker.objectId = item.ObjectId;
-                            marker.objectType = item.Type;
-                            marker.setTitle(item.ObjectName);
-                            //var label = new BMap.Label(item.ObjectName, { offset: new BMap.Size(20, -10) });
-                            //marker.setLabel(label);
+                        } else {
+                            //看地图上面是不是存在该点位
+                            var isHave = false;
+                            var marker_Temp = [];
+                            var overlays = map.getOverlays();
+                            $.each(overlays, function (index_o, item_o) {
+                                if (item_o.objectId == item.ObjectId && item_o.objectType == item.Type) {
+                                    isHave = true;
+                                    overlays[index_o].setPosition(new BMap.Point(item.Lon, item.Lat));
 
-                            //如果是人员，添加右键查看消息菜单
-                            if (item.Type == "1") {
-                                var markerMenu = new BMap.ContextMenu();
-                                markerMenu.addItem(new BMap.MenuItem('消息查看', messageLook.bind(marker)));
-                                marker.addContextMenu(markerMenu);
-                                //看是否有新消息
-                                if (item.IsNeedShow) {
-                                    ajaxFunction("./GetMessageList", {
-                                        phone: item.ObjectId
-                                    }, "post", false, function (data) {
-                                        $.each(data, function (index, d) {
-                                            $('#notifyAudio')[0].play();
-                                            $.messager.anim('fade', 2000);
-                                            var content = "地点：" + d.Address;
-                                            var remarks = "";
-                                            if (!(d.Remarks == "" || d.Remarks == null)) {
-                                                remarks = "备注：" + d.Remarks;
-                                            }
-                                            $.messager
-                                                    .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
-
-                                            $("#reply" + d.Id).click(function () {
-                                                var iframeWindowUrl = '@Url.Content("../Notification/Notification/Add")';
-                                                var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
-
-                                                // 显示窗体
-                                                F.ui.Window1.show(iframeUrl, '发送 - ' + '通知');
+                                    if (item.ObjectId == objectId) {
+                                        if (label == "") {
+                                            label = new BMap.Label("<span class='box'>" + item.ObjectName + "</span>", { offset: new BMap.Size(20, -10) });
+                                            label.setStyle({
+                                                fontSize: "14px",//字体大小
+                                                backgroundColor: "0.05", //文本标注背景颜色
+                                                border: "1px solid #ffcc00",
+                                                borderRadius: "5px",
+                                                fontWeight: "bold" //字体加粗
                                             });
-                                            $("#look" + d.Id).click(function () {
-                                                var iframeWindowUrl = '@Url.Content("~/Home/UserMessageDetail")';
-                                                var iframeUrl = iframeWindowUrl + '?id=' + d.Id;
+                                        }
+                                        else {
+                                            label.setContent("<span class='box'>" + item.ObjectName + "</span>");
+                                        }
+                                        label.show();
+                                        overlays[index_o].setLabel(label);
+                                        overlays[index_o].setTop(true);
+                                        overlays[index_o].setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                                        map.centerAndZoom(new BMap.Point(item.Lon, item.Lat), 19);
+                                    } else {
+                                        overlays[index_o].setTop(false);
+                                        overlays[index_o].setAnimation(null); //取消动画，取消置顶
+                                    }
+                                    overlays[index_o].show();
+                                    return false;
+                                }
+                            });
+                            if (isHave == false) {
+                                var icon = myIcon_Person;
+                                if (item.Type != "1") {
+                                    if (item.ObjectType == "19" || item.ObjectType == "11") {
+                                        icon = myIcon_Mtc;
+                                    }
+                                    else if (item.ObjectType == "18" || item.ObjectType == "37") {
+                                        icon = myIcon_Mtc;
+                                    }
+                                    else {
+                                        icon = myIcon_Xqc;
+                                    }
+                                }
+                                var marker = new BMap.Marker(new BMap.Point(item.Lon, item.Lat), {
+                                    icon: icon
+                                });
+                                // 创建标注
+                                marker.type = 3;
+                                marker.objectId = item.ObjectId;
+                                marker.objectType = item.Type;
+                                marker.setTitle(item.ObjectName);
 
-                                                // 显示窗体
-                                                F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
+                                //如果是人员，添加右键查看消息菜单
+                                if (item.Type == "1") {
+                                    var markerMenu = new BMap.ContextMenu();
+                                    markerMenu.addItem(new BMap.MenuItem('消息查看', messageLook.bind(marker)));
+                                    marker.addContextMenu(markerMenu);
+
+                                    //看是否有新消息
+                                    if (item.IsNeedShow) {
+                                        ajaxFunction("./GetMessageList", {
+                                            phone: item.ObjectId
+                                        }, "post", false, function (data) {
+                                            $.each(data, function (index, d) {
+                                                $('#notifyAudio')[0].play();
+                                                $.messager.anim('fade', 2000);
+                                                var content = "地点：" + d.Address;
+                                                var remarks = "";
+                                                if (!(d.Remarks == "" || d.Remarks == null)) {
+                                                    remarks = "备注：" + d.Remarks;
+                                                }
+                                                $.messager
+                                                        .show(d.Title, content, remarks, item.ObjectName, 60 * 1000, d.Id);
+
+                                                $("#reply" + d.Id).click(function () {
+                                                    var iframeWindowUrl = '@Url.Content("../Notification/Notification/Add")';
+                                                    var iframeUrl = iframeWindowUrl + "?phone=" + item.ObjectId;
+
+                                                    // 显示窗体
+                                                    F.ui.Window1.show(iframeUrl, '发送 - ' + '通知');
+                                                });
+                                                $("#look" + d.Id).click(function () {
+                                                    var iframeWindowUrl = '@Url.Content("~/Home/UserMessageDetail")';
+                                                    var iframeUrl = iframeWindowUrl + '?id=' + d.Id;
+
+                                                    // 显示窗体
+                                                    F.ui.Window1.show(iframeUrl, '详情 - ' + '附件');
+                                                });
                                             });
                                         });
-                                    });
+                                    }
                                 }
-                            }
-                            addRyClClickHandler(marker);
-                            map.addOverlay(marker);
+                                addRyClClickHandler(marker);
 
+                                if (item.ObjectId == objectId) {
+                                    if (label == "") {
+                                        label = new BMap.Label("<span class='box'>" + item.ObjectName + "</span>", { offset: new BMap.Size(20, -10) });
+                                        label.setStyle({
+                                            fontSize: "14px",//字体大小
+                                            backgroundColor: "0.05", //文本标注背景颜色
+                                            border: "1px solid #ffcc00",
+                                            borderRadius: "5px",
+                                            fontWeight: "bold" //字体加粗
+                                        });
+                                    }
+                                    else {
+                                        label.setContent("<span class='box'>" + item.ObjectName + "</span>");
+                                    }
+                                    label.show();
+                                    marker.setLabel(label);
+                                    marker.setTop(true);
+                                    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                                    map.centerAndZoom(new BMap.Point(item.Lon, item.Lat), 19);
+                                }
+                                map.addOverlay(marker);
+                            }
                             //报警 根据所属区域id获取区域信息
                             var polygon = '';
                             $.each(polygonInfo, function (index, d) {
@@ -490,21 +583,6 @@
                                     polygon = d;
                                 }
                             });
-
-                            if (item.ObjectId == objectId) {
-                                var label = new BMap.Label("<span class='box'>" + item.ObjectName + "</span>", { offset: new BMap.Size(20, -10) });
-                                label.setStyle({
-                                    fontSize: "14px",//字体大小
-                                    backgroundColor: "0.05", //文本标注背景颜色
-                                    border: "1px solid #ffcc00",
-                                    borderRadius: "5px",
-                                    fontWeight: "bold" //字体加粗
-                                });
-                                marker.setLabel(label);
-                                marker.setTop(true);
-                                marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-                                map.centerAndZoom(new BMap.Point(item.Lon, item.Lat), 19);
-                            }
 
                             //离线车辆不报警
                             if (item.IsNeedAlarm && $("#cbYjbj").prop('checked') && !item.IsOffline) {
@@ -686,6 +764,7 @@
 
         //越格报警
         var iii = 0;
+        var circle = '';
         function alarm(item, polygon) {
 
             if (polygon == "" || polygon == null || polygon.getPath().length == 0) {
@@ -694,10 +773,14 @@
             var lon = item.Lon;
             var lat = item.Lat;
             var point = new BMap.Point(lon, lat);
-            var circle = new BMap.Circle(point, 50, { fillOpacity: 0, strokeOpacity: 0 });
-            map.addOverlay(circle);
+            if (circle == '') {
+                circle = new BMap.Circle(point, 50, { fillOpacity: 0, strokeOpacity: 0 });
+                map.addOverlay(circle);
+            } else {
+                circle.setCenter(point);
+            }
             var circlePath = circle.getPath();
-            map.removeOverlay(circle);
+            circle.hide();
             if (isPointInPolygonBidirectional(polygon.getPath(), circlePath) == false) {
                 $('#alarmAudio')[0].play();
                 //document.getElementById("alarm").innerHTML = "<embed src='../res/voice/alarm.wav' width=0 height=0 type=audio/wav loop='1' autostart='true' ></embed> ";
@@ -811,6 +894,7 @@
             $.fn.zTree.init($("#treeDemo"), setting);
 
             ajaxFunction("./GetAllInfo", {}, "post", false, function (data) {
+
                 timeoutId = setInterval(function () {
                     addRyCl(data);
                 }, 2000);
